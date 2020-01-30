@@ -62,7 +62,8 @@ export default class Profile extends React.Component {
         firstname: this.state.firstname,
         lastname: this.state.lastname,
         user_id: sessionStorage.getItem("user"),
-        session_token: sessionStorage.getItem("token")
+        session_token: sessionStorage.getItem("token"),
+        mode: "ignorenull"
       })
     })
       .then(res => res.json())

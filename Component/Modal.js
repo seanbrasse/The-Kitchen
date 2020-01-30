@@ -12,13 +12,12 @@ export default class Modal extends React.Component {
       return null;
     }
     return (
-      <div className="modal" id="modal">
-        <h2>{this.props.title}</h2>
-        <div className="content">{this.props.children}</div>
-        <div className="actions">
-          <button className="toggle-button" onClick={this.onClose}>
-            close
-          </button>
+      <div id="myModal" className="modal">
+        <div className="modal-content">
+          <span className="close" onClick={this.onClose}>
+            &times;
+          </span>
+          <div id="modalcontent">{this.props.children}</div>
         </div>
       </div>
     );
