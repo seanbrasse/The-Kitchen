@@ -8,6 +8,7 @@ export default class Modal extends React.Component {
   };
 
   render() {
+    console.log("Modal Show is " + this.props.show);
     if (!this.props.show) {
       return null;
     }

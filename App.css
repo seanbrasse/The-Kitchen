@@ -236,7 +236,7 @@
 
 /* The Modal (background) */
 .modal {
-  display: none; /* Hidden by default */
+  display: block;
   position: fixed; /* Stay in place */
   z-index: 0; /* Sit on top -- sri changed from 1 to 0--*/
   left: 0;
@@ -254,7 +254,8 @@
   margin: 15% auto; /* 15% from the top and centered */
   padding: 1px 10px 20px 20px;
   border: 1px solid #888;
-  width: 80%; /* Could be more or less, depending on screen size */
+  width: 50%; /* Could be more or less, depending on screen size */
+  height: 200px;
 }
 
 /* The Close Button */
