@@ -1,6 +1,5 @@
 import React from "react";
 import "./App.css";
-import PostingList from "./Component/PostingList.js";
 import PostForm from "./Component/PostForm.js";
 import FriendList from "./Component/FriendList.js";
 import LoginForm from "./Component/LoginForm.js";

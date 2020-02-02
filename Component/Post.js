@@ -1,7 +1,6 @@
 import React from "react";
 import "../App.css";
 import CommentForm from "./CommentForm.js";
-import Modal from "./Modal.js";
 
 export default class Post extends React.Component {
   constructor(props) {
@@ -26,7 +25,7 @@ export default class Post extends React.Component {
   };
 
   getCommentCount() {
-    if (!this.state.comments || this.state.comments == "0") {
+    if (!this.state.comments || this.state.comments === "0") {
       return 0;
     }
     return parseInt(this.state.comments);
@@ -54,6 +53,7 @@ export default class Post extends React.Component {
               src={require("../comment.svg")}
               className="comment-icon"
               onClick={e => this.showModal()}
+              alt="View Comments"
             />
           </div>
           <div className={this.showHideComments()}>

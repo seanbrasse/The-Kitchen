@@ -1,6 +1,4 @@
 import React from "react";
-import Modal from "./Modal.js";
-import PostForm from "./PostForm.js";
 import Post from "./Post.js";
 
 export default class PostingList extends React.Component {

@@ -101,7 +101,7 @@ class Autocomplete extends Component {
     if (showSuggestions && userInput) {
       if (filteredSuggestions.length) {
         suggestionsListComponent = (
-          <div class="autocomplete">
+          <div className="autocomplete">
             <ul className="suggestions">
               {filteredSuggestions.map((suggestion, index) => {
                 let className;
@@ -122,13 +122,13 @@ class Autocomplete extends Component {
         );
       } else {
         suggestionsListComponent = (
-          <div class="autocomplete">
+          <div className="autocomplete">
             <em>No suggestions, you're on your own!</em>
           </div>
         );
       }
     } else {
-      suggestionsListComponent = <div class="autocomplete" />;
+      suggestionsListComponent = <div className="autocomplete" />;
     }
 
     return (
