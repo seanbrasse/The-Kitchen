@@ -2,7 +2,7 @@ Team Name: Deliberate Development
 
 Github Repo: https://github.com/CSE410HCI/deliberate-development-web
 
-ZenHub: <TODO pending further instructions - user stories recorded in Discord pending transfer>
+ZenHub: https://app.zenhub.com/workspaces/deliberate-development-5e41b921b96a9e3a70942684/board?repos=237307322
 
 Dispute Resolution Approach: Start by attempting to lay out all the information and come to a conensus. Failing that, utilize tools like a decision matrix and outside opinions (eg from instructors). If no decision can still be reached, settle over a game of blitz chess (or if whoever is involved can't/doesn't want to play, a simple game of rock paper scissors)
 
