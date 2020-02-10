@@ -1,0 +1,16 @@
+Team Name: Deliberate Development
+
+
+Github Repo: https://github.com/CSE410HCI/deliberate-development-web
+
+
+ZenHub: <TODO pending further instructions - user stories recorded in Discord pending transfer>
+
+
+Dispute Resolution Approach: Start by attempting to lay out all the information and come to a conensus. Failing that, utilize tools like a decision matrix and outside opinions (eg from instructors). If no decision can still be reached, settle over a game of blitz chess (or if whoever is involved can't/doesn't want to play, a simple game of rock paper scissors)
+
+
+Project Overview/Vision: An application called The Kitchen, for sharing and discovering recipes. Curently there are few centralized platforms for this, with recipes in many locations presented in formats that are hard to search and consume, and without the social aspect to engage and keep up to date with other chefs.
+
+
+Typical User: This is aimed at chefs of varying callibers. You have home cooks looking to find something new to try, or more experienced cooks looking to add to their repotoire. You might have someone who wants to share family recipes or their own special twists on a classic, or chefs who push the boundaries of new types of dishes who want to share them with the world.
