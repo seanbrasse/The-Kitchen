@@ -1,8 +1,8 @@
 import React from "react";
 import "../App.css";
-import PostingList from "./PostingList.js";
+import PostingList from "./PostingList.jsx";
 
-export default class CommentForm extends React.Component {
+export default class PostForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -23,15 +23,15 @@ export default class CommentForm extends React.Component {
         action: "addOrEditPosts",
         user_id: sessionStorage.getItem("user"),
         session_token: sessionStorage.getItem("token"),
-        posttext: this.state.post_text,
-        parentid: this.props.parent
+        posttext: this.state.post_text
       })
     })
       .then(res => res.json())
       .then(
         result => {
-          // update the count in the UI manually, to avoid a database hit
-          this.props.onAddComment(this.props.commentCount + 1);
+          this.setState({
+            postmessage: result.Status
+          });
           this.postListing.current.loadPosts();
         },
         error => {
@@ -51,7 +51,7 @@ export default class CommentForm extends React.Component {
       <div>
         <form onSubmit={this.submitHandler}>
           <label>
-            Add A Comment to Post {this.props.parent}
+            Post Something!
             <br />
             <textarea rows="10" cols="70" onChange={this.myChangeHandler} />
           </label>
@@ -61,11 +61,7 @@ export default class CommentForm extends React.Component {
           <br />
           {this.state.postmessage}
         </form>
-        <PostingList
-          ref={this.postListing}
-          parentid={this.props.parent}
-          type="commentlist"
-        />
+        <PostingList ref={this.postListing} type="postlist" />
       </div>
     );
   }

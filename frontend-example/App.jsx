@@ -1,11 +1,11 @@
 import React from "react";
 import "./App.css";
-import PostForm from "./Component/PostForm.js";
-import FriendList from "./Component/FriendList.js";
-import LoginForm from "./Component/LoginForm.js";
-import Profile from "./Component/Profile.js";
-import FriendForm from "./Component/FriendForm.js";
-import Modal from "./Component/Modal.js";
+import PostForm from "./components/PostForm.jsx";
+import FriendList from "./components/FriendList.jsx";
+import LoginForm from "./components/LoginForm.jsx";
+import Profile from "./components/Profile.jsx";
+import FriendForm from "./components/FriendForm.jsx";
+import Modal from "./components/Modal.jsx";
 
 class MainContent extends React.Component {
   constructor(props) {
@@ -67,10 +67,10 @@ class App extends React.Component {
   }
 
   render() {
-    let post = require("./post.svg");
-    let friend = require("./friends.svg");
-    let setting = require("./settings.svg");
-    let help = require("./help.svg");
+    let post = require("./images/post.svg");
+    let friend = require("./images/friends.svg");
+    let setting = require("./images/settings.svg");
+    let help = require("./images/help.svg");
     let mainContent = React.createRef();
 
     return (

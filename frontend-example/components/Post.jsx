@@ -1,6 +1,6 @@
 import React from "react";
 import "../App.css";
-import CommentForm from "./CommentForm.js";
+import CommentForm from "./CommentForm.jsx";
 
 export default class Post extends React.Component {
   constructor(props) {
@@ -50,7 +50,7 @@ export default class Post extends React.Component {
               {this.getCommentCount()} Comments
             </div>
             <img
-              src={require("../comment.svg")}
+              src={require("../images/comment.svg")}
               className="comment-icon"
               onClick={e => this.showModal()}
               alt="View Comments"
