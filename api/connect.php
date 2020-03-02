@@ -5,9 +5,9 @@ $connections = array();
 function getDbConnection()
 {
     $servername = "stark.cse.buffalo.edu";
-    $username = ""; // fill in your team user name here
-    $password = ""; // fill in your team password here
-    $dbname = ""; // fill in the team schema name here
+    $username = "410team1_user"; // fill in your team user name here
+    $password = "insecure1"; // fill in your team password here
+    $dbname = "cse410_team1_db"; // fill in the team schema name here
     global $connections;
 
     error_log("Connecting to  ".$dbname." as user ".$username, 0);
