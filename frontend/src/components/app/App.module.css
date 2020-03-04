@@ -1,1 +1,3 @@
-:local(.app) {}
+:local(.app) {
+    margin: 10px 20px;
+}
