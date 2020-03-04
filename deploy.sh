@@ -6,3 +6,7 @@ else
     git stash
     git pull
 fi
+
+cd frontend
+npm i
+PUBLIC_URL=/cse410/deldev/frontend/build/ npm run build
