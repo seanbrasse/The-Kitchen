@@ -31,6 +31,7 @@ background-color: #5a3f37;
   text-align: center;
   padding: 20px 20px 0;
   margin:0;
+  margin-bottom: 40px;
 }
 
 #acct {
@@ -47,10 +48,9 @@ background-color: #5a3f37;
 }
 
 .login-item {
-  color: #ffff;
-  padding:25px 25px 0;
-  margin: 20px 20px 0;  
-  border-radius: 10px;
+  padding:0px 100px 0;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 input {
@@ -63,7 +63,6 @@ input {
 }
 
 .user:before {
-  font: 14px fontawesome;
   color: #5b5b5b;
 }
 
@@ -74,7 +73,6 @@ input {
 
 .form input[type="password"], .form input[type="text"], .form input[type="submit"] {
 
-  width: 100%;
 }
 
 
@@ -82,18 +80,15 @@ input {
   color: #fa9819;
 }
 
-
-
-
 .form-login label,
 .form-login input[type="text"],
 .form-login input[type="password"],
 .form-login input[type="submit"] {
   border-radius: 0.25rem;
-  padding: 1rem;
+  padding: 5px;
   color: #3A3F44;  
   border-radius: 10px;
-
+  width: 12rem;
 }
 
   .form-login input[type="text"], .form-login input[type="username"] {
@@ -119,7 +114,6 @@ input {
 }
 
 .form-login input[type="password"] {
-  max-width:677px;
 }
 .form-field {
   display: -webkit-box;
@@ -167,6 +161,13 @@ input {
 #break {  
   flex-basis: 100%;
 
+}
+
+a {
+  padding-top: 100px;
+  margin-left: auto;
+  margin-right: auto;
+  color: black;
 }
 
 #fpw {
