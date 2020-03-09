@@ -4,7 +4,9 @@ import { render } from '@testing-library/react';
 import Profile from './Profile';
 
 test('renders follow button', () => {
-    // TODO: Mock API, test with followed + unfollowed
+    fetch.mockResponseOnce(JSON.stringify({}));
+
+    // TODO: Test with followed + unfollowed
     const { getByText } = render(
         <MemoryRouter initialEntries={["/users/123"]}>
             <Profile />

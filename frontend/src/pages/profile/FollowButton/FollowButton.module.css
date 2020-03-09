@@ -13,3 +13,7 @@
 :local(.followButton:active) {
     background-color: #ccc;
 }
+
+:local(.followButton:disabled) {
+    background-color: #eee;
+}
