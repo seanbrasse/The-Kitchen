@@ -162,3 +162,28 @@ test('follow button updates correctly from unfollowed to followed', async () => 
     await new Promise(resolve => setTimeout(() => resolve()));
     expect(followButton.innerHTML).toEqual('Unfollow');
 });
+
+test('follow button updates correctly from followed to unfollowed', async () => {
+    fetch.mockResponseOnce(JSON.stringify({connections: [{
+        'connection_type': 'Friend',
+        'connection_status': 'Active',
+        'connection_id': connectionID
+    }]}));
+
+    const { getByRole } = render(
+        <FollowButton userID={userIDToConnect}/>
+    );
+
+    const followButton = getByRole('button');
+    expect(followButton).toBeInTheDocument();
+
+    await followButton._getFollowStatus;
+    // Let react rerender
+    await new Promise(resolve => setTimeout(() => resolve()));
+    fetch.mockResponseOnce(JSON.stringify({'Status': 'SUCCESS - Updated 1 Rows'}));
+    followButton.click();
+
+    // Let react rerender
+    await new Promise(resolve => setTimeout(() => resolve()));
+    expect(followButton.innerHTML).toEqual('Follow');
+});

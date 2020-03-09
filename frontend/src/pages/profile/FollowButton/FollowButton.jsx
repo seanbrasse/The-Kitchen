@@ -68,7 +68,7 @@ export default class FollowButton extends React.Component {
             })
         }).then(res => res.json()).then(
             response => {
-                if (response.Status.startsWith('SUCCESS')) this.setState({currentlyFollowed: true})
+                if (response.Status.startsWith('SUCCESS')) this.setState(state => ({currentlyFollowed: !state.currentlyFollowed}))
             }
         );
     }
