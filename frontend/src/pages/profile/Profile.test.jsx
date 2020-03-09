@@ -6,7 +6,7 @@ import Profile from './Profile';
 test('renders follow button', () => {
     // TODO: Mock API, test with followed + unfollowed
     const { getByText } = render(
-        <MemoryRouter initialEntries={["/users/someuser"]}>
+        <MemoryRouter initialEntries={["/users/123"]}>
             <Profile />
         </MemoryRouter>
     );
