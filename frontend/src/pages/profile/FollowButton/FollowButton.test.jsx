@@ -4,7 +4,8 @@ import Deferred from 'util/deferred';
 import FollowButton from './FollowButton';
 
 const currentUserID = '889';
-const userIDToConnect = '123';
+const userIDToConnect = '123';;
+const connectionID = '4456'
 
 beforeEach(() => {
     localStorage.clear();
@@ -55,7 +56,8 @@ test('follow button initializes correctly when not followed', async () => {
 test('follow button initializes correctly when followed', async () => {
     fetch.mockResponseOnce(JSON.stringify({connections: [{
         'connection_type': 'Friend',
-        'connection_status': 'Active'
+        'connection_status': 'Active',
+        'connection_id': '4456'
     }]}));
 
     const { getByRole } = render(
@@ -73,7 +75,7 @@ test('follow button initializes correctly when followed', async () => {
     expect(followButton.innerHTML).toEqual('Unfollow');
 });
 
-test('follow button requests follow on click', async () => {
+test('follow button requests follow on click when unfollowed', async () => {
     // Initial fetch for follow status
     fetch.mockResponseOnce(JSON.stringify({}));
 
@@ -102,6 +104,42 @@ test('follow button requests follow on click', async () => {
     expect(body.connectuserid).toEqual(userIDToConnect);
     expect(body.connectiontype).toEqual('Follow');
     expect(body.connectionstatus).toEqual('Active');
+});
+
+test('follow button requests unfollow on click when followed', async () => {
+    // Initial fetch for follow status
+    fetch.mockResponseOnce(JSON.stringify({connections: [{
+        'connection_type': 'Friend',
+        'connection_status': 'Active',
+        'connection_id': connectionID
+    }]}));
+
+    const { getByRole } = render(
+        <FollowButton userID={userIDToConnect}/>
+    );
+    
+    const followButton = getByRole('button');
+    expect(followButton).toBeInTheDocument();
+
+    // We can't click on the button until the initial fetch for status is done
+    await followButton._getFollowStatus;
+    // Let react rerender
+    await new Promise(resolve => setTimeout(() => resolve()));
+    fetch.mockResponseOnce(JSON.stringify({'Status': 'SUCCESS - Updated 1 Rows'}));
+    followButton.click();
+
+    expect(fetch.mock.calls.length).toEqual(2);
+    const url = fetch.mock.calls[1][0];
+    const body = JSON.parse(fetch.mock.calls[1][1].body);
+
+    expect(url).toMatch(/connectioncontroller.php$/);
+    
+    expect(body.action).toEqual('addOrEditConnections');
+    expect(body.userid).toEqual(currentUserID);
+    expect(body.connectuserid).toEqual(userIDToConnect);
+    expect(body.connectiontype).toEqual('Follow');
+    expect(body.connectionstatus).toEqual('Inactive');
+    expect(body.connectionid).toEqual(connectionID);
 });
 
 test('follow button updates correctly from unfollowed to followed', async () => {

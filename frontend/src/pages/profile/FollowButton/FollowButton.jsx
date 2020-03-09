@@ -8,7 +8,8 @@ export default class FollowButton extends React.Component {
             // Who does this button connect to?
             userID: props.userID,
             currentlyFollowed: false,
-            loadingFollowStatus: true
+            loadingFollowStatus: true,
+            connectionID: undefined
         }
     }
     
@@ -20,7 +21,7 @@ export default class FollowButton extends React.Component {
                 userid: localStorage.getItem('userid'),
                 connectuserid: this.state.userID,
                 connectiontype: 'follow',
-                connectionstatus: 'following'
+                connectionstatus: 'following',
             })
         }).then(res => res.json()).then(
             response => {
@@ -30,7 +31,11 @@ export default class FollowButton extends React.Component {
                         connection.connection_type == 'Friend' &&
                         connection.connection_status == 'Active'
                     ),
-                    loadingFollowStatus: false
+                    connectionID: response.connections?.find(connection =>
+                        connection.connection_type == 'Friend' &&
+                        connection.connection_status == 'Active'
+                    )?.connection_id,
+                    loadingFollowStatus: false,
                 });
             }
         );
@@ -58,7 +63,8 @@ export default class FollowButton extends React.Component {
                 userid: localStorage.getItem('userid'),
                 connectuserid: this.state.userID,
                 connectiontype: 'Follow',
-                connectionstatus: 'Active'
+                connectionstatus: this.state.currentlyFollowed ? 'Inactive' : 'Active',
+                connectionid: this.state.connectionID
             })
         }).then(res => res.json()).then(
             response => {
