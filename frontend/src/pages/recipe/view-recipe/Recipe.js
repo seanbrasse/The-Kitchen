@@ -4,11 +4,19 @@ import "./RecipePage.css"
 
 
 const Recipe = (props) => {
-  return(
-    <div>
-    {props.elements.map((e, i) => <GetElem elem={e} type={props.types[i]}/>)}
-    </div>
-  )
+  if(props.type == "edit"){
+    return(
+      <div>
+      {props.recipe[1].map((e, i) => <EditElem index={i} type={props.recipe[0][i]} handle={props.handle}/>)}
+      </div>
+    )
+  }else{
+    return(
+      <div>
+      {props.recipe[1].map((e, i) => <GetElem elem={e} type={props.recipe[0][i]} />)}
+      </div>
+    )
+  }
 }
 
 const GetElem = (props) => {
@@ -21,10 +29,21 @@ const GetElem = (props) => {
   }
 }
 
+const EditElem = (props) => {
+  if(props.type == "header"){
+    return(<div><input type="text" name={props.index} onChange={props.handle}></input></div>)
+  }else if (props.type == "text") {
+    return(<div><textarea name={props.index} onChange={props.handle}></textarea></div>)
+  }else{
+    return(<div><input type="text" name={props.index} onChange={props.handle}></input></div>)
+  }
+}
 
 Recipe.propTypes = {
-  elements: PropTypes.arrayOf(PropTypes.string),
-  types: PropTypes.arrayOf(PropTypes.oneOf(["header", "text", "image"]))
+  handle: PropTypes.func,
+  type: PropTypes.oneOf("edit", "display"),
+  recipe: PropTypes.arrayOf([PropTypes.arrayOf(PropTypes.string),
+                             PropTypes.arrayOf(PropTypes.oneOf(["header", "text", "image"]))])
 }
 
 export default Recipe;

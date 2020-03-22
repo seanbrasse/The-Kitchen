@@ -6,10 +6,10 @@ import "./RecipePage.css"
 const RecipeHeader = (props) => {
   var buttons = props.buttons ? props.buttons : null;
 
-  if(buttons){
+  if(buttons && props.type == "edit"){
     return(
       <div>
-        <h1>{props.children}{props.buttons.map((b, i) => <button onClick={props.onClick[i]}>{b}</button>)}</h1>
+        <h1>{props.children}{props.buttons.map((b, i) => <button name={i} onClick={props.handle}>{b}</button>)}</h1>
       </div>
     )
   }else{
@@ -22,8 +22,9 @@ const RecipeHeader = (props) => {
 }
 
 RecipeHeader.propTypes = {
-  buttons: PropTypes.arrayOf(PropTypes.func),
-  onClick: PropTypes.arrayOf(PropTypes.string),
+  type: PropTypes.oneOf("edit", "display"),
+  buttons: PropTypes.arrayOf(PropTypes.string),
+  handle: PropTypes.func,
   children: PropTypes.element.isRequired
 }
 

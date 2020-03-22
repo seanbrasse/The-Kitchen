@@ -7,64 +7,101 @@ import IngredientsList from './IngredientsList'
 import StarRating from './StarRating'
 import Recipe from './Recipe'
 import Author from './Author'
+import Comment from './Comment'
+import Description from './Description'
+import Title from './Title'
 
 class App extends React.Component{
   constructor(props){
     super(props);
+
     this.state = {
-			name1: "Add Header",
-			name2: "Add Textbox",
-      name3: "Add Image",
-      tags: ["tag1", "tag2", "tag3"],
-      prepTime: 50,
-      units: "min",
-      ingredients: ["Flour", "Tomatos", "Vanilla Extract"],
-      ingredientsUnits: ["Cups", "", "Tbsp"],
-      ingredientsAmount: [2, 1, 1],
-      rating: 2,
-      newRating: 0,
-      recipeElements:["Header", "This is a Description", "/logo192.png", "Header2", "more words"],
-      recipeTypes: ["header", "text", "image" ,"header", "text"],
-      authorImage: "/logo192.png",
-      authorUsername: "The name"
+      title: "Title",
+      mainImage: "",
+      description: "Write description here.",
+      ingredients: [[], [], []],
+      recipe: [[], []],
+      editMode: false
 		}
   }
 
-  handleClickA = (event) =>{
-    this.setState({name1: this.state.name1 + " was clicked"});
+  changeMode = (event) => {
+		this.setState({editMode: !this.state.editMode})
+	}
+
+  addIngredient = (event) => {
+    if(event.target.name == "Ingredients"){
+
+      if(event.target.i == null){
+        event.target.i = this.state.ingredients[0].length
+      }
+      this.state.ingredients[0][event.target.i] = event.target.value
+  		this.setState({})
+
+    }else if(event.target.name == "Amount"){
+
+      if(event.target.i == null){
+        event.target.i = this.state.ingredients[1].length
+      }
+      this.state.ingredients[1][event.target.i] = event.target.value
+      this.setState({})
+
+    }else if(event.target.name == "Units"){
+
+      if(event.target.i == null){
+        event.target.i = this.state.ingredients[2].length
+      }
+      this.state.ingredients[2][event.target.i] = event.target.value
+      this.setState({})
+
+    }
   }
-  handleClickB = (event) =>{
-    this.setState({name2: this.state.name2 + "B was clicked"});
+
+  addRecipeElement = (event) => {
+    if(event.target.name == "0"){
+      this.state.recipe[0][this.state.recipe[0].length] = "header"
+    }else if(event.target.name == "1"){
+      this.state.recipe[0][this.state.recipe[0].length] = "text"
+    }else if(event.target.name == "2"){
+      this.state.recipe[0][this.state.recipe[0].length] = "image"
+    }
+    this.state.recipe[1][this.state.recipe[1].length] = ""
+    this.setState({})
   }
-  handleClickC = (event) =>{
-    this.setState({name3: this.state.name3 + "C was clicked"});
+
+  updateRecipe = (event) => {
+    this.state.recipe[1][event.target.name] = event.target.value
+    this.setState({})
   }
-  updateRating = (event) =>{
-    this.setState({newRating: event.target.r});
-    console.log(this.newRating);
+
+  updateDesc = (event) => {
+    this.state.description = event.target.value
+    this.setState({})
+  }
+
+  updateTitle = (event) => {
+    if(event.target.name == "title"){
+      this.state.title = event.target.value
+    }else{
+      this.state.mainImage = event.target.value
+    }
+    this.setState({})
   }
 
   render(){
-
     return(
       <div>
-      <div><Author username={this.state.authorUsername} profileImage={this.state.authorImage}/></div>
-      <div><Tags tags={this.state.tags}/></div>
-      <div><PrepTime time={this.state.prepTime} units={this.state.units}/></div>
-      <div><RecipeHeader buttons={[this.state.name1, this.state.name2, this.state.name3]} onClick={[this.handleClickA, this.handleClickB, this.handleClickC]} >The Kitchen</RecipeHeader></div>
-      <div><RecipeHeader>Ingredients</RecipeHeader></div>
-      <div><IngredientsList ingredients={this.state.ingredients} amount={this.state.ingredientsAmount} units={this.state.ingredientsUnits}/></div>
-      <div><RecipeHeader>Recipe</RecipeHeader></div>
-      <div><Recipe elements={this.state.recipeElements} types={this.state.recipeTypes}/></div>
-      <div><RecipeHeader>Comments</RecipeHeader></div>
+      <Title type={this.state.editMode ? "edit" : "display"} title={this.state.title} image={this.state.mainImage} handle={this.updateTitle}/>
+      <RecipeHeader>Description</RecipeHeader>
+      <Description type={this.state.editMode ? "edit" : "display"} handle={this.updateDesc} description={this.state.description}/>
+      <RecipeHeader>Ingredients</RecipeHeader>
+      <IngredientsList type={this.state.editMode ? "edit" : "display"} ingredients={this.state.ingredients} handle={this.addIngredient}/>
+      <RecipeHeader type={this.state.editMode ? "edit" : "display"} buttons={["add Header", "add Textbox", "add Image"]} handle={this.addRecipeElement}>Recipe</RecipeHeader>
+      <Recipe type={this.state.editMode ? "edit" : "display"} recipe={this.state.recipe} handle={this.updateRecipe}/>
+      <button onClick={this.changeMode}>Change Mode</button>
       </div>
     )
   }
-  /*
-  <div><StarRating newRating={this.state.newRating} rating={this.state.rating} updateRating={this.updateRating}/></div>
-  */
-
 }
-
 
 export default App;
