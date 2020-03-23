@@ -10,23 +10,21 @@ const IngredientsList = (props) => {
           <div id="sideByside">
             <h2>Ingredients</h2>
             <ul>
-            <li><input type="text" name="Ingredients" onChange={props.handle}></input></li>
-            {props.ingredients[0].map((a, i) => <li><input type="text" name="Ingredients" onChange={props.handle}></input></li>)}
+            {props.ingredients[0].map((ing, i) => <li><input type="text" name="Ingredients" id={i} value={ing} onChange={props.handle}></input></li>)}
             </ul>
           </div>
           <div id="sideByside">
             <h2>Amount</h2>
             <ul>
-            <li><input type="number" name="Amount" onChange={props.handle}></input></li>
-            {props.ingredients[0].map((a, i) => <li><input type="number" name="Amount" onChange={props.handle}></input></li>)}
+            {props.ingredients[1].map((amt, i) => <li><input type="number" name="Amount" id={i} value={amt} onChange={props.handle}></input></li>)}
             </ul>
           </div>
           <div id="sideByside">
             <h2>Units</h2>
             <ul>
-            <li><input type="text" name="Units" onChange={props.handle}></input></li>
-            {props.ingredients[0].map((a, i) => <li><input type="text" name="Units" onChange={props.handle}></input></li>)}
+            {props.ingredients[2].map((unit, i) => <li><input type="text" name="Units" id={i} value={unit} onChange={props.handle}></input></li>)}
             </ul>
+            <button name="button" onClick={props.handle}>Add Ingredient</button>
           </div>
         </div>
       </div>

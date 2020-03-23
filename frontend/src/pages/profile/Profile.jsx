@@ -53,7 +53,7 @@ export default function Profile() {
   return (
     <main>
       <div className="profile">
-        <img className="profile-image" src={avatar}></img>
+        <img className="profile-image" src={avatar} alt="Avatar"/>
         <Link to="/settings" className="editPfp">
           <FontAwesomeIcon
             icon={faEdit}

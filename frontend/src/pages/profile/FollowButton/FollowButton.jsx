@@ -39,12 +39,12 @@ export default class FollowButton extends React.Component {
                 this._getFollowStatus = null;
                 this.setState({
                     currentlyFollowed: response.connections?.some(connection =>
-                        connection.connection_type == 'Follow' &&
-                        connection.connection_status == 'Active'
+                        connection.connection_type === 'Follow' &&
+                        connection.connection_status === 'Active'
                     ),
                     connectionID: response.connections?.find(connection =>
-                        connection.connection_type == 'Follow' &&
-                        connection.connection_status == 'Active'
+                        connection.connection_type === 'Follow' &&
+                        connection.connection_status === 'Active'
                     )?.connection_id,
                     loadingFollowStatus: false,
                 });

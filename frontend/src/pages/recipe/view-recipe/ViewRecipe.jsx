@@ -19,7 +19,7 @@ export default class ViewRecipe extends React.Component{
       title: "Title",
       mainImage: "",
       description: "Write description here.",
-      ingredients: [[], [], []],
+      ingredients: [["F", "E", "G"], [1, 2, 3], ["Cups", "ft", "tbs"]],
       recipe: [[], []],
       editMode: false
 		}
@@ -35,18 +35,14 @@ export default class ViewRecipe extends React.Component{
 
       this.setState(({ ingredients }) => ({
         ingredients: ingredients.map((row, i) => {
-          return target.i === null && i===0 ?
-            [...row, target.value] : 
-            row.map((cell, j) => (i===0 && target.i === j) ? target.value : cell)
+          return row.map((cell, j) => (i===0 && target.id === j) ? target.value : cell)
         })
       }));
 
     }else if(target.name === "Amount"){
       this.setState(({ ingredients }) => ({
         ingredients: ingredients.map((row, i) => {
-          return target.i === null && i===1 ?
-            [...row, target.value] : 
-            row.map((cell, j) => (i===1 && target.i === j) ? target.value : cell)
+          return row.map((cell, j) => (i===1 && target.id === j) ? target.value : cell)
         })
       }));
 
@@ -54,10 +50,12 @@ export default class ViewRecipe extends React.Component{
 
       this.setState(({ ingredients }) => ({
         ingredients: ingredients.map((row, i) => {
-          return target.i === null && i===2 ?
-            [...row, target.value] : 
-            row.map((cell, j) => (i===2 && target.i === j) ? target.value : cell)
+          return row.map((cell, j) => (i===2 && target.id === j) ? target.value : cell)
         })
+      }));
+    } else if(event.target.name === "button"){
+      this.setState(({ingredients}) => ({
+        ingredients: ingredients.map((row, i) => [...row, (i === 0 || i === 2) ? "" : 0])
       }));
     }
   }
