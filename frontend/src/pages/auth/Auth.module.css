@@ -1,0 +1,25 @@
+:local(.authContainer) {
+    height: 600px;
+    max-height: calc(100vh - 20px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+:local(.authContainer > article) {
+    border: 1px solid black;
+    border-radius: 5px;
+    --article-padding: 30px;
+    padding: var(--article-padding);
+    background-color: #f8f8f8;
+    width: 500px;
+    max-height: 100%;
+}
+
+:local(.authContainer > article > h1) {
+    margin-top: 0;
+}
+
+:local(.textInput) {
+    width: calc(100% - var(--article-padding)/2);
+}
