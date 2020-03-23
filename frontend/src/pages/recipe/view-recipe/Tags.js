@@ -9,7 +9,7 @@ const Tags = (props) => {
 
   if(tags){
 
-    if(tags.length == 1){
+    if(tags.length === 1){
       return(
         <div>
           <p>{tags[0]}</p>

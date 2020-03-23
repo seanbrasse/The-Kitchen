@@ -4,7 +4,7 @@ import "./RecipePage.css"
 
 
 const Comment = (props) => {
-  if(props.type == "display"){
+  if(props.type === "display"){
     return(
       <div>
       <div id="sideByside">

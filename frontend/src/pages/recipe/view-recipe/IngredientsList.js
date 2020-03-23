@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import "./RecipePage.css"
 
 const IngredientsList = (props) => {
-  if(props.type == "edit"){
+  if(props.type === "edit"){
     return(
       <div>
         <div>

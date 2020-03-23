@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import "./RecipePage.css"
 
 const Description = (props) => {
-  if(props.type == "edit"){
+  if(props.type === "edit"){
     return(
       <div>
       <input type="text" name="description" onChange={props.handle}></input>
