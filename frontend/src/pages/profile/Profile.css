@@ -80,7 +80,7 @@
   /* margin-left: 185px; */
   margin-top: 30px;
   position: absolute;
-  margin-left: 250px;
+  margin-left: 225px;
 }
 
 .followersRow {
@@ -91,6 +91,6 @@
 .Following {
   margin-top: 30px;
   position: absolute;
-  margin-left: 250px;
+  margin-left: 225px;
   cursor: pointer;
 }
