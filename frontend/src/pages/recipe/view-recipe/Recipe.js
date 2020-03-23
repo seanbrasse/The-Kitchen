@@ -7,7 +7,7 @@ const Recipe = (props) => {
   if(props.type == "edit"){
     return(
       <div>
-      {props.recipe[1].map((e, i) => <EditElem index={i} type={props.recipe[0][i]} handle={props.handle}/>)}
+      {props.recipe[1].map((e, i) => <EditElem index={i} type={props.recipe[0][i]} value={e} handle={props.handle}/>)}
       </div>
     )
   }else{
@@ -31,11 +31,11 @@ const GetElem = (props) => {
 
 const EditElem = (props) => {
   if(props.type == "header"){
-    return(<div><input type="text" name={props.index} onChange={props.handle}></input></div>)
+    return(<div><input type="text" name={props.index} value={props.value} onChange={props.handle}></input></div>)
   }else if (props.type == "text") {
-    return(<div><textarea name={props.index} onChange={props.handle}></textarea></div>)
+    return(<div><textarea name={props.index} value={props.value} onChange={props.handle}></textarea></div>)
   }else{
-    return(<div><input type="text" name={props.index} onChange={props.handle}></input></div>)
+    return(<div><input type="text" name={props.index} value={props.value} onChange={props.handle}></input></div>)
   }
 }
 

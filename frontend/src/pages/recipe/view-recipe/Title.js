@@ -6,15 +6,15 @@ const Title = (props) => {
   if(props.type == "edit"){
     return(
       <div>
-      <div><input type="text" name="title" onChange={props.handle}></input></div>
-      <div><input type="text" name="image" onChange={props.handle}></input></div>
+      <div><input type="text" name="title" value={props.title} onChange={props.handle}></input></div>
+      <div><input type="text" name="image" value={props.image} onChange={props.handle}></input></div>
       </div>
     )
   }else{
     return(
       <div>
       <h1>{props.title}</h1>
-      <img src={process.env.PUBLIC_URL + props.image}/>
+      <img src={props.image}/>
       </div>
     )
   }

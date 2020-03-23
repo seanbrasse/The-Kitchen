@@ -19,7 +19,7 @@ class App extends React.Component{
       title: "Title",
       mainImage: "",
       description: "Write description here.",
-      ingredients: [[], [], []],
+      ingredients: [["F", "E", "G"], [1, 2, 3], ["Cups", "ft", "tbs"]],
       recipe: [[], []],
       editMode: false
 		}
@@ -31,29 +31,20 @@ class App extends React.Component{
 
   addIngredient = (event) => {
     if(event.target.name == "Ingredients"){
-
-      if(event.target.i == null){
-        event.target.i = this.state.ingredients[0].length
-      }
-      this.state.ingredients[0][event.target.i] = event.target.value
+      this.state.ingredients[0][event.target.id] = event.target.value
   		this.setState({})
-
     }else if(event.target.name == "Amount"){
-
-      if(event.target.i == null){
-        event.target.i = this.state.ingredients[1].length
-      }
-      this.state.ingredients[1][event.target.i] = event.target.value
+      this.state.ingredients[1][event.target.id] = event.target.value
       this.setState({})
 
     }else if(event.target.name == "Units"){
-
-      if(event.target.i == null){
-        event.target.i = this.state.ingredients[2].length
-      }
-      this.state.ingredients[2][event.target.i] = event.target.value
+      this.state.ingredients[2][event.target.id] = event.target.value
       this.setState({})
-
+    }else if(event.target.name == "button"){
+      this.state.ingredients[0][this.state.ingredients[0].length] = "";
+      this.state.ingredients[1][this.state.ingredients[1].length] = 0;
+      this.state.ingredients[2][this.state.ingredients[2].length] = "";
+      this.setState({})
     }
   }
 
