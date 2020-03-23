@@ -1,10 +1,11 @@
 import React from "react";
 import { useParams, Link } from "react-router-dom";
-import AccountSettings from "../account-settings/AccountSettings";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCog, faCaretDown } from "@fortawesome/free-solid-svg-icons";
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
 import { faEllipsisV } from "@fortawesome/free-solid-svg-icons";
+import FollowButton from './FollowButton/FollowButton';
+import AccountSettings from "../account-settings/AccountSettings";
 import "./Profile.css";
 import avatar from "./img_avatar.png";
 
@@ -62,6 +63,7 @@ export default function Profile() {
           ></FontAwesomeIcon>
         </Link>
         <h1 className="profile-name">Profile {userID}</h1>
+        <FollowButton userID={userID} />
         <Link to="/settings" className="settings">
           <FontAwesomeIcon
             icon={faCog}

@@ -1,0 +1,19 @@
+:local(.followButton) {
+    background: none;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 7px 10px;
+}
+
+:local(.followButton:hover) {
+    background-color: #ddd;
+}
+
+:local(.followButton:active) {
+    background-color: #ccc;
+}
+
+:local(.followButton:disabled) {
+    background-color: #eee;
+}
