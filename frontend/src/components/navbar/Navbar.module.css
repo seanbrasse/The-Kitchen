@@ -1,26 +1,28 @@
-.navbar {
+:local(.navbar) {
     border: 1px solid #ccc;
     border-radius: 4px;
     --vertical-padding: 15px;
     padding: var(--vertical-padding) 0;
 }
 
-.navbar ul {
+:local(.navbar ul) {
     padding: 0;
     margin: 0;
     display: inline-block;
 }
 
-.navbar li {
+:local(.navbar li) {
     list-style: none;
     display: inline-block;
 }
 
-.navbar a {
+:local(.navbar a) {
     text-decoration: none;
     padding: var(--vertical-padding) 15px;
 }
 
+/*
 .navbar a.active {
     background-color: #d9d9d9;
 }
+*/

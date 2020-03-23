@@ -1,5 +1,6 @@
 export {default as AccountSettings} from './account-settings/AccountSettings';
 export {default as CreateAccount} from './auth/create-account/CreateAccount';
+export {default as ForgotPassword} from './auth/forgot-password/ForgotPassword';
 export {default as Login} from './auth/login/Login';
 export {default as ResetPassword} from './auth/reset-password/ResetPassword';
 export {default as Feed} from './feed/Feed';

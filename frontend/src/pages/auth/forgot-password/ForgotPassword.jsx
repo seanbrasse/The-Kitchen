@@ -4,10 +4,10 @@ import { NavLink } from "react-router-dom";
 import { ValidatedInput } from 'components';
 import styles from '../Auth.module.css';
 
-const BUTTON_READY = "Create Account";
+const BUTTON_READY = "Request One Time Login";
 const BUTTON_WAITING = "Setting Up Your Account...";
 
-class CreateAccount extends React.Component {
+class ForgotPassword extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -34,7 +34,7 @@ class CreateAccount extends React.Component {
         fetch('http://stark.cse.buffalo.edu/cse410/deldev/api/SocialAuth.php', {
             method: 'post',
             body: JSON.stringify({
-                action: 'register',
+                action: 'forgotpassword',
                 email_addr: this.state.email
             })
         }).then(res => res.json()).then(
@@ -43,13 +43,13 @@ class CreateAccount extends React.Component {
             }
         );
     }
-
+    
     render() {
         return (
             <main className={styles.authContainer}>
                 <article>
                     <h1>Welcome to The Kitchen</h1>
-                    <h2>Sign Up</h2>
+                    <h2>Request Password Reset</h2>
                     <form ref={this.form}>
                         <ValidatedInput type="email" className={styles.textInput} onChange={e => this.setState({email: e.target.value})}
                             ref={this.emailInput} required
@@ -71,4 +71,4 @@ class CreateAccount extends React.Component {
     }
 }
 
-export default withRouter(CreateAccount);
+export default withRouter(ForgotPassword);

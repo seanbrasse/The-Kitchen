@@ -7,6 +7,7 @@ import {
 import {
   AccountSettings,
   CreateAccount,
+  ForgotPassword,
   Login,
   ResetPassword,
   Feed,
@@ -25,7 +26,7 @@ export default function App() {
     <div className={styles.app}>
       <Router>
         <Switch>
-          <Route exact path={['/', '/login', '/create-account', '/reset-password', '/change-password']}></Route>
+          <Route exact path={['/', '/login', '/create-account', '/reset-password', '/change-password', '/forgot-password']}></Route>
           <Route>
             <Navbar/>
           </Route>
@@ -37,8 +38,8 @@ export default function App() {
           <Route exact path='/create-account'>
             <CreateAccount/>
           </Route>
-          <Route exact path='/reset-password'>
-            <ResetPassword/>
+          <Route exact path='/forgot-password'>
+            <ForgotPassword/>
           </Route>
           <Route exact path='/reset-password'>
             <ResetPassword/>
