@@ -1,0 +1,182 @@
+body {
+	background-color: #def;
+  background-image: url("donkey.png");
+}
+
+
+a:hover {
+  background-color: yellow;
+}
+
+p:hover {
+  background-color: yellow;
+}
+
+#backg {
+	 background-color: #ba1;
+}
+
+#space {
+
+}
+
+#make_acc {
+	
+	text-align: center;
+	width: 675px;
+
+}
+
+#header {
+	padding: 10px;
+	border-top-left-radius: 10px;	
+	border-top-right-radius: 10px;	
+	background-color: coral;
+	text-align: center;
+	color: #fff0f5;
+}
+
+#container {
+	border-style: solid;
+	border-radius: 10px;
+	border-color: #fff0f5;
+	background-color: #fff0f5;
+	position: absolute;
+	width: 1050.00px;
+	height: 500.8px;
+	left: 114.44px;
+	top: 20.0px;	
+
+}
+
+#left {
+    width: 30%;
+    float: left;
+    text-align: right;
+}
+
+/*form {
+	color: black;
+	font-size: 74.69;
+	position: absolute;
+	left: 381.94px;	
+	top: 243.87px;
+	width: 176.48px;
+	height: 59.93px;
+} */
+
+label{
+    display: block; /* add this */
+    padding-top: 10px;
+}
+
+label[for="uname"]
+{
+    font-size:24px;
+    padding-bottom: 10px;
+
+}
+label[for="pword"]
+{
+    font-size:24px;
+    padding-top: 30px;
+    padding-bottom: 10px;
+}
+label[for="sub"]
+{
+    font-size:24px;
+    padding-top: 20px;
+    padding-bottom: 10px;
+
+}
+
+label[for="account"] {
+ text-align: center;
+ width: 650px;
+}
+
+label[for="account"]:hover {
+  /*background-color: #3da;*/
+}
+
+input[id="unamel"]
+{
+    font-size:24px;
+    border-radius: 10px;
+    width: 675px;
+    height: 30px;
+}
+input[name="uname"]
+{
+    font-size:24px;
+}
+
+input[id="pwordl"]
+{
+    font-size:24px;
+    border-radius: 10px;
+    width: 675px;
+    height: 30px;
+
+}
+
+input[type="submit"] {
+  width: 675px;
+  background-color: coral;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+
+}
+
+input[type="submit"]:hover {
+   cursor: pointer;
+}
+
+#rect {
+	width:500px;height:100px;border:1px solid #000;
+}
+
+#fgpass {
+	position: absolute;
+	left: 563px;
+	top: 210.0px;
+	width: 115px;	
+  color: white;
+}
+
+ #username {
+	color: black;
+	font-size: 74.69;
+	position: absolute;
+	left: 18%;
+	top: 30%;
+	width: 176.48px;
+	height: 59.93px;
+}
+
+.btn_login {
+  top: 195.0px;
+  width: 675px;
+  background-color: coral;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+
+} 
+
+#log {
+	top:300.0px;
+}
+
+#user_errors, #pass_errors, #email_errors, #pass1_errors, #pass2_errors, #user_regi{
+	display: inline-block;
+    color: #ffffff;
+
+}
