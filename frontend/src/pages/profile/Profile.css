@@ -1,0 +1,96 @@
+.profile {
+  border: 1px solid #ccc;
+  margin-top: 10px;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: row;
+}
+
+.sidebar {
+  border: 1px solid #ccc;
+  margin-top: 10px;
+  border-radius: 4px;
+  width: 15%;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+}
+
+.settings {
+  right: 0;
+  margin-right: 30px;
+  margin-top: 5px;
+  position: absolute;
+}
+
+.editPfp {
+  width: 80px;
+  height: 80px;
+  padding: 10px;
+  position: absolute;
+  margin-top: 8px;
+  left: 80px;
+}
+
+.left-text {
+  margin-left: 10px;
+}
+
+.profile-image {
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+  padding: 10px;
+}
+
+.profile-name {
+  align-self: center;
+}
+
+.follower {
+  margin: 10px;
+  padding: 12px 16px;
+  border-radius: 16px;
+  cursor: pointer;
+  text-align: center;
+  background-color: #ddd;
+}
+
+.btn-setting {
+  float: right;
+}
+
+.myfeed {
+  border: 1px solid #ccc;
+  margin-top: 10px;
+  border-radius: 4px;
+  width: 15%;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+}
+
+.BioRow {
+  display: flex;
+  flex-direction: row;
+}
+
+.editBio {
+  /* float: right; */
+  /* margin-left: 185px; */
+  margin-top: 30px;
+  position: absolute;
+  margin-left: 250px;
+}
+
+.followersRow {
+  display: flex;
+  flex-direction: row;
+}
+
+.Following {
+  margin-top: 30px;
+  position: absolute;
+  margin-left: 250px;
+  cursor: pointer;
+}
