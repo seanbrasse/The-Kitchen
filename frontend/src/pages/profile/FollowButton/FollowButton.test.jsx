@@ -8,8 +8,8 @@ const userIDToConnect = '123';;
 const connectionID = '4456'
 
 beforeEach(() => {
-    localStorage.clear();
-    localStorage.setItem('userid', currentUserID);
+    sessionStorage.clear();
+    sessionStorage.setItem('userid', currentUserID);
     fetch.resetMocks();
 });
 
@@ -100,7 +100,7 @@ test('follow button requests follow on click when unfollowed', async () => {
     expect(url).toMatch(/connectioncontroller.php$/);
     
     expect(body.action).toEqual('addOrEditConnections');
-    expect(body.userid).toEqual(currentUserID);
+    expect(body.user_id).toEqual(currentUserID);
     expect(body.connectuserid).toEqual(userIDToConnect);
     expect(body.connectiontype).toEqual('Follow');
     expect(body.connectionstatus).toEqual('Active');
@@ -135,7 +135,7 @@ test('follow button requests unfollow on click when followed', async () => {
     expect(url).toMatch(/connectioncontroller.php$/);
     
     expect(body.action).toEqual('addOrEditConnections');
-    expect(body.userid).toEqual(currentUserID);
+    expect(body.user_id).toEqual(currentUserID);
     expect(body.connectuserid).toEqual(userIDToConnect);
     expect(body.connectiontype).toEqual('Follow');
     expect(body.connectionstatus).toEqual('Inactive');
