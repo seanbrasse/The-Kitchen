@@ -4,7 +4,7 @@ import "./RecipePage.css"
 
 
 const Recipe = (props) => {
-  if(props.type === "edit"){
+  if(props.type == "edit"){
     return(
       <div>
       {props.recipe[1].map((e, i) => <EditElem index={i} type={props.recipe[0][i]} value={e} handle={props.handle}/>)}
@@ -20,19 +20,19 @@ const Recipe = (props) => {
 }
 
 const GetElem = (props) => {
-  if(props.type === "header"){
+  if(props.type == "header"){
     return(<h4>{props.elem}</h4>)
-  }else if (props.type === "text") {
+  }else if (props.type == "text") {
     return(<p>{props.elem}</p>)
   }else{
-    return(<img src={process.env.PUBLIC_URL + props.elem} alt="Dish"/>)
+    return(<img src={process.env.PUBLIC_URL + props.elem}/>)
   }
 }
 
 const EditElem = (props) => {
-  if(props.type === "header"){
+  if(props.type == "header"){
     return(<div><input type="text" name={props.index} value={props.value} onChange={props.handle}></input></div>)
-  }else if (props.type === "text") {
+  }else if (props.type == "text") {
     return(<div><textarea name={props.index} value={props.value} onChange={props.handle}></textarea></div>)
   }else{
     return(<div><input type="text" name={props.index} value={props.value} onChange={props.handle}></input></div>)

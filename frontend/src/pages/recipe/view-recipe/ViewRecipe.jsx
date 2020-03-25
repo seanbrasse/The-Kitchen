@@ -1,13 +1,7 @@
 import React from 'react'
-//import Board from './tictac'
 import RecipeHeader from './RecipeHeader'
-//import Tags from './Tags'
-//import PrepTime from './PrepTime'
 import IngredientsList from './IngredientsList'
-//import StarRating from './StarRating'
 import Recipe from './Recipe'
-//import Author from './Author'
-//import Comment from './Comment'
 import Description from './Description'
 import Title from './Title'
 
@@ -16,85 +10,158 @@ export default class ViewRecipe extends React.Component{
     super(props);
 
     this.state = {
-      title: "Title",
-      mainImage: "",
-      description: "Write description here.",
-      ingredients: [["F", "E", "G"], [1, 2, 3], ["Cups", "ft", "tbs"]],
+      title: "title",
+      mainImage: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fimg.izismile.com%2Fimg%2Fimg5%2F20120210%2F640%2Ffood_photos_which_will_make_you_drool_640_05.jpg&f=1&nofb=1",
+      description: "description",
+      ingredients: [[], [], []],
       recipe: [[], []],
+      content: "",
       editMode: false
 		}
   }
 
+  loadData = (event) => {
+      fetch('http://stark.cse.buffalo.edu/cse410/deldev/api/postcontroller.php', {
+          method: 'post',
+          body: JSON.stringify({
+              action: 'getPosts',
+              postid: '65'
+          })
+          }).then(res => res.json()).then(parsedRes => {
+              this.state.content = parsedRes.posts[0];
+              this.setState({
+                content: this.state.content.post_text,
+                mainImage:  this.state.content.post_pic_url
+              })
+      })
+      this.parseData();
+  }
+
+  saveData(){
+    this.combineData();
+
+    fetch('http://stark.cse.buffalo.edu/cse410/deldev/api/postcontroller.php', {
+        method: 'post',
+        body: JSON.stringify({
+            action: 'addOrEditPosts',
+            postid: '65',
+            user_id: "300",
+            session_token: "5e7ad8a807ff3",
+            posttype: "Recipe",
+            posttext: this.state.content,
+            postpicurl: this.state.mainImage,
+            parentid: null
+            })
+        })
+  }
+
+  combineData(){
+    var len = 0;
+
+    //title
+    this.state.content = this.state.title;
+    //description
+    this.state.content += "," + this.state.description;
+
+    //ingredients
+    len = this.state.ingredients[0].length;
+    this.state.content += "," + len;
+    for(var i = 0; i < len; i++){
+      this.state.content += "," + this.state.ingredients[0][i];
+    }
+    for(var i = 0; i < len; i++){
+      this.state.content += "," + this.state.ingredients[1][i];
+    }
+    for(var i = 0; i < len; i++){
+      this.state.content += "," + this.state.ingredients[2][i];
+    }
+
+    //recipe
+    len = this.state.recipe[0].length;
+    this.state.content += "," + len;
+    for(var i = 0; i < len; i++){
+      this.state.content += "," + this.state.recipe[0][i];
+    }
+    for(var i = 0; i < len; i++){
+      this.state.content += "," + this.state.recipe[1][i];
+    }
+  }
+
+  parseData(){
+    var len = 0;
+    var index = 0;
+    var data = this.state.content.split(',');
+
+    //title
+    this.state.title = data[index++];
+    //description
+    this.state.description = data[index++];
+
+    //ingredients
+    len = data[index++];
+    for(var i = 0; i < len; i++){
+      this.state.ingredients[0][i] = data[index++];
+    }
+    for(var i = 0; i < len; i++){
+      this.state.ingredients[1][i] = data[index++];
+    }
+    for(var i = 0; i < len; i++){
+      this.state.ingredients[2][i] = data[index++];
+    }
+
+    //recipe
+    len = data[index++];
+    for(var i = 0; i < len; i++){
+      this.state.recipe[0][i] = data[index++];
+    }
+    for(var i = 0; i < len; i++){
+      this.state.recipe[1][i] = data[index++];
+    }
+  }
+
   changeMode = (event) => {
+
+    if(this.state.editMode == true){
+      this.saveData();
+    }
+
 		this.setState({editMode: !this.state.editMode})
 	}
 
   addIngredient = (event) => {
-    const target = event.target;
-    if(target.name === "Ingredients"){
+    if(event.target.name === "Ingredients"){
+      this.state.ingredients[0][event.target.id] = event.target.value
+  		this.setState({})
+    }else if(event.target.name === "Amount"){
+      this.state.ingredients[1][event.target.id] = event.target.value
+      this.setState({})
 
-      this.setState(({ ingredients }) => ({
-        ingredients: ingredients.map((row, i) => {
-          return row.map((cell, j) => (i===0 && target.id === j) ? target.value : cell)
-        })
-      }));
-
-    }else if(target.name === "Amount"){
-      this.setState(({ ingredients }) => ({
-        ingredients: ingredients.map((row, i) => {
-          return row.map((cell, j) => (i===1 && target.id === j) ? target.value : cell)
-        })
-      }));
-
-    }else if(target.name === "Units"){
-
-      this.setState(({ ingredients }) => ({
-        ingredients: ingredients.map((row, i) => {
-          return row.map((cell, j) => (i===2 && target.id === j) ? target.value : cell)
-        })
-      }));
-    } else if(event.target.name === "button"){
-      this.setState(({ingredients}) => ({
-        ingredients: ingredients.map((row, i) => [...row, (i === 0 || i === 2) ? "" : 0])
-      }));
+    }else if(event.target.name === "Units"){
+      this.state.ingredients[2][event.target.id] = event.target.value
+      this.setState({})
+    }else if(event.target.name === "button"){
+      this.state.ingredients[0][this.state.ingredients[0].length] = "";
+      this.state.ingredients[1][this.state.ingredients[1].length] = 0;
+      this.state.ingredients[2][this.state.ingredients[2].length] = "";
+      this.setState({})
     }
   }
 
   addRecipeElement = (event) => {
-    const target = event.target;
-    if(target.name === "0"){
-      this.setState(({ recipe }) => ({
-        recipe: recipe.map((row, i) => {
-          return i===0 ? [...row, "header"] : row
-        })
-      }));
-    }else if(target.name === "1"){
-      this.setState(({ recipe }) => ({
-        recipe: recipe.map((row, i) => {
-          return i===0 ? [...row, "text"] : row
-        })
-      }));
-    }else if(target.name === "2"){
-      this.setState(({ recipe }) => ({
-        recipe: recipe.map((row, i) => {
-          return i===0 ? [...row, "image"] : row
-        })
-      }));
+    if(event.target.name === "0"){
+      this.state.recipe[0][this.state.recipe[0].length] = "header"
+    }else if(event.target.name === "1"){
+      this.state.recipe[0][this.state.recipe[0].length] = "text"
+    }else if(event.target.name === "2"){
+      this.state.recipe[0][this.state.recipe[0].length] = "image"
     }
-    this.setState(({ recipe }) => ({
-      recipe: recipe.map((row, i) => {
-        return i===1 ? [...row, ""] : row
-      })
-    }));
+    this.state.recipe[1][this.state.recipe[1].length] = ""
+    this.setState({})
   }
 
   updateRecipe = (event) => {
-    const target = event.target;
-    this.setState(({ recipe }) => ({
-      recipe: recipe.map((row, i) => {
-        return i===1 ? row.map((cell, i) => i === target.name ? target.value : cell) : row
-      })
-    }));
+    this.state.recipe[1][event.target.name] = event.target.value
+    this.setState({})
   }
 
   updateDesc = (event) => {
@@ -120,6 +187,7 @@ export default class ViewRecipe extends React.Component{
       <RecipeHeader type={this.state.editMode ? "edit" : "display"} buttons={["add Header", "add Textbox", "add Image"]} handle={this.addRecipeElement}>Recipe</RecipeHeader>
       <Recipe type={this.state.editMode ? "edit" : "display"} recipe={this.state.recipe} handle={this.updateRecipe}/>
       <button onClick={this.changeMode}>Change Mode</button>
+      <button onClick={this.loadData}>Load Recipe</button>
       </div>
     )
   }

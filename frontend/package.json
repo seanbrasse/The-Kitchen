@@ -1,6 +1,7 @@
 {
   "name": "thekitchen-frontend",
   "version": "0.1.0",
+  "home": "./",
   "private": true,
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.28",
