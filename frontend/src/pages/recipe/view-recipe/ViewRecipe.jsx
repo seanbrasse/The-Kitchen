@@ -20,7 +20,12 @@ export default class ViewRecipe extends React.Component{
 		}
   }
 
-  loadData = (event) => {
+
+  componentDidMount() {
+    this.loadData();
+  }
+
+  loadData(){
       fetch('http://stark.cse.buffalo.edu/cse410/deldev/api/postcontroller.php', {
           method: 'post',
           body: JSON.stringify({
@@ -28,13 +33,15 @@ export default class ViewRecipe extends React.Component{
               postid: '65'
           })
           }).then(res => res.json()).then(parsedRes => {
-              this.state.content = parsedRes.posts[0];
               this.setState({
-                content: this.state.content.post_text,
-                mainImage:  this.state.content.post_pic_url
+                content: parsedRes.posts[0].post_text,
+                mainImage: parsedRes.posts[0].post_pic_url
               })
+              this.parseData();
+
+
       })
-      this.parseData();
+
   }
 
   saveData(){
@@ -42,11 +49,12 @@ export default class ViewRecipe extends React.Component{
 
     fetch('http://stark.cse.buffalo.edu/cse410/deldev/api/postcontroller.php', {
         method: 'post',
+
         body: JSON.stringify({
             action: 'addOrEditPosts',
             postid: '65',
-            user_id: "300",
-            session_token: "5e7ad8a807ff3",
+            user_id: sessionStorage.getItem('userID'),
+            session_token: sessionStorage.getItem('token'),
             posttype: "Recipe",
             posttext: this.state.content,
             postpicurl: this.state.mainImage,
@@ -61,41 +69,41 @@ export default class ViewRecipe extends React.Component{
     //title
     this.state.content = this.state.title;
     //description
-    this.state.content += "," + this.state.description;
+    this.state.content += "\0" + this.state.description;
 
     //ingredients
     len = this.state.ingredients[0].length;
-    this.state.content += "," + len;
+    this.state.content += "\0" + len;
     for(var i = 0; i < len; i++){
-      this.state.content += "," + this.state.ingredients[0][i];
+      this.state.content += "\0" + this.state.ingredients[0][i];
     }
     for(var i = 0; i < len; i++){
-      this.state.content += "," + this.state.ingredients[1][i];
+      this.state.content += "\0" + this.state.ingredients[1][i];
     }
     for(var i = 0; i < len; i++){
-      this.state.content += "," + this.state.ingredients[2][i];
+      this.state.content += "\0" + this.state.ingredients[2][i];
     }
 
     //recipe
     len = this.state.recipe[0].length;
-    this.state.content += "," + len;
+    this.state.content += "\0" + len;
     for(var i = 0; i < len; i++){
-      this.state.content += "," + this.state.recipe[0][i];
+      this.state.content += "\0" + this.state.recipe[0][i];
     }
     for(var i = 0; i < len; i++){
-      this.state.content += "," + this.state.recipe[1][i];
+      this.state.content += "\0" + this.state.recipe[1][i];
     }
   }
 
   parseData(){
     var len = 0;
     var index = 0;
-    var data = this.state.content.split(',');
+    var data = this.state.content.split('\0');
 
     //title
-    this.state.title = data[index++];
+    this.setState({title: data[index++]});
     //description
-    this.state.description = data[index++];
+    this.setState({description: data[index++]});
 
     //ingredients
     len = data[index++];
@@ -117,6 +125,8 @@ export default class ViewRecipe extends React.Component{
     for(var i = 0; i < len; i++){
       this.state.recipe[1][i] = data[index++];
     }
+
+    this.setState({})
   }
 
   changeMode = (event) => {
@@ -129,6 +139,7 @@ export default class ViewRecipe extends React.Component{
 	}
 
   addIngredient = (event) => {
+
     if(event.target.name === "Ingredients"){
       this.state.ingredients[0][event.target.id] = event.target.value
   		this.setState({})
@@ -187,7 +198,6 @@ export default class ViewRecipe extends React.Component{
       <RecipeHeader type={this.state.editMode ? "edit" : "display"} buttons={["add Header", "add Textbox", "add Image"]} handle={this.addRecipeElement}>Recipe</RecipeHeader>
       <Recipe type={this.state.editMode ? "edit" : "display"} recipe={this.state.recipe} handle={this.updateRecipe}/>
       <button onClick={this.changeMode}>Change Mode</button>
-      <button onClick={this.loadData}>Load Recipe</button>
       </div>
     )
   }
