@@ -1,5 +1,6 @@
 import React from 'react';
 import {useParams} from 'react-router-dom';
+import EditRecipePage from './EditRecipePage'
 
 export default function EditRecipe() {
     // recipeID will be null for the create page
@@ -7,7 +8,7 @@ export default function EditRecipe() {
 
     return (
         <main>
-            <h1>{recipeID ? 'EDIT' : 'CREATE'} RECIPE {recipeID}</h1>
+            <EditRecipePage postID={recipeID} />
         </main>
     );
 }
