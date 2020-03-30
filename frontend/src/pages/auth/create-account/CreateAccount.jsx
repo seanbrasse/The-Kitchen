@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { withRouter } from "react-router";
 import { NavLink } from "react-router-dom";
 import { ValidatedInput } from 'components';
@@ -12,14 +12,13 @@ class CreateAccount extends React.Component {
         super(props);
         this.state = {
             email: '',
-            submitText: BUTTON_READY,
             submitDisabled: false
         };
         this.emailInput = React.createRef();
         this.form = React.createRef();
     }
 
-    submit(e) {
+    async submit(e) {
         e.preventDefault();
 
         this.emailInput.current.validate();
@@ -28,9 +27,29 @@ class CreateAccount extends React.Component {
         }
 
         this.setState({
-            submitText: BUTTON_WAITING,
             submitDisabled: true
         });
+        
+        const userResponse = await fetch('http://stark.cse.buffalo.edu/cse410/deldev/api/usercontroller.php', {
+            method: 'post',
+            body: JSON.stringify({
+                action: 'getUsers',
+                emailaddr: this.state.email
+            })
+        }).then(res => res.json());
+
+        if (userResponse.users) {
+            this.emailInput.current.setTemporaryValidity(
+                <Fragment>A user account with this email already exists - <NavLink to="/forgot-password">Reset Password?</NavLink></Fragment>
+            );
+
+            this.setState({
+                submitDisabled: false
+            });
+
+            return;
+        }
+
         fetch('http://stark.cse.buffalo.edu/cse410/deldev/api/SocialAuth.php', {
             method: 'post',
             body: JSON.stringify({
@@ -59,7 +78,7 @@ class CreateAccount extends React.Component {
     
                         <br/>
             
-                        <input type="submit" value={this.state.submitText} onClick={e => this.submit(e)} disabled={this.state.submitDisabled} />
+                        <input type="submit" value={this.state.submitDisabled ? BUTTON_WAITING : BUTTON_READY} onClick={e => this.submit(e)} disabled={this.state.submitDisabled} />
     
                         <br/><br/>
                         
