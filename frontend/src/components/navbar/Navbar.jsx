@@ -22,7 +22,7 @@ class Navbar extends React.Component {
   render() {
     return (
       <nav className={styles.navbar}>
-        <NavLink to="/feed">The Kitchen</NavLink>
+        <NavLink to="/feed" className={styles.logo}>The Kitchen</NavLink>
         <ul>
           <li>
             <NavLink to="/feed" activeClassName={styles.active}>Home</NavLink>

@@ -19,8 +19,7 @@ const IngredientsList = (props) => {
             <h2>Amount</h2>
             <ul>
             {props.ingredients[1].map((amt, i) => <li key={i}>
-            <input type="number" name="Amount" value={amt} onChange={(e) => props.handle(e, i)}></input><
-            /li>)}
+            <input type="number" name="Amount" value={amt} onChange={(e) => props.handle(e, i)}></input></li>)}
             </ul>
           </div>
           <div>
@@ -28,10 +27,10 @@ const IngredientsList = (props) => {
             <ul>
             {props.ingredients[2].map((unit, i) => <li key={i}>
               <input type="text" name="Units" value={unit} onChange={(e) => props.handle(e, i)}></input>
-              <button id="icon" name="Delete" onClick={(e) => props.handle(e, i)}><MdDelete/></button>
+              <button className="icon" name="Delete" onClick={(e) => props.handle(e, i)}><MdDelete/></button>
               </li>)}
             </ul>
-            <button id="smallButton" name="button" onClick={(e) => props.handle(e, 0)}>Add Ingredient</button>
+            <button class="smallButton" name="button" onClick={(e) => props.handle(e, 0)}>Add Ingredient</button>
           </div>
       </div>
     )

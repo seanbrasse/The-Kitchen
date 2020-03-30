@@ -257,8 +257,8 @@ export default class EditRecipePage extends React.Component{
       <IngredientsList type={this.state.editMode ? "edit" : "display"} ingredients={this.state.ingredients} handle={this.addIngredient}/>
       <RecipeHeader type={this.state.editMode ? "edit" : "display"} buttons={["add Header", "add Textbox", "add Image"]} handle={this.addRecipeElement}>Recipe</RecipeHeader>
       <Recipe type={this.state.editMode ? "edit" : "display"} recipe={this.state.recipe} handle={this.updateRecipe}/>
-      <button id="smallButton" onClick={this.uploadDataPublic}>Upload Public</button>
-      <button id="smallButton" onClick={this.uploadDataPrivate}>Upload Private</button>
+      <button className="smallButton" onClick={this.uploadDataPublic}>Upload Public</button>
+      <button className="smallButton" onClick={this.uploadDataPrivate}>Upload Private</button>
       </div>
       </div>
     )

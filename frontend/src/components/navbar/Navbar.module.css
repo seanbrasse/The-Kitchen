@@ -1,8 +1,9 @@
 :local(.navbar) {
-    border: 1px solid #ccc;
+    background-color: #54C254;
     border-radius: 4px;
-    --vertical-padding: 15px;
-    padding: var(--vertical-padding) 0;
+    padding: 15px 0;
+    display: flex;
+    align-items: center;
 
     /* So that the right nav's position: absolute has something to reference off of */
     position: relative;
@@ -21,13 +22,20 @@
 
 :local(.navbar a) {
     text-decoration: none;
-    padding: var(--vertical-padding) 15px;
+    padding: 0 15px;
 }
 
 :local(.rightNav) {
     display: inline-block;
     position: absolute;
     right: 0;
+}
+
+:local(.logo) {
+    font-family: 'Comfortaa';
+    color: black;
+    font-weight: bold;
+    font-size: 24px;
 }
 
 /*
