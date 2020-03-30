@@ -54,6 +54,7 @@ class Login extends React.Component {
                 } else {
                     sessionStorage.setItem('userID', response.user.user_id);
                     sessionStorage.setItem('token', response.user.session_token);
+                    sessionStorage.setItem('userEmail', response.user.email_addr);
                     this.props.history.replace('/feed');
                 }
             }
