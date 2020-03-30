@@ -1,8 +1,13 @@
+<<<<<<< HEAD
 import React, { Fragment } from 'react';
 import { withRouter } from "react-router";
+=======
+import React from "react";
+>>>>>>> origin/user-profile
 import { NavLink } from "react-router-dom";
-import styles from './Navbar.module.css';
+import styles from "./Navbar.module.css";
 
+<<<<<<< HEAD
 class Navbar extends React.Component {
   logout() {
     fetch('http://stark.cse.buffalo.edu/cse410/deldev/api/SocialAuth.php', {
@@ -47,6 +52,36 @@ class Navbar extends React.Component {
       </nav>
     );
   }
+=======
+export default function Navbar() {
+  var user_id = sessionStorage.getItem("userID");
+  var url = "/user/" + user_id;
+
+  return (
+    <nav className={styles.navbar}>
+      <NavLink to="/feed">The Kitchen</NavLink>
+      <ul>
+        <li>
+          <NavLink to="/feed" activeClassName={styles.active}>
+            Home
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to="/search" activeClassName={styles.active}>
+            Search
+          </NavLink>
+        </li>
+        <li>
+          {" "}
+          {/* userLoggedIn ? */}
+          <NavLink to={url} activeClassName={styles.active}>
+            My Profile
+          </NavLink>
+        </li>
+      </ul>
+    </nav>
+  );
+>>>>>>> origin/user-profile
 }
 
 export default withRouter(Navbar);
