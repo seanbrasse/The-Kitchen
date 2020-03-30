@@ -1,17 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import "./RecipePage.css"
 
 const Description = (props) => {
   if(props.type === "edit"){
     return(
-      <div>
+      <div class="description">
       <textarea name="description" value={props.description} onChange={props.handle}></textarea>
       </div>
     )
   }else{
     return(
-      <div>
+      <div class="description">
       <p>{props.description}</p>
       </div>
     )
@@ -20,7 +19,7 @@ const Description = (props) => {
 
 Description.propTypes = {
   handle: PropTypes.func,
-  type: PropTypes.oneOf("edit", "display"),
+  type: PropTypes.oneOf(["edit", "display"]),
   description: PropTypes.string
 }
 
