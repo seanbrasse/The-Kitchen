@@ -4,6 +4,7 @@ import IngredientsList from '../recipe-components/IngredientsList'
 import Recipe from '../recipe-components/Recipe'
 import Description from '../recipe-components/Description'
 import Title from '../recipe-components/Title'
+import {parseRecipe} from 'components/parseRecipe.js'
 
 export default class EditRecipePage extends React.Component{
 
@@ -12,18 +13,22 @@ export default class EditRecipePage extends React.Component{
     var content = "";
 
     this.state = {
-      title: "title",
-      mainImage: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fimg.izismile.com%2Fimg%2Fimg5%2F20120210%2F640%2Ffood_photos_which_will_make_you_drool_640_05.jpg&f=1&nofb=1",
-      description: "description",
+      title: "",
+      mainImage: "",
+      description: "",
       ingredients: [[], [], []],
       recipe: [[], []],
+      postID: 0,
       editMode: true
 		}
   }
 
 
   componentDidMount() {
-    this.loadData(this.props.postID);
+    if(this.props.postID != 0){
+      this.setState({postID: this.props.postID})
+      this.loadData(this.props.postID);
+    }
   }
 
   loadData(postID){
@@ -34,22 +39,27 @@ export default class EditRecipePage extends React.Component{
               postid: postID
           })
           }).then(res => res.json()).then(parsedRes => {
-                this.content = parsedRes.posts[0].post_text;
+              this.content = parsedRes.posts[0].post_text;
               this.setState({
                 mainImage: parsedRes.posts[0].post_pic_url
               })
-            this.parseData();
+              var recipe = parseRecipe(this.content);
+              this.setState({title: recipe.title});
+              this.setState({description: recipe.description});
+              this.setState({ingredients: recipe.ingredients});
+              this.setState({recipe: recipe.recipe});
       })
   }
 
   saveData(){
     this.combineData();
+    if(this.state.postID != 0){
     fetch('http://stark.cse.buffalo.edu/cse410/deldev/api/postcontroller.php', {
         method: 'post',
 
         body: JSON.stringify({
             action: 'addOrEditPosts',
-            postid: this.props.postID,
+            postid: this.state.postID,
             user_id: sessionStorage.getItem('userID'),
             session_token: sessionStorage.getItem('token'),
             posttype: "Recipe",
@@ -58,6 +68,23 @@ export default class EditRecipePage extends React.Component{
             parentid: null
             })
         })
+    }else{
+      fetch('http://stark.cse.buffalo.edu/cse410/deldev/api/postcontroller.php', {
+          method: 'post',
+
+          body: JSON.stringify({
+              action: 'addOrEditPosts',
+              user_id: sessionStorage.getItem('userID'),
+              session_token: sessionStorage.getItem('token'),
+              posttype: "Recipe",
+              posttext: this.content,
+              postpicurl: this.state.mainImage,
+              parentid: null
+              })
+          }).then(res => res.json()).then(parsedRes => {
+                this.setState({postID: parsedRes['Record Id']});
+          })
+    }
   }
 
   combineData(){
@@ -94,50 +121,6 @@ export default class EditRecipePage extends React.Component{
     }
 
     this.content = str;
-  }
-
-  parseData(){
-    var len = 0;
-    var index = 0;
-    var data = this.content.split('\0');
-    var array;
-    var i;
-
-    //title
-    this.setState({title: data[index++]});
-    //description
-    this.setState({description: data[index++]});
-
-    //ingredients
-    len = data[index++];
-    for(i = 0; i < len; i++){
-      array = this.state.ingredients.slice();
-      array[0][i] = data[index++];
-      this.setState({ingredients: array});
-    }
-    for(i = 0; i < len; i++){
-      array = this.state.ingredients.slice();
-      array[1][i] = data[index++];
-      this.setState({ingredients: array});
-    }
-    for(i = 0; i < len; i++){
-      array = this.state.ingredients.slice();
-      array[2][i] = data[index++];
-      this.setState({ingredients: array});
-    }
-
-    //recipe
-    len = data[index++];
-    for(i = 0; i < len; i++){
-      array = this.state.recipe.slice();
-      array[0][i] = data[index++];
-      this.setState({recipe: array});
-    }
-    for(i = 0; i < len; i++){
-      array = this.state.recipe.slice();
-      array[1][i] = data[index++];
-      this.setState({recipe: array});
-    }
   }
 
   uploadDataPublic = (event) => {
@@ -257,8 +240,9 @@ export default class EditRecipePage extends React.Component{
       <IngredientsList type={this.state.editMode ? "edit" : "display"} ingredients={this.state.ingredients} handle={this.addIngredient}/>
       <RecipeHeader type={this.state.editMode ? "edit" : "display"} buttons={["add Header", "add Textbox", "add Image"]} handle={this.addRecipeElement}>Recipe</RecipeHeader>
       <Recipe type={this.state.editMode ? "edit" : "display"} recipe={this.state.recipe} handle={this.updateRecipe}/>
-      <button className="smallButton" onClick={this.uploadDataPublic}>Upload Public</button>
-      <button className="smallButton" onClick={this.uploadDataPrivate}>Upload Private</button>
+      <button id="smallButton" onClick={this.uploadDataPublic}>Upload Public</button>
+      <button id="smallButton" onClick={this.uploadDataPrivate}>Upload Private</button>
+      <h3>{"PostID: " + this.state.postID}</h3>
       </div>
       </div>
     )
