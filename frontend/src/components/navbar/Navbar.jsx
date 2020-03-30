@@ -13,9 +13,15 @@ export default function Navbar() {
         <li>
           <NavLink to="/search" activeClassName={styles.active}>Search</NavLink>
         </li>
-      </ul>
 
-      {/* userLoggedIn ? <NavLink to="/user/{userid}">{ username }</NavLink> */}
+        <div class={styles.rightNav}>
+          { sessionStorage.getItem('userID') ?
+            <li>
+              <NavLink to={"/user/" + sessionStorage.getItem('userID')}>My Profile</NavLink>
+            </li>
+          : '' }
+        </div>
+      </ul>
     </nav>
   );
 }

@@ -3,6 +3,9 @@
     border-radius: 4px;
     --vertical-padding: 15px;
     padding: var(--vertical-padding) 0;
+
+    /* So that the right nav's position: absolute has something to reference off of */
+    position: relative;
 }
 
 :local(.navbar ul) {
@@ -19,6 +22,12 @@
 :local(.navbar a) {
     text-decoration: none;
     padding: var(--vertical-padding) 15px;
+}
+
+:local(.rightNav) {
+    display: inline-block;
+    position: absolute;
+    right: 0;
 }
 
 /*
