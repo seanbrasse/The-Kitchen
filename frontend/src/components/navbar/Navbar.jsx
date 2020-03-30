@@ -13,6 +13,9 @@ class Navbar extends React.Component {
         session_token: sessionStorage.getItem('token')
       })
     });
+    sessionStorage.removeItem('userID');
+    sessionStorage.removeItem('token');
+    sessionStorage.removeItem('userEmail');
     this.props.history.replace('/');
   }
 

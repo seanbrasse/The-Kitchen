@@ -3,6 +3,7 @@ import {
   HashRouter as Router,
   Switch,
   Route,
+  Redirect
 } from 'react-router-dom';
 import {
   AccountSettings,
@@ -19,6 +20,32 @@ import {
 import {Navbar} from 'components';
 import styles from './App.module.css';
 
+// A wrapper for <Route> that redirects to the login
+// screen if you're not yet authenticated.
+function AuthenticatedRoute({ children, ...rest }) {
+  return (
+    <Route
+      {...rest}
+      render = { () =>
+        sessionStorage.getItem('userID') ? children : <Redirect to="/login"/>
+      }
+    />
+  );
+}
+
+// A wrapper for <Route> that redirects to the feed
+// screen if you're already authenticated.
+function LoginRoute({ children, ...rest }) {
+  return (
+    <Route
+      {...rest}
+      render = { () =>
+        !sessionStorage.getItem('userID') ? children : <Redirect to="/feed"/>
+      }
+    />
+  );
+}
+
 export default function App() {
   // TODO: Implement catchall error page
   
@@ -32,39 +59,39 @@ export default function App() {
           </Route>
         </Switch>
         <Switch>
-          <Route exact path={['/', '/login']}>
+          <LoginRoute exact path={['/', '/login']}>
             <Login/>
-          </Route>
-          <Route exact path='/create-account'>
+          </LoginRoute>
+          <LoginRoute exact path='/create-account'>
             <CreateAccount/>
-          </Route>
-          <Route exact path='/forgot-password'>
+          </LoginRoute>
+          <LoginRoute exact path='/forgot-password'>
             <ForgotPassword/>
-          </Route>
-          <Route exact path='/reset-password'>
+          </LoginRoute>
+          <LoginRoute exact path='/reset-password'>
             <ResetPassword/>
-          </Route>
-          <Route exact path='/feed'>
+          </LoginRoute>
+          <AuthenticatedRoute exact path='/feed'>
             <Feed/>
-          </Route>
-          <Route exact path='/search'>
+          </AuthenticatedRoute>
+          <AuthenticatedRoute exact path='/search'>
             <Search/>
-          </Route>
-          <Route exact path='/user/:userID'>
+          </AuthenticatedRoute>
+          <AuthenticatedRoute exact path='/user/:userID'>
             <Profile/>
-          </Route>
-          <Route exact path='/settings'>
+          </AuthenticatedRoute>
+          <AuthenticatedRoute exact path='/settings'>
             <AccountSettings/>
-          </Route>
-          <Route exact path='/recipe/create'>
+          </AuthenticatedRoute>
+          <AuthenticatedRoute exact path='/recipe/create'>
             <EditRecipe/>
-          </Route>
-          <Route exact path='/recipe/:recipeID'>
+          </AuthenticatedRoute>
+          <AuthenticatedRoute exact path='/recipe/:recipeID'>
             <ViewRecipe/>
-          </Route>
-          <Route exact path='/recipe/:recipeID/edit'>
+          </AuthenticatedRoute>
+          <AuthenticatedRoute exact path='/recipe/:recipeID/edit'>
             <EditRecipe/>
-          </Route>
+          </AuthenticatedRoute>
         </Switch>
       </Router>
     </div>
