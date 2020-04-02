@@ -11,6 +11,8 @@ export default class EditRecipePage extends React.Component{
   constructor(props){
     super(props);
     var content = "";
+    var titleID = 0;
+    var ingredientIDs = [];
 
     this.state = {
       title: "",
@@ -44,6 +46,8 @@ export default class EditRecipePage extends React.Component{
                 mainImage: parsedRes.posts[0].post_pic_url
               })
               var recipe = parseRecipe(this.content);
+              this.titleID = recipe.titleID;
+              this.ingredientIDs = recipe.ingredientIDs
               this.setState({title: recipe.title});
               this.setState({description: recipe.description});
               this.setState({ingredients: recipe.ingredients});
@@ -53,6 +57,7 @@ export default class EditRecipePage extends React.Component{
 
   saveData(){
     this.combineData();
+    this.addFilters();
     if(this.state.postID != 0){
     fetch('http://stark.cse.buffalo.edu/cse410/deldev/api/postcontroller.php', {
         method: 'post',
@@ -83,7 +88,7 @@ export default class EditRecipePage extends React.Component{
               })
           }).then(res => res.json()).then(parsedRes => {
                 this.setState({postID: parsedRes['Record Id']});
-          })
+      })
     }
   }
 
@@ -92,21 +97,28 @@ export default class EditRecipePage extends React.Component{
     var i;
     var str = "";
 
+    //titleID
+    str = this.titleID;
+
     //title
-    str = this.state.title;
+    str += "\0" + this.state.title;
+
     //description
     str += "\0" + this.state.description;
 
     //ingredients
     len = this.state.ingredients[0].length;
     str += "\0" + len;
-    for(i = 0; i < len; i++){
+    for(i = 0; i < len; i++){//ingredientIDs
+      str += "\0" + this.ingredientIDs[i];
+    }
+    for(i = 0; i < len; i++){//ingredients
       str += "\0" + this.state.ingredients[0][i];
     }
-    for(i = 0; i < len; i++){
+    for(i = 0; i < len; i++){//Amount
       str += "\0" + this.state.ingredients[1][i];
     }
-    for(i = 0; i < len; i++){
+    for(i = 0; i < len; i++){//Units
       str += "\0" + this.state.ingredients[2][i];
     }
 
@@ -121,6 +133,89 @@ export default class EditRecipePage extends React.Component{
     }
 
     this.content = str;
+  }
+
+  addFilters(){
+    var len = 0;
+    var i;
+
+    //Adds title filter
+    this.addTag(this.titleID, this.state.title, "title").then(
+      id => {
+        this.titleID  = id[0];
+    });;
+
+    //adds ingredients filter
+    len = this.state.ingredients[0].length;
+
+    console.log(this.ingredientIDs)
+
+    for(i = 0; i < len; i++){
+      this.addTag(this.ingredientIDs[i], this.state.ingredients[0][i], "ingredient", i).then(
+        id => {
+          this.ingredientIDs[id[1]] = id[0];
+      });
+    }
+  }
+
+  deleteTag(tagID){
+    if(tagID != 0){
+      fetch('http://stark.cse.buffalo.edu/cse410/deldev/api/ptcontroller.php', {
+          method: 'post',
+
+          body: JSON.stringify({
+              action: 'deletePostTags',
+              user_id: sessionStorage.getItem('userID'),
+              session_token: sessionStorage.getItem('token'),
+              posttagid: tagID
+              })
+        })
+    }
+  }
+
+  /*
+    For new tag tagID = 0;
+  */
+  addTag(tagID, tag, tagType, i){
+    if(tagID != 0){
+      const returnID = async recordID => {
+        const res = await fetch('http://stark.cse.buffalo.edu/cse410/deldev/api/ptcontroller.php', {
+            method: 'post',
+
+            body: JSON.stringify({
+                action: 'addOrEditPostTags',
+                user_id: sessionStorage.getItem('userID'),
+                userid: sessionStorage.getItem('userID'),
+                session_token: sessionStorage.getItem('token'),
+                postid: this.state.postID,
+                tagtype: tagType,
+                tag: tag,
+                posttagid: tagID
+              })
+            })
+        return [tagID, i];
+      }
+      return returnID();
+    }else{
+      const returnID = async recordID => {
+        const res = await fetch('http://stark.cse.buffalo.edu/cse410/deldev/api/ptcontroller.php', {
+            method: 'post',
+
+            body: JSON.stringify({
+                action: 'addOrEditPostTags',
+                user_id: sessionStorage.getItem('userID'),
+                userid: sessionStorage.getItem('userID'),
+                session_token: sessionStorage.getItem('token'),
+                postid: this.state.postID,
+                tagtype: tagType,
+                tag: tag
+              })
+            })
+        const json = await res.json();
+        return [json['Record Id'], i];
+      }
+      return returnID();
+    }
   }
 
   uploadDataPublic = (event) => {
@@ -148,12 +243,24 @@ export default class EditRecipePage extends React.Component{
       array[2][i] = event.target.value;
       this.setState({ingredients: array});
     }else if(event.target.name === "button"){
+      //new ingredientID
+      this.ingredientIDs[this.state.ingredients[0].length] = 0;
+
+      //new ingredient
       array = this.state.ingredients.slice();
       array[0][this.state.ingredients[0].length] = "";
       array[1][this.state.ingredients[1].length] = "0";
       array[2][this.state.ingredients[2].length] = "";
       this.setState({ingredients: array});
     }else{
+      //deletes ingredientID
+      this.deleteTag(this.ingredientIDs[i]);
+      arrayEnd = this.ingredientIDs.splice(i);
+      arrayEnd.shift();
+      this.ingredientIDs = this.ingredientIDs.concat(arrayEnd);
+
+
+      //deletes one ingredient
       array = this.state.ingredients.slice();
 
       arrayEnd = array[0].splice(i);
