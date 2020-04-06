@@ -1,0 +1,71 @@
+#signUpSubmitButton,
+#signUpCancelButton {
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+}
+
+#signUpSubmitButton {
+    background-color: rgb(0, 189, 252);
+    width: 100%;
+}
+
+#signUpCancelButton {
+    background-color: rgb(163, 15, 45);
+    width: 30%;
+}
+
+#signUpSubmitButton:hover,
+#signUpCancelButton:hover {
+    opacity: .8;
+}
+
+#email,
+#username,
+#password,
+#confirmPassword {
+    width: 88.5%;
+    padding: 12px 20px;
+    margin: 8px 0;
+}
+
+#signUpBottomBox {
+    background-color: rgb(235, 235, 235);
+    padding: 5px;
+    margin-top: 10px;
+}
+
+#signUpForm {
+    display: none;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 24em;
+    height: 30em;
+
+    position: absolute;
+    margin: auto;
+    margin-top: 1em;
+    padding: 3em;
+
+    background-color: white;
+
+    border: solid black 2pt;
+    border-radius: 25pt;
+}
+
+.signUpInfoContainer #x {
+    position: absolute;
+    background: grey;
+    color: white;
+    top: 1em;
+    right: 1em;
+    border: none;
+    height: 5ex;
+    width: 5ex;
+    background-color: #555;
+    border-radius: 50%;
+}

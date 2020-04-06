@@ -1,0 +1,45 @@
+:local(.navbar) {
+    background-color: #54C254;
+    border-radius: 4px;
+    padding: 15px 0;
+    display: flex;
+    align-items: center;
+
+    /* So that the right nav's position: absolute has something to reference off of */
+    position: relative;
+}
+
+:local(.navbar ul) {
+    padding: 0;
+    margin: 0;
+    display: inline-block;
+}
+
+:local(.navbar li) {
+    list-style: none;
+    display: inline-block;
+}
+
+:local(.navbar a) {
+    text-decoration: none;
+    padding: 0 15px;
+}
+
+:local(.rightNav) {
+    display: inline-block;
+    position: absolute;
+    right: 0;
+}
+
+:local(.logo) {
+    font-family: 'Comfortaa';
+    color: black;
+    font-weight: bold;
+    font-size: 24px;
+}
+
+/*
+.navbar a.active {
+    background-color: #d9d9d9;
+}
+*/

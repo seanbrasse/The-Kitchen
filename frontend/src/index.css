@@ -1,0 +1,100 @@
+@import url('https://fonts.googleapis.com/css?family=Beth+Ellen|Lora|Open+Sans&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Pinyon+Script&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Comfortaa&display=swap');
+
+body {
+  margin: 0;
+  font-family: "Open Sans", -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+h1 {
+  font-family: "Lora", serif;
+  background-color: #FFA357;
+  border-radius: 2px;
+  padding: 5px;
+}
+
+h2 {
+  font-family: "Lora", serif;
+}
+
+h3 {
+  font-family: "Lora", serif;
+}
+
+h4 {
+  font-family: "Lora", serif;
+}
+
+h5 {
+  font-family: "Lora", serif;
+}
+
+h6{
+  font-family: "Lora", serif;
+}
+
+input:not([type=submit]) {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  --vertical-padding: 5px;
+  padding: var(--vertical-padding) 0;
+}
+
+textarea{
+  width: 99%;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  height: 50px;
+  --vertical-padding: 5px;
+  padding: var(--vertical-padding) 0;
+}
+
+label{
+  color: #444;
+  font-size: 14px;
+}
+
+/*----------------Buttons----------------*/
+button, input[type=submit] {
+  background: white;
+  border: 1px solid #999;
+  border-radius: 8px;
+  box-shadow: 1px 1px 1px 0px rgba(0,0,0,0.21);
+  padding: 7px 10px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:hover, input[type=submit]:hover {
+  background-color: #FFA357;
+}
+
+/*----------------Icons----------------*/
+.icon{
+  border: 0px #FFF solid;
+  margin: 3px;
+  padding: 0px;
+  cursor: pointer;
+}
+
+.icon:hover{
+  color: red;
+}
+
+
+/*----------------RecipeHeader----------------*/
+.recipe-header h1{
+  background-color: #FFA357;
+  border-radius: 2px;
+  padding: 5px;
+}

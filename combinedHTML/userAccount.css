@@ -1,0 +1,92 @@
+.talk_con {
+    width: 600px;
+    height: 500px;
+    border: 1px;
+    margin: 50px auto 0;
+    background: #f9f9f9;
+}
+
+.talk_show {
+    width: 580px;
+    height: 420px;
+    border: 1px solid #666;
+    background: #fff;
+    margin: 10px auto 0;
+    overflow: auto;
+}
+
+.talk_input {
+    width: 580px;
+    margin: 10px auto 0;
+}
+
+.whostalking {
+    width: 80px;
+    height: 30px;
+    float: left;
+    outline: none;
+}
+
+.talk_word {
+    width: 420px;
+    height: 26px;
+    padding: 0px;
+    float: left;
+    margin-left: 10px;
+    outline: none;
+    text-indent: 10px;
+}
+
+.talk_sub {
+    width: 56px;
+    height: 30px;
+    float: left;
+    margin-left: 10px;
+}
+
+.userA {
+    margin: 10px;
+}
+
+.userA span {
+    display: inline-block;
+    background: #0181cc;
+    border-radius: 10px;
+    color: #fff;
+    padding: 5px 10px;
+}
+
+.userB {
+    margin: 10px;
+    text-align: right;
+}
+
+.userB span {
+    display: inline-block;
+    background: #ef8201;
+    border-radius: 10px;
+    color: #fff;
+    padding: 5px 10px;
+}
+.friend{
+    height: 35px;
+    background-color: #2459a2;
+    color: white;
+    line-height: 35px;
+}
+.friendtitle{
+    height: 50px;
+    background-color: #245910;
+    color: white;
+    line-height: 40px;
+    text-align:center;
+}
+.friendlist{
+    width:300px;
+    height: 200px;
+    border:1px;
+    margin:0;
+    float:left;
+    background: #f9f9f9;
+    position: relative;
+}

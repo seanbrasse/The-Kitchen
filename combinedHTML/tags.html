@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Homepage</title>
+    <link rel="stylesheet" type="text/css" href="navbar.css" />
+    <link rel="stylesheet" type="text/css" href="login.css" />
+    <link rel="stylesheet" type="text/css" href="signup.css" />
+    <link rel="stylesheet" type="text/css" href="index.css" />
+    <link rel="stylesheet" type="text/css" href="grid.css" />
+</head>
+
+<body>
+    <div id="navbarContainer">
+
+        <a href="index.html">Home</a>
+        <a href="tags.html">Tags</a>
+        <a href="authors.html">Authors</a>
+        <input id="search" type="text" placeholder="#Tags @Authors">
+        <button id="searchButton">search</button>
+
+        <div id="navbarRight">
+
+            <button id="loginFormButton"
+                onclick="document.getElementById('loginForm').style.display = 'block';">Login</button>
+            <button id="signUpFormButton" onclick="document.getElementById('signUpForm').style.display = 'block';">Sign
+                Up</button>
+
+        </div>
+    </div>
+
+    <form id="loginForm">
+        <div class="loginInfoContainer">
+
+            <button id="x" onclick="this.parentElement.parentElement.style.display = 'none';">X</button>
+
+            <label for="username"><b>Username</b></label><br>
+            <input type="text" placeholder="Enter Username" id="username" required /><br>
+
+            <label for="password"><b>Password</b></label><br>
+            <input type="password" placeholder="Enter Password" id="password" required /><br>
+
+            <button id="loginSubmitButton" type="submit"
+                onclick="window.location.href = 'userAccount.html';">Login</button><br>
+
+            <input type="checkbox" checked="checked" id="rememberMe" />
+            <label for="rememberMe">Remember me</label>
+
+            <span id="passwordForget">
+                <a>Forget password?</a>
+            </span><br>
+
+            <div id="loginBottomBox">
+                <button id="loginCancelButton" type="button"
+                    onclick="this.parentElement.parentElement.parentElement.style.display = 'none';">Cancel</button>
+            </div>
+
+        </div>
+    </form>
+
+    <form id="signUpForm">
+        <div class="signUpInfoContainer">
+
+            <button id="x" onclick="this.parentElement.parentElement.style.display = 'none';">X</button>
+
+            <label for="email"><b>Email</b></label><br>
+            <input type="text" placeholder="Enter Email" id="email" required /><br>
+
+            <label for="username"><b>Username</b></label><br>
+            <input type="text" placeholder="Enter Username" id="username" required /><br>
+
+            <label for="password"><b>Password</b></label><br>
+            <input type="password" placeholder="Enter Password" id="password" required /><br>
+
+            <label for="confirmPassword"><b>Confirm Password</b></label><br>
+            <input type="password" placeholder="Confirm Password" id="confirmPassword" required /><br>
+
+            <button id="signUpSubmitButton" type="submit">Sign Up</button><br>
+
+            <div id="signUpBottomBox">
+                <button id="signUpCancelButton" type="button"
+                    onclick="this.parentElement.parentElement.parentElement.style.display = 'none';">Cancel</button>
+            </div>
+
+        </div>
+    </form>
+
+    <div class="basic-grid">
+        <div class="card">tags</div>
+        <div class="card">tags</div>
+        <div class="card">tags</div>
+        <div class="card">tags</div>
+        <div class="card">tags</div>
+        <div class="card">tags</div>
+        <div class="card">tags</div>
+        <div class="card">tags</div>
+        <div class="card">tags</div>
+        <div class="card">tags</div>
+        <div class="card">tags</div>
+        <div class="card">tags</div>
+        <div class="card">tags</div>
+        <div class="card">tags</div>
+        <div class="card">tags</div>
+        <div class="card">tags</div>
+    </div>
+
+</body>
+
+</html>

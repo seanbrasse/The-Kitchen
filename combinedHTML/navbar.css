@@ -1,0 +1,55 @@
+body {
+    margin: 0;
+}
+
+#navbarContainer {
+    overflow: hidden;
+    background-color: blueviolet;
+}
+
+#navbarContainer a {
+    float: left;
+    color: #f2f2f2;
+    text-align: center;
+    text-decoration: none;
+    font-size: 1.4em;
+    padding: .25em;
+    margin: 0;
+}
+
+#navbarRight {
+    float: right;
+}
+
+#navbarContainer a:hover {
+    background-color: lightseagreen;
+    color: black;
+}
+
+#loginFormButton,
+#signUpFormButton,
+#searchButton {
+    font-size: 1.4em;
+    padding: .25em 0;
+    margin: 0;
+    border: none;
+    background-color: blueviolet;
+    color: #f2f2f2;
+    width: 5em;
+}
+
+#loginFormButton:hover,
+#signUpFormButton:hover,
+#searchButton:hover {
+    background-color: lightseagreen;
+    color: black;
+}
+
+#search {
+    font-size: 1.4em;
+    padding: .25em 0;
+    margin: 0;
+    border: none;
+    background-color: whitesmoke;
+    color: black;
+}

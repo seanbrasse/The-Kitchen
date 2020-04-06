@@ -1,0 +1,73 @@
+#loginSubmitButton,
+#loginCancelButton {
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+}
+
+#loginSubmitButton {
+    background-color: rgb(0, 189, 252);
+    width: 100%;
+}
+
+#loginCancelButton {
+    background-color: rgb(163, 15, 45);
+    width: 30%;
+}
+
+#loginSubmitButton:hover,
+#loginCancelButton:hover {
+    opacity: .8;
+}
+
+#username,
+#password {
+    width: 88.5%;
+    padding: 12px 20px;
+    margin: 8px 0;
+}
+
+#loginBottomBox {
+    background-color: rgb(235, 235, 235);
+    padding: 5px;
+    margin-top: 10px;
+}
+
+#passwordForget {
+    float: right;
+}
+
+#loginForm {
+    display: none;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 24em;
+    height: 20em;
+
+    position: absolute;
+    margin: auto;
+    margin-top: 5em;
+    padding: 3em;
+
+    background-color: white;
+
+    border: solid black 2pt;
+    border-radius: 25pt;
+}
+
+.loginInfoContainer #x {
+    position: absolute;
+    background: grey;
+    color: white;
+    top: 1em;
+    right: 1em;
+    border: none;
+    height: 5ex;
+    width: 5ex;
+    background-color: #555;
+    border-radius: 50%;
+}
