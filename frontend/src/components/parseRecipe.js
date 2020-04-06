@@ -7,10 +7,14 @@ export function parseRecipe(data){
   var recipe = new Object();
 
   data = data.split('\0');
-  
+
   if(data[index] >= 0){
     //titleID
     recipe.titleID = data[index++];
+
+    if(data[index] >= 0){
+      recipe.messageID = data[index++];
+    }
 
     //title
     recipe.title = data[index++];

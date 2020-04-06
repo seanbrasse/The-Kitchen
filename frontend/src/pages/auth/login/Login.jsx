@@ -59,6 +59,38 @@ class Login extends React.Component {
                 }
             }
         );
+
+        //what I added
+        fetch('http://stark.cse.buffalo.edu/cse410/deldev/api/groupcontroller.php', {
+          method: 'post',
+          body: JSON.stringify({
+              action: 'getGroups',
+              user_id: '300',
+              grouptype: 'followers'
+          })
+        }).then(res => res.json()).then(
+          response => {
+            if(response.groups != undefined){
+              sessionStorage.setItem('groupID', response.groups[0].group_id);
+            }else{
+              fetch('http://stark.cse.buffalo.edu/cse410/deldev/api/groupcontroller.php', {
+                method: 'post',
+                body: JSON.stringify({
+                    action: 'addOrEditGroups',
+                    user_id: sessionStorage.getItem('userID'),
+                    userid: sessionStorage.getItem('userID'),
+	                  session_token: sessionStorage.getItem('token'),
+                    groupname: 'followers',
+                    grouptype: 'followers'
+                })
+              }).then(res => res.json()).then(
+                response => {
+                  sessionStorage.setItem('groupID', response['Record Id']);
+                }
+              );
+            }
+          }
+        );
     }
 
     render() {
@@ -73,7 +105,7 @@ class Login extends React.Component {
                         >
                             Email
                         </ValidatedInput>
-                        
+
                         <br/>
 
                         <ValidatedInput type="password" className={styles.textInput} onChange={e => this.setState({pass: e.target.value})}
@@ -81,13 +113,13 @@ class Login extends React.Component {
                         >
                             Password
                         </ValidatedInput>
-                        
+
                         <br/>
-            
+
                         <input type="submit" value={this.state.submitText} disabled={this.state.submitDisabled} onClick={e => this.submit(e)} />
 
                         <br/><br/>
-                        
+
                         <NavLink to="/create-account"> Create Account </NavLink>
                         <br/>
                         <NavLink to="/forgot-password"> Forgot Password? </NavLink>
@@ -95,7 +127,7 @@ class Login extends React.Component {
                 </article>
             </main>
         );
-    }    
+    }
 }
 
 export default withRouter(Login);
