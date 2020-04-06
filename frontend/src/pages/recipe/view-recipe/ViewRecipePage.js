@@ -5,6 +5,7 @@ import Recipe from '../recipe-components/Recipe'
 import Description from '../recipe-components/Description'
 import Title from '../recipe-components/Title'
 import styles from '../recipe-components/recipe.css';
+import {parseRecipe} from 'util/parseRecipe.js'
 
 export default class ViewRecipePage extends React.Component{
   constructor(props){
@@ -37,7 +38,11 @@ export default class ViewRecipePage extends React.Component{
                 content: parsedRes.posts[0].post_text,
                 mainImage: parsedRes.posts[0].post_pic_url
               })
-              this.parseData();
+              var recipe = parseRecipe(this.state.content);
+              this.setState({title: recipe.title});
+              this.setState({description: recipe.description});
+              this.setState({ingredients: recipe.ingredients});
+              this.setState({recipe: recipe.recipe});
       })
   }
 

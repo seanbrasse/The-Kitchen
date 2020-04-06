@@ -121,7 +121,7 @@ export default function Profile() {
 
   return (
     <main>
-      <div className="profile">
+      <div className="card profile">
         <img className="profile-image" src={avatar} alt="Avatar" />
         {/* {console.log("myUserId: " + myUserId)} */}
         {/* {console.log("userID: " + userID)} */}
@@ -135,6 +135,7 @@ export default function Profile() {
         <div className="new-post">
           <h2 className="post"> New Post</h2>
           <NewPost />
+          </div>
 
           
             <div className="recipe-box">
@@ -143,6 +144,10 @@ export default function Profile() {
               <EditRecipe />
               <p className="recipe-description"> Description </p>
           </div>
+      <div className="card sidebar">
+        <div className="BioRow">
+          <h1 className="left-text"> Bio </h1>
+          <EditBioButton />
         </div>
 
         <div className="sidebar">
@@ -165,6 +170,7 @@ export default function Profile() {
           </div>
           {followers}
         </div>
+      </div>
       </div>
     </main>
   );

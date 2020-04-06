@@ -66,7 +66,7 @@ class CreateAccount extends React.Component {
     render() {
         return (
             <main className={styles.authContainer}>
-                <article>
+                <article class="card">
                     <h1>Welcome to The Kitchen</h1>
                     <h2>Sign Up</h2>
                     <form ref={this.form}>

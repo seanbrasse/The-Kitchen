@@ -4,26 +4,34 @@ import IngredientsList from '../recipe-components/IngredientsList'
 import Recipe from '../recipe-components/Recipe'
 import Description from '../recipe-components/Description'
 import Title from '../recipe-components/Title'
+import {parseRecipe} from 'util/parseRecipe.js'
 
 export default class EditRecipePage extends React.Component{
 
   constructor(props){
     super(props);
     var content = "";
+    var titleID = 0;
+    var ingredientIDs = [];
 
     this.state = {
-      title: "title",
-      mainImage: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fimg.izismile.com%2Fimg%2Fimg5%2F20120210%2F640%2Ffood_photos_which_will_make_you_drool_640_05.jpg&f=1&nofb=1",
-      description: "description",
+      title: "",
+      mainImage: "",
+      description: "",
       ingredients: [[], [], []],
       recipe: [[], []],
-      editMode: true
+      postID: 0,
+      editMode: true,
+      messageID: 0
 		}
   }
 
 
   componentDidMount() {
-    this.loadData(this.props.postID);
+    if(this.props.postID != 0){
+      this.setState({postID: this.props.postID})
+      this.loadData(this.props.postID);
+    }
   }
 
   loadData(postID){
@@ -38,18 +46,27 @@ export default class EditRecipePage extends React.Component{
               this.setState({
                 mainImage: parsedRes.posts[0].post_pic_url
               })
-            this.parseData();
+              var recipe = parseRecipe(this.content);
+              this.titleID = recipe.titleID;
+              this.ingredientIDs = recipe.ingredientIDs
+              this.setState({title: recipe.title});
+              this.setState({description: recipe.description});
+              this.setState({ingredients: recipe.ingredients});
+              this.setState({recipe: recipe.recipe});
+              this.setState({messageID: recipe.messageID});
       })
   }
 
   saveData(){
     this.combineData();
+    this.addFilters();
+    if(this.state.postID != 0){
     fetch('http://stark.cse.buffalo.edu/cse410/deldev/api/postcontroller.php', {
         method: 'post',
 
         body: JSON.stringify({
             action: 'addOrEditPosts',
-            postid: this.props.postID,
+            postid: this.state.postID,
             user_id: sessionStorage.getItem('userID'),
             session_token: sessionStorage.getItem('token'),
             posttype: "Recipe",
@@ -58,6 +75,23 @@ export default class EditRecipePage extends React.Component{
             parentid: null
             })
         })
+    }else{
+      fetch('http://stark.cse.buffalo.edu/cse410/deldev/api/postcontroller.php', {
+          method: 'post',
+
+          body: JSON.stringify({
+              action: 'addOrEditPosts',
+              user_id: sessionStorage.getItem('userID'),
+              session_token: sessionStorage.getItem('token'),
+              posttype: "Recipe",
+              posttext: this.content,
+              postpicurl: this.state.mainImage,
+              parentid: null
+              })
+          }).then(res => res.json()).then(parsedRes => {
+                this.setState({postID: parsedRes['Record Id']});
+      })
+    }
   }
 
   combineData(){
@@ -65,21 +99,31 @@ export default class EditRecipePage extends React.Component{
     var i;
     var str = "";
 
+    //titleID
+    str = this.titleID;
+
+    //messageID
+    str += "\0" + this.state.messageID;
+
     //title
-    str = this.state.title;
+    str += "\0" + this.state.title;
+
     //description
     str += "\0" + this.state.description;
 
     //ingredients
     len = this.state.ingredients[0].length;
     str += "\0" + len;
-    for(i = 0; i < len; i++){
+    for(i = 0; i < len; i++){//ingredientIDs
+      str += "\0" + this.ingredientIDs[i];
+    }
+    for(i = 0; i < len; i++){//ingredients
       str += "\0" + this.state.ingredients[0][i];
     }
-    for(i = 0; i < len; i++){
+    for(i = 0; i < len; i++){//Amount
       str += "\0" + this.state.ingredients[1][i];
     }
-    for(i = 0; i < len; i++){
+    for(i = 0; i < len; i++){//Units
       str += "\0" + this.state.ingredients[2][i];
     }
 
@@ -96,47 +140,84 @@ export default class EditRecipePage extends React.Component{
     this.content = str;
   }
 
-  parseData(){
+  addFilters(){
     var len = 0;
-    var index = 0;
-    var data = this.content.split('\0');
-    var array;
     var i;
 
-    //title
-    this.setState({title: data[index++]});
-    //description
-    this.setState({description: data[index++]});
+    //Adds title filter
+    this.addTag(this.titleID, this.state.title, "title").then(
+      id => {
+        this.titleID  = id[0];
+    });;
 
-    //ingredients
-    len = data[index++];
-    for(i = 0; i < len; i++){
-      array = this.state.ingredients.slice();
-      array[0][i] = data[index++];
-      this.setState({ingredients: array});
-    }
-    for(i = 0; i < len; i++){
-      array = this.state.ingredients.slice();
-      array[1][i] = data[index++];
-      this.setState({ingredients: array});
-    }
-    for(i = 0; i < len; i++){
-      array = this.state.ingredients.slice();
-      array[2][i] = data[index++];
-      this.setState({ingredients: array});
-    }
+    //adds ingredients filter
+    len = this.state.ingredients[0].length;
 
-    //recipe
-    len = data[index++];
     for(i = 0; i < len; i++){
-      array = this.state.recipe.slice();
-      array[0][i] = data[index++];
-      this.setState({recipe: array});
+      this.addTag(this.ingredientIDs[i], this.state.ingredients[0][i], "ingredient", i).then(
+        id => {
+          this.ingredientIDs[id[1]] = id[0];
+      });
     }
-    for(i = 0; i < len; i++){
-      array = this.state.recipe.slice();
-      array[1][i] = data[index++];
-      this.setState({recipe: array});
+  }
+
+  deleteTag(tagID){
+    if(tagID != 0){
+      fetch('http://stark.cse.buffalo.edu/cse410/deldev/api/ptcontroller.php', {
+          method: 'post',
+
+          body: JSON.stringify({
+              action: 'deletePostTags',
+              user_id: sessionStorage.getItem('userID'),
+              session_token: sessionStorage.getItem('token'),
+              posttagid: tagID
+              })
+        })
+    }
+  }
+
+  /*
+    For new tag tagID = 0;
+  */
+  addTag(tagID, tag, tagType, i){
+    if(tagID != 0){
+      const returnID = async recordID => {
+        const res = await fetch('http://stark.cse.buffalo.edu/cse410/deldev/api/ptcontroller.php', {
+            method: 'post',
+
+            body: JSON.stringify({
+                action: 'addOrEditPostTags',
+                user_id: sessionStorage.getItem('userID'),
+                userid: sessionStorage.getItem('userID'),
+                session_token: sessionStorage.getItem('token'),
+                postid: this.state.postID,
+                tagtype: tagType,
+                tag: tag,
+                posttagid: tagID
+              })
+            })
+        return [tagID, i];
+      }
+      return returnID();
+    }else{
+      const returnID = async recordID => {
+        const res = await fetch('http://stark.cse.buffalo.edu/cse410/deldev/api/ptcontroller.php', {
+            method: 'post',
+
+            body: JSON.stringify({
+                action: 'addOrEditPostTags',
+                user_id: sessionStorage.getItem('userID'),
+                userid: sessionStorage.getItem('userID'),
+                session_token: sessionStorage.getItem('token'),
+                postid: this.state.postID,
+                tagtype: tagType,
+                tag: tag
+              })
+            })
+        const json = await res.json();
+        return [json['Record Id'], i];
+      }
+      return returnID();
     }
   }
 
@@ -145,8 +226,108 @@ export default class EditRecipePage extends React.Component{
 	}
 
   uploadDataPrivate = (event) => {
-    this.saveData();
+    this.combineData();
+    this.deleteTags(this.state.postID);
+    if(this.state.postID != 0){
+      this.sendAsMessage(this.state.postID);
+      fetch('http://stark.cse.buffalo.edu/cse410/deldev/api/postcontroller.php', {
+        method: 'post',
+
+        body: JSON.stringify({
+            action: 'addOrEditPosts',
+            postid: this.state.postID,
+            user_id: sessionStorage.getItem('userID'),
+            session_token: sessionStorage.getItem('token'),
+            posttype: "Private",
+            posttext: this.content,
+            postpicurl: this.state.mainImage,
+            parentid: null
+            })
+        })
+    }else{
+      fetch('http://stark.cse.buffalo.edu/cse410/deldev/api/postcontroller.php', {
+          method: 'post',
+
+          body: JSON.stringify({
+              action: 'addOrEditPosts',
+              user_id: sessionStorage.getItem('userID'),
+              session_token: sessionStorage.getItem('token'),
+              posttype: "Private",
+              posttext: this.content,
+              postpicurl: this.state.mainImage,
+              parentid: null
+              })
+          }).then(res => res.json()).then(parsedRes => {
+                this.setState({postID: parsedRes['Record Id']});
+                this.sendAsMessage(parsedRes['Record Id']);
+                this.uploadDataPrivate();
+      })
+    }
 	}
+
+  sendAsMessage(postID){
+    if(this.state.messageID != 0){
+    fetch('http://stark.cse.buffalo.edu/cse410/deldev/api/messagecontroller.php', {
+        method: 'post',
+
+        body: JSON.stringify({
+            	action: "addOrEditMessages",
+            	user_id: sessionStorage.getItem('userID'),
+            	userid: sessionStorage.getItem('userID'),
+            	session_token: sessionStorage.getItem('token'),
+            	groupid: sessionStorage.getItem('groupID'),
+            	message: postID,
+              messageid: this.state.messageID
+            })
+        })
+    }else{
+      fetch('http://stark.cse.buffalo.edu/cse410/deldev/api/messagecontroller.php', {
+          method: 'post',
+
+          body: JSON.stringify({
+            	action: "addOrEditMessages",
+            	user_id: sessionStorage.getItem('userID'),
+            	userid: sessionStorage.getItem('userID'),
+            	session_token: sessionStorage.getItem('token'),
+            	groupid: sessionStorage.getItem('groupID'),
+            	message: postID,
+            })
+          }).then(res => res.json()).then(parsedRes => {
+                this.setState({messageID: parsedRes['Record Id']});
+          })
+    }
+  }
+
+  deleteTags(postID){
+    fetch('http://stark.cse.buffalo.edu/cse410/deldev/api/ptcontroller.php', {
+        method: 'post',
+
+        body: JSON.stringify({
+            action: 'getPostTags',
+            postid: postID
+            })
+        }).then(res => res.json()).then(parsedRes => {
+              var tags = parsedRes['post_tags'];
+              var len;
+              var i;
+
+              if(tags != undefined){
+                len =  tags.length;
+                for(i = 0; i < len; i++){
+                  fetch('http://stark.cse.buffalo.edu/cse410/deldev/api/ptcontroller.php', {
+                      method: 'post',
+
+                      body: JSON.stringify({
+                          action: 'deletePostTags',
+                          user_id: sessionStorage.getItem('userID'),
+                          session_token: sessionStorage.getItem('token'),
+                          posttagid: tags[i].post_tag_id
+                          })
+                  })
+                }
+              }
+        })
+  }
 
   addIngredient = (event, i) => {
     var array;
@@ -165,12 +346,24 @@ export default class EditRecipePage extends React.Component{
       array[2][i] = event.target.value;
       this.setState({ingredients: array});
     }else if(event.target.name === "button"){
+      //new ingredientID
+      this.ingredientIDs[this.state.ingredients[0].length] = 0;
+
+      //new ingredient
       array = this.state.ingredients.slice();
       array[0][this.state.ingredients[0].length] = "";
       array[1][this.state.ingredients[1].length] = "0";
       array[2][this.state.ingredients[2].length] = "";
       this.setState({ingredients: array});
     }else{
+      //deletes ingredientID
+      this.deleteTag(this.ingredientIDs[i]);
+      arrayEnd = this.ingredientIDs.splice(i);
+      arrayEnd.shift();
+      this.ingredientIDs = this.ingredientIDs.concat(arrayEnd);
+
+
+      //deletes one ingredient
       array = this.state.ingredients.slice();
 
       arrayEnd = array[0].splice(i);
@@ -257,8 +450,10 @@ export default class EditRecipePage extends React.Component{
       <IngredientsList type={this.state.editMode ? "edit" : "display"} ingredients={this.state.ingredients} handle={this.addIngredient}/>
       <RecipeHeader type={this.state.editMode ? "edit" : "display"} buttons={["add Header", "add Textbox", "add Image"]} handle={this.addRecipeElement}>Recipe</RecipeHeader>
       <Recipe type={this.state.editMode ? "edit" : "display"} recipe={this.state.recipe} handle={this.updateRecipe}/>
-      <button className="smallButton" onClick={this.uploadDataPublic}>Upload Public</button>
-      <button className="smallButton" onClick={this.uploadDataPrivate}>Upload Private</button>
+      <button id="smallButton" onClick={this.uploadDataPublic}>Upload Public</button>
+      <button id="smallButton" onClick={this.uploadDataPrivate}>Upload Private</button>
+      <h3>{"PostID: " + this.state.postID}</h3>
+      <h3>{"MessageID: " + this.state.messageID}</h3>
       </div>
       </div>
     )
