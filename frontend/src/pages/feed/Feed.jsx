@@ -38,7 +38,14 @@ export default class Feed extends React.Component {
                             const recipe = parseRecipe(post.post_text);
                             return (
                                 <li>
-                                    <RecipeCard recipeID={post.post_id} title={recipe.title} description={recipe.description} image={post.post_pic_url}/>
+                                    <RecipeCard
+                                        recipeID={post.post_id}
+                                        title={recipe.title}
+                                        description={recipe.description}
+                                        image={post.post_pic_url}
+                                        userid={post.user_id}
+                                        username="User"
+                                    />
                                 </li>
                             );
                         })
