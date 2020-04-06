@@ -14,7 +14,7 @@ export default class RecipeCard extends React.Component {
                         <div className={styles.topInfo}>
                             <h2>{this.props.title}</h2>
                             <span>By <NavLink to={`/user/${this.props.userid}`}>{this.props.username}</NavLink></span>
-                            {
+                            { 
                                 /*
                                 // TODO: separate component with filled/unfilled/partially filled [actual icon] stars
                                 <span>* * * * *</span>

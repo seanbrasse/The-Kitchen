@@ -12,10 +12,8 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import AccountSettings from "../account-settings/AccountSettings";
 import "./Profile.css";
-import EditRecipe from './../recipe/edit-recipe/EditRecipe';
-import Recipe from './../recipe/recipe-components/Recipe';
-import RecipeHeader from './../recipe/recipe-components/RecipeHeader';
-import Description from './../recipe/recipe-components/Description';
+import Feed from './../feed/Feed';
+
 
 export default function Profile() {
   let { userID } = useParams();
@@ -119,6 +117,7 @@ export default function Profile() {
     }
   }
 
+
   return (
     <main>
       <div className="card profile">
@@ -135,22 +134,9 @@ export default function Profile() {
         <div className="new-post">
           <h2 className="post"> New Post</h2>
           <NewPost />
-          </div>
-
-          
-            <div className="recipe-box">
-              <h2 className="recipe-name"> Recipe </h2>
-              <image className="recipe-image">  </image>
-              <EditRecipe />
-              <p className="recipe-description"> Description </p>
-          </div>
-      <div className="card sidebar">
-        <div className="BioRow">
-          <h1 className="left-text"> Bio </h1>
-          <EditBioButton />
         </div>
 
-        <div className="sidebar">
+        <div className="card sidebar">
           <div className="BioRow">
             <h1 className="left-text"> Bio </h1>
             <EditBioButton />
@@ -171,7 +157,9 @@ export default function Profile() {
           {followers}
         </div>
       </div>
-      </div>
+
+      <Feed> </Feed>
+
     </main>
   );
 }
