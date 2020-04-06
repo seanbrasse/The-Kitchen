@@ -34,7 +34,7 @@ export default class EditRecipePage extends React.Component{
               postid: postID
           })
           }).then(res => res.json()).then(parsedRes => {
-                this.content = parsedRes.posts[0].post_text;
+              this.content = parsedRes.posts[0].post_text;
               this.setState({
                 mainImage: parsedRes.posts[0].post_pic_url
               })

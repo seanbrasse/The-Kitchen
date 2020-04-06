@@ -12,7 +12,7 @@ class Navbar extends React.Component {
         username: sessionStorage.getItem('userEmail'),
         session_token: sessionStorage.getItem('token')
       })
-    });
+    }); 
     sessionStorage.removeItem('userID');
     sessionStorage.removeItem('token');
     sessionStorage.removeItem('userEmail');

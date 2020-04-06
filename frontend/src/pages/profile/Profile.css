@@ -6,6 +6,12 @@
   flex-direction: row;
 }
 
+.feed {
+  margin-top: 10px;
+  width: 100%;
+  height: 100%;
+}
+
 .sidebar {
   border: 1px solid #ccc;
   margin-top: 10px;
@@ -15,6 +21,32 @@
   flex-direction: column;
   padding: 10px;
 }
+
+.new-post {
+  border: 1px solid #ccc;
+  margin-top: 10px;
+  border-radius: 4px;
+  height: 50px;
+  width: 8%;
+  position: absolute;
+  left: 325px;
+  top: 183px;
+}
+
+
+.new-new {
+  position: relative;
+  left: 120px;
+  top: -60px;
+}
+
+.recipe-box {
+  border: 1px solid #ccc;
+  margin: 20px;
+  width: 200px;
+  height: 250px;
+}
+
 
 .settings {
   right: 0;
@@ -34,6 +66,7 @@
 
 .left-text {
   margin-left: 10px;
+  border-radius: 4px;
 }
 
 .profile-image {
@@ -45,6 +78,9 @@
 
 .profile-name {
   align-self: center;
+  padding: 10px;
+  margin-right: 10px;
+  margin-left: 10px;
 }
 
 .follower {
@@ -72,7 +108,7 @@
 
 .BioRow {
   display: flex;
-  flex-direction: row;
+  /* flex-direction: row; */
 }
 
 .editBio {
