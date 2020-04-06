@@ -64,7 +64,7 @@ class Login extends React.Component {
     render() {
         return (
             <main className={styles.authContainer}>
-                <article>
+                <article class="card">
                     <h1>Welcome to The Kitchen</h1>
                     <h2>Log In</h2>
                     <form ref={this.form}>

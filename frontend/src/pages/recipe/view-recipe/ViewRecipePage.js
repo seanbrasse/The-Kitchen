@@ -5,7 +5,7 @@ import Recipe from '../recipe-components/Recipe'
 import Description from '../recipe-components/Description'
 import Title from '../recipe-components/Title'
 import styles from '../recipe-components/recipe.css';
-import {parseRecipe} from 'components/parseRecipe.js'
+import {parseRecipe} from 'util/parseRecipe.js'
 
 export default class ViewRecipePage extends React.Component{
   constructor(props){

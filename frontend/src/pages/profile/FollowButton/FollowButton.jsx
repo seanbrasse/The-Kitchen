@@ -21,7 +21,7 @@ export default class FollowButton extends React.Component {
             this.setState({loadingFollowStatus: true});
           this.updateFollowed();
         }
-      }
+    }
 
     updateFollowed() {
         this._getFollowStatus = fetch('http://stark.cse.buffalo.edu/cse410/deldev/api/connectioncontroller.php', {

@@ -6,11 +6,6 @@
 }
 
 :local(.authContainer > article) {
-    border: 1px solid black;
-    border-radius: 5px;
-    --article-padding: 30px;
-    padding: var(--article-padding);
-    background-color: #f8f8f8;
     width: 500px;
 }
 
@@ -19,5 +14,5 @@
 }
 
 :local(.textInput) {
-    width: calc(100% - var(--article-padding)/2);
+    width: calc(100% - var(--card-padding)/2);
 }

@@ -1,0 +1,49 @@
+:local(.cardLink) {
+    text-decoration: none;
+}
+
+:local(.card) {
+    display: flex;
+    flex-direction: row;
+    height: 160px;
+    color: black;
+}
+
+:local(.image) {
+    width: 240px;
+    height: 100%;
+    object-fit: cover;
+    margin-right: 10px;
+}
+
+:local(.card > .infoCol) {
+    display: block;
+    overflow: hidden;
+    flex-grow: 1;
+}
+
+:local(.topInfo) {
+    overflow: hidden;
+    height:140px;
+}
+
+:local(.bottomInfo) {
+    text-align: right;
+}
+
+:local(.card h2) {
+    margin: 0;
+    display: inline-block;
+    margin-right: 10px;
+}
+
+:local(.tags) {
+    display: inline-block;
+    list-style: none;
+    padding: 0;
+}
+
+:local(.tags li) {
+    display: inline-block;
+    margin: 0 3px;
+}
