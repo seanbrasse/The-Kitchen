@@ -10,9 +10,9 @@ export default class EditRecipePage extends React.Component{
 
   constructor(props){
     super(props);
-    //var content = "";
-    //var titleID = 0;
-    //var ingredientIDs = [];
+    this.content = "";
+    this.titleID = 0;
+    this.ingredientIDs = [];
 
     this.state = {
       title: "",

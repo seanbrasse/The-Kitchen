@@ -8,13 +8,11 @@ export function parseRecipe(data){
 
   data = data.split('\0');
 
-  if(data[index] >= 0){
+  if(data[index]){
     //titleID
     recipe.titleID = data[index++];
 
-    if(data[index] >= 0){
-      recipe.messageID = data[index++];
-    }
+    recipe.messageID = data[index++];
 
     //title
     recipe.title = data[index++];
