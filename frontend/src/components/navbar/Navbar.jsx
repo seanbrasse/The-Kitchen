@@ -25,6 +25,7 @@ class Navbar extends React.Component {
     } else {
       sessionStorage.setItem('smallCards', true);
     }
+    window.location.reload();
   }
 
   render() {
