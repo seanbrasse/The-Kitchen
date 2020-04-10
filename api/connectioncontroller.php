@@ -8,17 +8,28 @@ require 'connect.php';
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");$json = array();
+
 // pull the input, which should be in the form of a JSON object
 $json_params = file_get_contents('php://input');
+
 // check to make sure that the JSON is in a valid format
 if (isValidJSON($json_params)) {
-    //load in all the potential parameters.  These should match the database columns for the objects.
+
+    // get a database connection from connect.php
     $conn = getDbConnection();
+
+    //load in all the potential parameters.
     $decoded_params = json_decode($json_params, true);
+
+    // the action parameter will tell us which specific action the user is trying to accomplish with connections
     $action = $decoded_params['action'];
     $json['action'] = $action;
+
     // uncomment the following line if you want to turn PHP error reporting on for debug - note, this will break the JSON response
     //ini_set('display_errors', 1); error_reporting(-1);
+
+    // the rest of the parameters should match fields in the database, and help us build
+    // our SQL
     $connectionId = "";
     if (array_key_exists('connectionid', $decoded_params)) {
         $connectionId =  $decoded_params['connectionid'];
@@ -39,16 +50,16 @@ if (isValidJSON($json_params)) {
     if (array_key_exists('connectionstatus', $decoded_params)) {
         $connectionStatus =  $decoded_params['connectionstatus'];
     }
-    $userId = "";
+    $authUserId = "";
     if (array_key_exists('user_id', $decoded_params)) {
-        $userId =  $decoded_params['user_id'];
+        $authUserId =  $decoded_params['user_id'];
     }
     $sessionToken = "";
     if (array_key_exists('session_token', $decoded_params)) {
         $sessionToken =  $decoded_params['session_token'];
     }
     if ($action == "addOrEditConnections") {
-        if (validateAPIKey($userId, $sessionToken)) {
+        if (validateAPIKey($authUserId, $sessionToken)) {
             $args = array();
             if (IsNullOrEmpty($connectionId)) {
                 $sql = "INSERT INTO connections (connection_id,user_id,connect_user_id,connection_type,connection_status) VALUES ( ?,?,?,?,?);";
@@ -91,7 +102,7 @@ if (isValidJSON($json_params)) {
             $json['Status'] = "ERROR - API Key Check Failed";
         }
     } elseif ($action == "deleteConnections") {
-        if (validateAPIKey($userId, $sessionToken)) {
+        if (validateAPIKey($authUserId, $sessionToken)) {
             $sql = "DELETE FROM connections WHERE connection_id = ?";
             $args = array();
             array_push($args, $connectionId);
@@ -109,7 +120,7 @@ if (isValidJSON($json_params)) {
                     $json['Exception'] =  $e->getMessage();
                 }
             } else {
-                $json['Status'] = "ERROR - Id is required";
+                $json['Status'] = "ERROR - missing required parameter connectionid";
             }
             $json['Action'] = $action;
         } else {

@@ -51,9 +51,9 @@ if (isValidJSON($json_params)) {
     if (array_key_exists('parentid', $decoded_params)) {
         $parentId =  $decoded_params['parentid'];
     }
-    $userId = "";
+    $authUserId = "";
     if (array_key_exists('user_id', $decoded_params)) {
-        $userId =  $decoded_params['user_id'];
+        $authUserId =  $decoded_params['user_id'];
     }
     $sessionToken = "";
     if (array_key_exists('session_token', $decoded_params)) {
@@ -63,8 +63,20 @@ if (isValidJSON($json_params)) {
     if (array_key_exists('max_posts', $decoded_params)) {
         $maxPosts =  $decoded_params['max_posts'];
     }
+    $tag = "";
+    if (array_key_exists('tag', $decoded_params)) {
+        $tag =  $decoded_params['tag'];
+    }
+    $tagType = "";
+    if (array_key_exists('tag_type', $decoded_params)) {
+        $tagType =  $decoded_params['tag_type'];
+    }
+    $offset = "";
+    if (array_key_exists('offset', $decoded_params)) {
+        $offset =  $decoded_params['offset'];
+    }
     if ($action == "addOrEditPosts") {
-        if (validateAPIKey($userId, $sessionToken)) {
+        if (validateAPIKey($authUserId, $sessionToken)) {
             $args = array();
             if (IsNullOrEmpty($postId)) {
                 $sql = "INSERT INTO posts (post_id,user_id,post_type,post_text,post_pic_url,comment_flag,parent_id) VALUES ( ?,?,?,?,?,?,?);";
@@ -122,7 +134,7 @@ if (isValidJSON($json_params)) {
             $json['Status'] = "ERROR - API Key Check Failed";
         }
     } elseif ($action == "deletePosts") {
-        if (validateAPIKey($userId, $sessionToken)) {
+        if (validateAPIKey($authUserId, $sessionToken)) {
             $sql = "DELETE FROM posts WHERE post_id = ?";
             $args = array();
             array_push($args, $postId);
@@ -229,13 +241,34 @@ if (isValidJSON($json_params)) {
                 $sql .= " AND (parent_id is null or parent_id =  0) ";
             }
         }
+        if (!IsNullOrEmpty($tag)) {
+            if ($first) {
+                $sql .= " WHERE exists (select 'x' from post_tags pt where pt.post_id = posts.post_id and pt.tag=?) ";
+                $first = false;
+            } else {
+                $sql .= " AND exists (select 'x' from post_tags pt where pt.post_id = posts.post_id and pt.tag=?) ";
+            }
+            array_push($args, $tag);
+        }
+        if (!IsNullOrEmpty($tagType)) {
+            if ($first) {
+                $sql .= " WHERE exists (select 'x' from post_tags pt where pt.post_id = posts.post_id and pt.tag_type=?) ";
+                $first = false;
+            } else {
+                $sql .= " AND exists (select 'x' from post_tags pt where pt.post_id = posts.post_id and pt.tag_type=?) ";
+            }
+            array_push($args, $tagType);
+        }
 
         $sql .= " order by timestamp desc ";
 
         if (!IsNullOrEmpty($maxPosts)) {
-            $sql .= " LIMIT ".$maxPosts;
+            if (!IsNullOrEmpty($offset)) {
+                $sql .= " LIMIT ".$offset.",".$maxPosts;
+            } else {
+                $sql .= " LIMIT ".$maxPosts;
+            }
         }
-
 
         $json['SQL'] = $sql;
         try {
@@ -325,6 +358,17 @@ if (isValidJSON($json_params)) {
                 $sql .= " AND parent_id IS NULL ";
             }
         }
+
+        $sql .= " order by timestamp desc ";
+
+        if (!IsNullOrEmpty($maxPosts)) {
+            if (!IsNullOrEmpty($offset)) {
+                $sql .= " LIMIT ".$offset.",".$maxPosts;
+            } else {
+                $sql .= " LIMIT ".$maxPosts;
+            }
+        }
+
         $json['SQL'] = $sql;
         try {
             $statement = $conn->prepare($sql);
