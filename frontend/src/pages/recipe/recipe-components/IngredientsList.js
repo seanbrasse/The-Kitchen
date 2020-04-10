@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { MdDelete } from 'react-icons/md';
-import styles from './recipe.css';
+import './recipe.css';
 
 const IngredientsList = (props) => {
   if(props.type === "edit"){

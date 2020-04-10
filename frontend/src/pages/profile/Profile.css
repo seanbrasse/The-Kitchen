@@ -7,36 +7,22 @@
 }
 
 .feed {
+  display: flex;
   margin-top: 10px;
-  width: 100%;
-  height: 100%;
+}
+
+.profileFeed {
+  flex-grow: 1;
 }
 
 .sidebar {
   border: 1px solid #ccc;
-  margin-top: 10px;
+  margin-right: 10px;
   border-radius: 4px;
-  width: 15%;
+  width: 200px;
   display: flex;
   flex-direction: column;
   padding: 10px;
-}
-
-.new-post {
-  border: 1px solid #ccc;
-  margin-top: 10px;
-  border-radius: 4px;
-  height: 50px;
-  width: 9%;
-  position: absolute;
-  left: 420px;
-  top: 230px;
-}
-
-.new-new {
-  position: relative;
-  left: 120px;
-  top: -50px;
 }
 
 .recipe-box {
@@ -48,19 +34,14 @@
 
 
 .settings {
+  margin-left: auto;
   right: 0;
-  margin-right: 230px;
   margin-top: 5px;
-  position: absolute;
 }
 
 .editPfp {
-  width: 80px;
-  height: 80px;
-  padding: 10px;
-  position: absolute;
+  margin-left: -10px;
   margin-top: 8px;
-  left: 280px;
 }
 
 .left-text {
@@ -111,11 +92,7 @@
 }
 
 .editBio {
-  /* float: right; */
-  /* margin-left: 185px; */
-  margin-top: 30px;
-  position: absolute;
-  margin-left: 150px;
+  margin-left: auto;
 }
 
 .followersRow {
@@ -125,7 +102,12 @@
 
 .Following {
   margin-top: 30px;
-  position: absolute;
-  margin-left: 225px;
+  /*position: absolute;
+  margin-left: 225px;*/
   cursor: pointer;
+}
+
+.newpostHeader {
+  display: inline;
+  margin-right: 10px;
 }

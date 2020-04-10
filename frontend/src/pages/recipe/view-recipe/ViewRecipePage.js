@@ -4,7 +4,6 @@ import IngredientsList from '../recipe-components/IngredientsList'
 import Recipe from '../recipe-components/Recipe'
 import Description from '../recipe-components/Description'
 import Title from '../recipe-components/Title'
-import styles from '../recipe-components/recipe.css';
 import {parseRecipe} from 'util/parseRecipe.js'
 
 export default class ViewRecipePage extends React.Component{

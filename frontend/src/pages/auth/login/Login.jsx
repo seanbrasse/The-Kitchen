@@ -70,7 +70,7 @@ class Login extends React.Component {
           })
         }).then(res => res.json()).then(
           response => {
-            if(response.groups != undefined){
+            if(response.groups !== undefined){
               sessionStorage.setItem('groupID', response.groups[0].group_id);
             }else{
               fetch('http://stark.cse.buffalo.edu/cse410/deldev/api/groupcontroller.php', {

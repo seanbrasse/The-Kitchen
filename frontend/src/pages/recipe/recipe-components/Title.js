@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styles from './recipe.css';
+import './recipe.css';
 
 const Title = (props) => {
   if(props.type === "edit"){
@@ -14,14 +14,14 @@ const Title = (props) => {
         <label for="textbox">Image URL</label><br></br>
         <input type="text" name="image" value={props.image} onChange={props.handle}></input>
       </div>
-      <img src={props.image}/>
+      <img src={props.image} alt="Recipe dish"/>
       </div>
     )
   }else{
     return(
       <div class="title">
       <h1>{props.title}</h1>
-      <img src={props.image}/>
+      <img src={props.image} alt="Recipe dish"/>
       </div>
     )
   }

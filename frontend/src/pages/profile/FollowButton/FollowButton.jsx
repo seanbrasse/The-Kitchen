@@ -68,7 +68,7 @@ export default class FollowButton extends React.Component {
 
     onClick() {
         //What I added
-        if(this.state.currentlyFollowed != true){
+        if(this.state.currentlyFollowed !== true){
           fetch('http://stark.cse.buffalo.edu/cse410/deldev/api/gmcontroller.php', {
               method: 'post',
               body: JSON.stringify({
@@ -80,7 +80,7 @@ export default class FollowButton extends React.Component {
                   membertype: this.props.userID
               })
           })
-        }else{
+        } else{
           fetch('http://stark.cse.buffalo.edu/cse410/deldev/api/gmcontroller.php', {
               method: 'post',
               body: JSON.stringify({
@@ -96,7 +96,7 @@ export default class FollowButton extends React.Component {
                       action: 'deleteGroupMembers',
                       user_id: sessionStorage.getItem('userID'),
                       session_token: sessionStorage.getItem('token'),
-                      gmid: response.group_members[0].gm_id
+                      gmid: response.group_members ? response.group_members[0].gm_id : undefined
                   })
                 });
               }
@@ -109,6 +109,7 @@ export default class FollowButton extends React.Component {
             body: JSON.stringify({
                 action: 'addOrEditConnections',
                 user_id: sessionStorage.getItem('userID'),
+                userid: sessionStorage.getItem('userID'),
                 connectuserid: this.props.userID,
                 connectiontype: 'Follow',
                 connectionstatus: this.state.currentlyFollowed ? 'Inactive' : 'Active',

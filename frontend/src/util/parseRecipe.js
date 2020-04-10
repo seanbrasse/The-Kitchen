@@ -4,7 +4,7 @@ export function parseRecipe(data){
   var index = 0;
   var array;
   var i;
-  var recipe = new Object();
+  var recipe = {};
 
   data = data.split('\0');
 

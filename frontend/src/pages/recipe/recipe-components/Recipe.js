@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { MdDelete } from 'react-icons/md';
-import styles from './recipe.css';
+import './recipe.css';
 
 
 const Recipe = (props) => {
@@ -26,7 +26,7 @@ const GetElem = (props) => {
   }else if (props.type === "text") {
     return(<p>{props.elem}</p>)
   }else{
-    return(<img src={props.elem}/>)
+    return(<img src={props.elem} alt="Visual of this step"/>)
   }
 }
 
@@ -48,7 +48,7 @@ const EditElem = (props) => {
             <button className="icon" name="Delete" onClick={(e) => props.handle(e, props.index)}><MdDelete/></button>
             <label for="textbox">Image URL</label><br></br>
             <input type="text" name="update" value={props.value} onChange={(e) => props.handle(e, props.index)}></input>
-            <img src={props.value}/>
+            <img src={props.value} alt="Visual of this step"/>
           </div>)
   }
 }

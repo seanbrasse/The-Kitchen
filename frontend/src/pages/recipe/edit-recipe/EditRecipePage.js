@@ -10,9 +10,9 @@ export default class EditRecipePage extends React.Component{
 
   constructor(props){
     super(props);
-    var content = "";
-    var titleID = 0;
-    var ingredientIDs = [];
+    //var content = "";
+    //var titleID = 0;
+    //var ingredientIDs = [];
 
     this.state = {
       title: "",
@@ -28,7 +28,7 @@ export default class EditRecipePage extends React.Component{
 
 
   componentDidMount() {
-    if(this.props.postID != 0){
+    if(this.props.postID !== 0){
       this.setState({postID: this.props.postID})
       this.loadData(this.props.postID);
     }
@@ -60,7 +60,7 @@ export default class EditRecipePage extends React.Component{
   saveData(){
     this.combineData();
     this.addFilters();
-    if(this.state.postID != 0){
+    if(this.state.postID !== 0){
     fetch('http://stark.cse.buffalo.edu/cse410/deldev/api/postcontroller.php', {
         method: 'post',
 
@@ -162,7 +162,7 @@ export default class EditRecipePage extends React.Component{
   }
 
   deleteTag(tagID){
-    if(tagID != 0){
+    if(tagID !== 0){
       fetch('http://stark.cse.buffalo.edu/cse410/deldev/api/ptcontroller.php', {
           method: 'post',
 
@@ -180,22 +180,22 @@ export default class EditRecipePage extends React.Component{
     For new tag tagID = 0;
   */
   addTag(tagID, tag, tagType, i){
-    if(tagID != 0){
+    if(tagID !== 0){
       const returnID = async recordID => {
-        const res = await fetch('http://stark.cse.buffalo.edu/cse410/deldev/api/ptcontroller.php', {
-            method: 'post',
+        await fetch('http://stark.cse.buffalo.edu/cse410/deldev/api/ptcontroller.php', {
+          method: 'post',
 
-            body: JSON.stringify({
-                action: 'addOrEditPostTags',
-                user_id: sessionStorage.getItem('userID'),
-                userid: sessionStorage.getItem('userID'),
-                session_token: sessionStorage.getItem('token'),
-                postid: this.state.postID,
-                tagtype: tagType,
-                tag: tag,
-                posttagid: tagID
-              })
-            })
+          body: JSON.stringify({
+            action: 'addOrEditPostTags',
+            user_id: sessionStorage.getItem('userID'),
+            userid: sessionStorage.getItem('userID'),
+            session_token: sessionStorage.getItem('token'),
+            postid: this.state.postID,
+            tagtype: tagType,
+            tag: tag,
+            posttagid: tagID
+          })
+        })
         return [tagID, i];
       }
       return returnID();
@@ -228,7 +228,7 @@ export default class EditRecipePage extends React.Component{
   uploadDataPrivate = (event) => {
     this.combineData();
     this.deleteTags(this.state.postID);
-    if(this.state.postID != 0){
+    if(this.state.postID !== 0){
       this.sendAsMessage(this.state.postID);
       fetch('http://stark.cse.buffalo.edu/cse410/deldev/api/postcontroller.php', {
         method: 'post',
@@ -266,7 +266,7 @@ export default class EditRecipePage extends React.Component{
 	}
 
   sendAsMessage(postID){
-    if(this.state.messageID != 0){
+    if(this.state.messageID !== 0){
     fetch('http://stark.cse.buffalo.edu/cse410/deldev/api/messagecontroller.php', {
         method: 'post',
 
@@ -311,7 +311,7 @@ export default class EditRecipePage extends React.Component{
               var len;
               var i;
 
-              if(tags != undefined){
+              if(tags !== undefined){
                 len =  tags.length;
                 for(i = 0; i < len; i++){
                   fetch('http://stark.cse.buffalo.edu/cse410/deldev/api/ptcontroller.php', {

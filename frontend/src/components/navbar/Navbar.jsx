@@ -35,6 +35,9 @@ class Navbar extends React.Component {
             { sessionStorage.getItem('userID') ?
               <Fragment>
                 <li>
+                  <NavLink to={"/recipe/create"}>Create Post</NavLink>
+                </li>
+                <li>
                   <NavLink to={"/user/" + sessionStorage.getItem('userID')}>My Profile</NavLink>
                 </li>
                 <li>
