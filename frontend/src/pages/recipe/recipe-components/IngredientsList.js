@@ -6,7 +6,7 @@ import './recipe.css';
 const IngredientsList = (props) => {
   if(props.type === "edit"){
     return(
-      <div class="ingredients">
+      <div className="ingredients">
           <div>
             <h2>Ingredients</h2>
             <ul>
@@ -30,13 +30,13 @@ const IngredientsList = (props) => {
               <button className="icon" name="Delete" onClick={(e) => props.handle(e, i)}><MdDelete/></button>
               </li>)}
             </ul>
-            <button class="smallButton" name="button" onClick={(e) => props.handle(e, 0)}>Add Ingredient</button>
+            <button className="smallButton" name="button" onClick={(e) => props.handle(e, 0)}>Add Ingredient</button>
           </div>
       </div>
     )
   }else{
     return(
-      <div class="ingredients">
+      <div className="ingredients">
         <div>
           <h2>Ingredients</h2>
           <ul>{props.ingredients[0].map((ing, i) => <li key={i}><input id="autoWidth" type="checkbox"></input> {ing} </li>)}</ul>

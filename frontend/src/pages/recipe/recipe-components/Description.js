@@ -4,13 +4,13 @@ import PropTypes from 'prop-types';
 const Description = (props) => {
   if(props.type === "edit"){
     return(
-      <div class="description">
+      <div className="description">
       <textarea name="description" value={props.description} onChange={props.handle}></textarea>
       </div>
     )
   }else{
     return(
-      <div class="description">
+      <div className="description">
       <p>{props.description}</p>
       </div>
     )

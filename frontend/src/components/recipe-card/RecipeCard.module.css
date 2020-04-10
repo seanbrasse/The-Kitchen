@@ -9,6 +9,18 @@
     color: black;
 }
 
+:local(.card.small) {
+    width: 250px;
+    height: 350px;
+    flex-direction: column;
+}
+
+:local(.card.small > .infoCol) {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
 :local(.image) {
     width: 240px;
     height: 100%;

@@ -28,7 +28,7 @@ export default class EditRecipePage extends React.Component{
 
 
   componentDidMount() {
-    if(this.props.postID !== 0){
+    if(this.props.postID !== 0 && this.props.postID !== undefined){
       this.setState({postID: this.props.postID})
       this.loadData(this.props.postID);
     }
@@ -63,11 +63,11 @@ export default class EditRecipePage extends React.Component{
     if(this.state.postID !== 0){
     fetch('http://stark.cse.buffalo.edu/cse410/deldev/api/postcontroller.php', {
         method: 'post',
-
         body: JSON.stringify({
             action: 'addOrEditPosts',
             postid: this.state.postID,
             user_id: sessionStorage.getItem('userID'),
+            userid: sessionStorage.getItem('userID'),
             session_token: sessionStorage.getItem('token'),
             posttype: "Recipe",
             posttext: this.content,
@@ -82,6 +82,7 @@ export default class EditRecipePage extends React.Component{
           body: JSON.stringify({
               action: 'addOrEditPosts',
               user_id: sessionStorage.getItem('userID'),
+              userid: sessionStorage.getItem('userID'),
               session_token: sessionStorage.getItem('token'),
               posttype: "Recipe",
               posttext: this.content,
@@ -99,8 +100,10 @@ export default class EditRecipePage extends React.Component{
     var i;
     var str = "";
 
+    debugger;
     //titleID
-    str = this.titleID;
+    //str = this.titleID;
+    str = this.state.title;
 
     //messageID
     str += "\0" + this.state.messageID;
@@ -169,6 +172,7 @@ export default class EditRecipePage extends React.Component{
           body: JSON.stringify({
               action: 'deletePostTags',
               user_id: sessionStorage.getItem('userID'),
+              userid: sessionStorage.getItem('userID'),
               session_token: sessionStorage.getItem('token'),
               posttagid: tagID
               })
@@ -237,6 +241,7 @@ export default class EditRecipePage extends React.Component{
             action: 'addOrEditPosts',
             postid: this.state.postID,
             user_id: sessionStorage.getItem('userID'),
+            userid: sessionStorage.getItem('userID'),
             session_token: sessionStorage.getItem('token'),
             posttype: "Private",
             posttext: this.content,
@@ -251,6 +256,7 @@ export default class EditRecipePage extends React.Component{
           body: JSON.stringify({
               action: 'addOrEditPosts',
               user_id: sessionStorage.getItem('userID'),
+              userid: sessionStorage.getItem('userID'),
               session_token: sessionStorage.getItem('token'),
               posttype: "Private",
               posttext: this.content,
@@ -320,6 +326,7 @@ export default class EditRecipePage extends React.Component{
                       body: JSON.stringify({
                           action: 'deletePostTags',
                           user_id: sessionStorage.getItem('userID'),
+                          userid: sessionStorage.getItem('userID'),
                           session_token: sessionStorage.getItem('token'),
                           posttagid: tags[i].post_tag_id
                           })
@@ -431,6 +438,7 @@ export default class EditRecipePage extends React.Component{
   }
 
   updateTitle = (event) => {
+    console.log(event);
     if(event.target.name === "title"){
       this.setState({title: event.target.value});
     }else{
@@ -440,8 +448,8 @@ export default class EditRecipePage extends React.Component{
 
   render(){
     return(
-      <div class="recipe-page">
-      <div class="recipe-content">
+      <div className="recipe-page">
+      <div className="recipe-content">
       <h1>{this.recipeID}</h1>
       <Title type={this.state.editMode ? "edit" : "display"} title={this.state.title} image={this.state.mainImage} handle={this.updateTitle}/>
       <RecipeHeader>Description</RecipeHeader>

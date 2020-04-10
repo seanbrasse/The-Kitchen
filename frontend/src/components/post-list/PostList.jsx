@@ -11,7 +11,7 @@ export default function PostList(props) {
                 props.posts.map(post => {
                     const recipe = parseRecipe(post.post_text);
                     return (
-                        <li key={post.post_id} className={styles.cardli}>
+                        <li key={post.post_id} className={`${styles.cardli} ${sessionStorage.getItem('smallCards') ? styles.small : ''}`}>
                             <RecipeCard
                                 recipeID={post.post_id}
                                 title={recipe.title}

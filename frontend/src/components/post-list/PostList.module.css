@@ -1,3 +1,9 @@
 :local(.cardli) {
     margin: 20px 0;
 }
+
+:local(.cardli.small) {
+    display: inline-block;
+    margin: 10px 10px;
+    overflow: hidden;
+}

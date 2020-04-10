@@ -7,13 +7,13 @@ import './recipe.css';
 const Recipe = (props) => {
   if(props.type === "edit"){
     return(
-      <div class="recipe">
+      <div className="recipe">
       {props.recipe[1].map((e, i) => <EditElem key={i} index={i} type={props.recipe[0][i]} value={e} handle={props.handle}/>)}
       </div>
     )
   }else{
     return(
-      <div class="recipe">
+      <div className="recipe">
       {props.recipe[1].map((e, i) => <GetElem key={i} elem={e} type={props.recipe[0][i]} />)}
       </div>
     )

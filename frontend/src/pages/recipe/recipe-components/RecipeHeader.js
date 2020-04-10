@@ -8,13 +8,13 @@ const RecipeHeader = (props) => {
 
   if(buttons && props.type === "edit"){
     return(
-      <div class="recipe-header">
+      <div className="recipe-header">
         <h1>{props.children}{props.buttons.map((b, i) => <button className="largeButton" key={i} name={i} onClick={props.handle}>{b}</button>)}</h1>
       </div>
     )
   }else{
     return(
-      <div class="recipe-header">
+      <div className="recipe-header">
         <h1>{props.children}</h1>
       </div>
     )

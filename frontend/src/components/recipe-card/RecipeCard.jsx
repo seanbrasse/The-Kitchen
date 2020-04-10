@@ -5,7 +5,7 @@ import styles from './RecipeCard.module.css';
 export default class RecipeCard extends React.Component {
     render() {
         return (
-            <article className={`card ${styles.card}`}>
+            <article className={`card ${styles.card} ${sessionStorage.getItem('smallCards') ? styles.small : ''}`}>
                 <div className={styles.imgCol}>
                     <img src={this.props.image} className={styles.image} alt="Recipe dish"/>
                 </div>
