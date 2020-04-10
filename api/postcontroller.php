@@ -199,11 +199,12 @@ if (isValidJSON($json_params)) {
             array_push($args, $timestamp);
         }
         if (!IsNullOrEmpty($postText)) {
+            $postText = "%$postText%";
             if ($first) {
-                $sql .= " WHERE post_text = ? ";
+                $sql .= " WHERE post_text LIKE ? ";
                 $first = false;
             } else {
-                $sql .= " AND post_text = ? ";
+                $sql .= " AND post_text LIKE ? ";
             }
             array_push($args, $postText);
         }
