@@ -100,7 +100,6 @@ export default class EditRecipePage extends React.Component{
     var i;
     var str = "";
 
-    debugger;
     //titleID
     //str = this.titleID;
     str = this.state.title;
@@ -438,7 +437,6 @@ export default class EditRecipePage extends React.Component{
   }
 
   updateTitle = (event) => {
-    console.log(event);
     if(event.target.name === "title"){
       this.setState({title: event.target.value});
     }else{
