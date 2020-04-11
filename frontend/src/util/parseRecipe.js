@@ -12,6 +12,7 @@ export function parseRecipe(data){
     //titleID
     recipe.titleID = data[index++];
 
+    //messageID
     recipe.messageID = data[index++];
 
     //title
