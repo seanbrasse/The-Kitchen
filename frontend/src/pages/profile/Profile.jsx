@@ -18,18 +18,63 @@ class Profile extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      posts: []
+      posts: [],
+      hidden: true,
+      picID: 0,
+      profileImageTemp: avatar,
+      profileImage: avatar
+
     }
   }
 
   componentDidMount() {
     this.updatePageData();
+    this.fetchProfilePic();
   }
 
   componentDidUpdate(prevProps) {
     if (this.props.match.params.userID !== prevProps.match.params.userID) {
       this.updatePageData();
     }
+  }
+
+  fetchProfilePic(){
+    fetch('http://stark.cse.buffalo.edu/cse410/deldev/api/uacontroller.php', {
+      method: 'post',
+      body: JSON.stringify({
+          action: 'getUserArtifacts',
+          userid: this.props.match.params.userID,
+          posttype: 'Recipe',
+          artifacttype: 'profilePic'
+      })
+    }).then(res => res.json()).then(
+        response => {
+            if(response.user_artifacts != undefined){
+              this.setState({
+                picID: response.user_artifacts[0].artifact_id,
+                profileImageTemp: response.user_artifacts[0].artifact_url,
+                profileImage: response.user_artifacts[0].artifact_url
+              })
+            }else{
+              fetch('http://stark.cse.buffalo.edu/cse410/deldev/api/uacontroller.php', {
+                method: 'post',
+                body: JSON.stringify({
+                    action: 'addOrEditUserArtifacts',
+                    userid: this.props.match.params.userID,
+                    user_id: this.props.match.params.userID,
+                    artifacttype: 'profilePic',
+                  	session_token: sessionStorage.getItem('token'),
+                  	artifacturl: avatar,
+                  	artifactcategory: "image",
+                  	artifacttype: "profilePic"
+                })
+              }).then(res => res.json()).then(
+                  response => {
+                    this.setState({picID: response["Record Id"]})
+                })
+            }
+        }
+    );
   }
 
   updatePageData() {
@@ -50,6 +95,32 @@ class Profile extends React.Component {
     );
   }
 
+  showPopUp = () => {
+    this.setState({hidden: false});
+  }
+
+  changePic = (event) => {
+    this.setState({profileImageTemp: event.target.value});
+  }
+
+  savePic = (event) => {
+    this.setState({profileImage: this.state.profileImageTemp});
+    fetch('http://stark.cse.buffalo.edu/cse410/deldev/api/uacontroller.php', {
+      method: 'post',
+      body: JSON.stringify({
+          action: 'addOrEditUserArtifacts',
+          userid: sessionStorage.getItem('userID'),
+          user_id: sessionStorage.getItem('userID'),
+	        artifactid: this.state.picID,
+          artifacttype: 'profilePic',
+          session_token: sessionStorage.getItem('token'),
+          artifacturl: this.state.profileImageTemp,
+          artifactcategory: "image",
+          artifacttype: "profilePic"
+      })
+    })
+  }
+
   render() {
     let myUserId = sessionStorage.getItem("userID");
     let userID = this.props.match.params.userID;
@@ -68,22 +139,24 @@ class Profile extends React.Component {
       );
     }
 
-    function EditProfilePicture() {
+    function EditProfilePicture(props) {
       if (myUserId === userID) {
         return (
-          <Link to="/settings" className="editPfp">
+          <div>
+          <button className="changePicButton" onClick={props.handler}>
             <FontAwesomeIcon
               icon={faEdit}
               size="1x"
               onClick={AccountSettings}
               color="black"
             ></FontAwesomeIcon>
-          </Link>
+          </button>
+          </div>
         );
       }
       return null;
     }
-  
+
     function EditBioButton() {
       if (myUserId === userID) {
         return (
@@ -99,7 +172,7 @@ class Profile extends React.Component {
       }
       return null;
     }
-  
+
     function NewPost(){
       if(myUserId === userID){
         return (
@@ -118,7 +191,7 @@ class Profile extends React.Component {
       }
       return null;
     }
-  
+
     function EditRecipe() {
       if (myUserId === userID) {
         return (
@@ -134,7 +207,7 @@ class Profile extends React.Component {
       }
       return null;
     }
-  
+
     function Settings() {
       if (userID === myUserId) {
         return (
@@ -149,13 +222,24 @@ class Profile extends React.Component {
         );
       }
       return null;
-    }  
+    }
 
     return (
       <main>
+
+        <div className="popUpBackground" style={{display: (this.state.hidden ? 'none' : 'flex')}}>
+          <div className="popUpWindow">
+          <button className="exitButton" onClick={() => this.setState({hidden: true})}>+</button>
+          <h2>Change Profile Picture</h2>
+          <input type="text" placeholder="Paste Image or URL" onChange={this.changePic}></input>
+          <img id="image" className="profile-image-large" src={this.state.profileImageTemp} alt="Avatar"/>
+          <button onClick={this.savePic}>Save Changes</button>
+          </div>
+        </div>
+
         <div className="card profile">
-          <img className="profile-image" src={avatar} alt="Avatar" />
-          <EditProfilePicture />
+          <img className="profile-image" src={this.state.profileImage} alt="Avatar" />
+          <EditProfilePicture handler={this.showPopUp} />
           {/* {console.log("myUserId: " + myUserId)} */}
           {/* {console.log("userID: " + userID)} */}
           <h1 className="profile-name">{userID}</h1>
@@ -164,21 +248,21 @@ class Profile extends React.Component {
           }
           <Settings />
         </div>
-  
+
         <div className="feed">
           <div className="card sidebar">
             <div className="BioRow">
               <h1 className="left-text"> Bio </h1>
               <EditBioButton />
             </div>
-  
+
             <p className="left-text">
               Duis aute irure dolor in reprehenderit in voluptate velit esse
               cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
               cupidatat non proident, sunt in culpa qui officia deserunt mollit
               anim id est laborum.
             </p>
-  
+
             <div className="followersRow">
               <h1 className="left-text" id="followers">
                 Followers
@@ -191,7 +275,7 @@ class Profile extends React.Component {
             <PostList posts={this.state.posts}/>
           </div>
         </div>
-  
+
       </main>
     );
   }
