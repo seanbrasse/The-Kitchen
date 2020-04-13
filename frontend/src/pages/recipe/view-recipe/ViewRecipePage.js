@@ -17,12 +17,29 @@ export default class ViewRecipePage extends React.Component{
       ingredients: [[], [], []],
       recipe: [[], []],
       content: "",
-      editMode: false
+      editMode: false,
+      userid: null
 		}
   }
 
   componentDidMount() {
     this.loadData(this.props.postID);
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.postID !== this.props.postID) {
+      this.setState({
+        title: "",
+        mainImage: "",
+        description: "",
+        ingredients: [[], [], []],
+        recipe: [[], []],
+        content: "",
+        editMode: false,
+        userid: null
+      });
+      this.loadData(this.props.postID);
+    }
   }
 
   loadData(postID){
@@ -32,16 +49,17 @@ export default class ViewRecipePage extends React.Component{
               action: 'getPosts',
               postid: postID
           })
-        }).then(res => res.json()).then(parsedRes => {
-              this.setState({
-                content: parsedRes.posts[0].post_text,
-                mainImage: parsedRes.posts[0].post_pic_url
-              })
-              var recipe = parseRecipe(this.state.content);
-              this.setState({title: recipe.title});
-              this.setState({description: recipe.description});
-              this.setState({ingredients: recipe.ingredients});
-              this.setState({recipe: recipe.recipe});
+      }).then(res => res.json()).then(parsedRes => {
+          this.setState({
+            content: parsedRes.posts[0].post_text,
+            mainImage: parsedRes.posts[0].post_pic_url,
+            userid: parsedRes.posts[0].user_id
+          });
+          var recipe = parseRecipe(this.state.content);
+          this.setState({title: recipe.title});
+          this.setState({description: recipe.description});
+          this.setState({ingredients: recipe.ingredients});
+          this.setState({recipe: recipe.recipe});
       })
   }
 
@@ -128,7 +146,11 @@ export default class ViewRecipePage extends React.Component{
     return(
       <div class="recipe-page">
       <div class="recipe-content">
-      <Title title={this.state.title} image={this.state.mainImage}/>
+      <Title
+        title={this.state.title} image={this.state.mainImage}
+        canEdit={this.state.userid === sessionStorage.getItem('userID')}
+        postID={this.props.postID}
+      />
       <RecipeHeader>Description</RecipeHeader>
       <Description description={this.state.description}/>
       <RecipeHeader>Ingredients</RecipeHeader>

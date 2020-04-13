@@ -1,11 +1,25 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+    faEdit
+} from "@fortawesome/free-solid-svg-icons";
 import styles from './RecipeCard.module.css';
 
 export default class RecipeCard extends React.Component {
     render() {
         return (
             <article className={`card ${styles.card} ${sessionStorage.getItem('smallCards') ? styles.small : ''}`}>
+                {
+                    this.props.userid === sessionStorage.getItem('userID') ? 
+                        <Link to={`/recipe/${this.props.recipeID}/edit`} className={styles.editRecipe}>
+                            <FontAwesomeIcon
+                            icon={faEdit}
+                            size="1x"
+                            color="black"
+                            ></FontAwesomeIcon>
+                        </Link> : null
+                }
                 <div className={styles.imgCol}>
                     <img src={this.props.image} className={styles.image} alt="Recipe dish"/>
                 </div>

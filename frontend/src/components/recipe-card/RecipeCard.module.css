@@ -7,6 +7,7 @@
     flex-direction: row;
     height: 160px;
     color: black;
+    position: relative;
 }
 
 :local(.card.small) {
@@ -62,4 +63,10 @@
 :local(.tags li) {
     display: inline-block;
     margin: 0 3px;
+}
+
+:local(.editRecipe) {
+    position: absolute;
+    right: 5px;
+    top: 5px;
 }
