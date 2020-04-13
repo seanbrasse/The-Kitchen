@@ -32,7 +32,14 @@ export default class Search extends React.Component {
                         type="submit" value="Search"
                     />
                 </form>
-                <PostList fetchParams={this.state.fetchParams} className={styles.recipeList}/>
+                <div className={styles.listWrapper}>
+                    <PostList fetchParams={this.state.fetchParams} className={styles.recipeList}/>
+                    <form className={`card ${styles.extraSearch}`}>
+                        <h3>Additional Search Details</h3>
+                        <h4>Exclude Ingredients</h4>
+                        <input type="text"/>
+                    </form>
+                </div>
             </main>
         );
     }

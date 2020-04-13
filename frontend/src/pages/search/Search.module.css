@@ -16,3 +16,14 @@
 :local(.searchbar input[type="submit"]) {
     margin-left: 5px;
 }
+
+:local(.listWrapper) {
+    display: flex;
+}
+
+:local(.extraSearch) {
+    width: 350px;
+    height: min-content;
+    margin-right: 30px;
+    margin-top: 20px;
+}
