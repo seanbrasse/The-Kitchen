@@ -15,6 +15,12 @@
     flex-direction: column;
 }
 
+:local(.card > .infoCol) {
+    display: block;
+    overflow: hidden;
+    flex-grow: 1;
+}
+
 :local(.card.small > .infoCol) {
     display: flex;
     flex-direction: column;
@@ -28,10 +34,8 @@
     margin-right: 10px;
 }
 
-:local(.card > .infoCol) {
-    display: block;
-    overflow: hidden;
-    flex-grow: 1;
+:local(.card.small .image) {
+    height: 160px;
 }
 
 :local(.topInfo) {
