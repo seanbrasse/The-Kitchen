@@ -67,6 +67,13 @@
 
 :local(.editRecipe) {
     position: absolute;
-    right: 5px;
+    right: 25px;
     top: 5px;
+}
+
+:local(.deleteRecipe) {
+    position: absolute;
+    right: 8px;
+    top: 9px;
+    cursor: pointer;
 }

@@ -1,5 +1,5 @@
 import React from "react";
-import {withRouter} from "react-router";
+import { withRouter } from "react-router";
 import { Link } from "react-router-dom";
 import avatar from "./img_avatar.png";
 import FollowButton from "./FollowButton/FollowButton";
@@ -7,12 +7,12 @@ import {
   faEllipsisV,
   faEdit,
   faCog,
-  faPlus
+  faPlus,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import AccountSettings from "../account-settings/AccountSettings";
 import "./Profile.css";
-import {PostList} from 'components';
+import {PostList} from "components";
+// import AccountSettings from './../account-settings/AccountSettings';
 
 class Profile extends React.Component {
   constructor(props) {
@@ -111,7 +111,6 @@ class Profile extends React.Component {
   render() {
     let myUserId = sessionStorage.getItem("userID");
     let userID = this.props.match.params.userID;
-
     const followers = [];
     //var followerState = true;
     for (var i = 0; i <= 5; i++) {
@@ -134,7 +133,7 @@ class Profile extends React.Component {
             <FontAwesomeIcon
               icon={faEdit}
               size="1x"
-              onClick={AccountSettings}
+              // onClick={AccountSettings}
               color="black"
             ></FontAwesomeIcon>
           </button>
@@ -151,7 +150,7 @@ class Profile extends React.Component {
             <FontAwesomeIcon
               icon={faEdit}
               size="1x"
-              onClick={AccountSettings}
+              // onClick={AccountSettings}
               color="black"
             ></FontAwesomeIcon>
           </Link>
@@ -160,35 +159,18 @@ class Profile extends React.Component {
       return null;
     }
 
-    function NewPost(){
-      if(myUserId === userID){
+    function NewPost() {
+      if (myUserId === userID) {
         return (
-          <Link to= "/recipe/create">
+          <Link to="/recipe/create">
             <div className="card">
               <h2 className="newpostHeader"> New Post</h2>
               <FontAwesomeIcon
                 icon={faPlus}
-                size = "2x"
-                onClick={EditRecipe}
+                size="2x"
                 color="black"
               ></FontAwesomeIcon>
             </div>
-          </Link>
-        );
-      }
-      return null;
-    }
-
-    function EditRecipe() {
-      if (myUserId === userID) {
-        return (
-          <Link to="/recipe/:recipeID/edit" className="editRecipe">
-            <FontAwesomeIcon
-              icon={faEdit}
-              size="1x"
-              onClick={AccountSettings}
-              color="black"
-            ></FontAwesomeIcon>
           </Link>
         );
       }
@@ -202,7 +184,7 @@ class Profile extends React.Component {
             <FontAwesomeIcon
               icon={faCog}
               size="lg"
-              onClick={AccountSettings}
+              // onClick={AccountSettings}
               color="black"
             ></FontAwesomeIcon>
           </Link>
