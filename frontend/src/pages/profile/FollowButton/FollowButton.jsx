@@ -19,7 +19,7 @@ export default class FollowButton extends React.Component {
     componentDidUpdate(prevProps) {
         if (this.props.userID !== prevProps.userID) {
             this.setState({loadingFollowStatus: true});
-          this.updateFollowed();
+            this.updateFollowed();
         }
     }
 
@@ -29,9 +29,10 @@ export default class FollowButton extends React.Component {
             body: JSON.stringify({
                 action: 'getConnections',
                 user_id: sessionStorage.getItem('userID'),
+                userid: sessionStorage.getItem('userID'),
                 connectuserid: this.props.userID,
                 connectiontype: 'Follow',
-                connectionstatus: 'Active',
+                //connectionstatus: 'Active',
                 session_token: sessionStorage.getItem('token')
             })
         }).then(res => res.json()).then(
@@ -39,12 +40,10 @@ export default class FollowButton extends React.Component {
                 this._getFollowStatus = null;
                 this.setState({
                     currentlyFollowed: response.connections?.some(connection =>
-                        connection.connection_type === 'Follow' &&
-                        connection.connection_status === 'Active'
+                        connection.connection_type === 'Follow'
                     ),
                     connectionID: response.connections?.find(connection =>
-                        connection.connection_type === 'Follow' &&
-                        connection.connection_status === 'Active'
+                        connection.connection_type === 'Follow'
                     )?.connection_id,
                     loadingFollowStatus: false,
                 });
@@ -104,22 +103,38 @@ export default class FollowButton extends React.Component {
         }
         //end
 
-        fetch('http://stark.cse.buffalo.edu/cse410/deldev/api/connectioncontroller.php', {
-            method: 'post',
-            body: JSON.stringify({
-                action: 'addOrEditConnections',
-                user_id: sessionStorage.getItem('userID'),
-                userid: sessionStorage.getItem('userID'),
-                connectuserid: this.props.userID,
-                connectiontype: 'Follow',
-                connectionstatus: this.state.currentlyFollowed ? 'Inactive' : 'Active',
-                connectionid: this.state.connectionID,
-                session_token: sessionStorage.getItem('token')
-            })
-        }).then(res => res.json()).then(
-            response => {
-                if (response.Status.startsWith('SUCCESS')) this.setState(state => ({currentlyFollowed: !state.currentlyFollowed}))
-            }
-        );
+        if (this.state.currentlyFollowed) {
+            fetch('http://stark.cse.buffalo.edu/cse410/deldev/api/connectioncontroller.php', {
+                method: 'post',
+                body: JSON.stringify({
+                    action: 'deleteConnections',
+                    user_id: sessionStorage.getItem('userID'),
+                    connectionid: this.state.connectionID,
+                    session_token: sessionStorage.getItem('token')
+                })
+            }).then(res => res.json()).then(
+                response => {
+                    if (response.Status.startsWith('SUCCESS')) this.setState({currentlyFollowed: false})
+                }
+            );
+        } else {
+            fetch('http://stark.cse.buffalo.edu/cse410/deldev/api/connectioncontroller.php', {
+                method: 'post',
+                body: JSON.stringify({
+                    action: 'addOrEditConnections',
+                    user_id: sessionStorage.getItem('userID'),
+                    userid: sessionStorage.getItem('userID'),
+                    connectuserid: this.props.userID,
+                    connectiontype: 'Follow',
+                    connectionstatus: 'Active',
+                    connectionid: this.state.connectionID,
+                    session_token: sessionStorage.getItem('token')
+                })
+            }).then(res => res.json()).then(
+                response => {
+                    if (response.Status.startsWith('SUCCESS')) this.setState({currentlyFollowed: true})
+                }
+            );
+        }
     }
 }

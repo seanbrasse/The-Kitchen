@@ -9,10 +9,10 @@
     flex-direction: row;
 }
 
-:local(.searchbar input) {
+:local(.searchbar input[type="text"]) {
     flex-grow: 1;
 }
 
-:local(.searchbar button) {
+:local(.searchbar input[type="submit"]) {
     margin-left: 5px;
 }

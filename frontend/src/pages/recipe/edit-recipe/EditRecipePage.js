@@ -144,7 +144,7 @@ export default class EditRecipePage extends React.Component{
   This is meant for if a ingredient gets deleted the tag gets deleted as well
 */
   deleteTag(tagID){
-    if(tagID != 0){
+    if(tagID !==0){
       fetch('http://stark.cse.buffalo.edu/cse410/deldev/api/ptcontroller.php', {
           method: 'post',
 
@@ -164,7 +164,7 @@ export default class EditRecipePage extends React.Component{
     For new tag tagID = 0;
   */
   addTag(tagID, tag, tagType, i){
-    if(tagID != 0){
+    if(tagID !==0){
       const returnID = async recordID => {
         await fetch('http://stark.cse.buffalo.edu/cse410/deldev/api/ptcontroller.php', {
           method: 'post',
@@ -209,7 +209,7 @@ export default class EditRecipePage extends React.Component{
     Uploads the data to the stark server
   */
   uploadData(postType){
-    if(this.state.postID == 0){
+    if(this.state.postID === 0){
       return fetch('http://stark.cse.buffalo.edu/cse410/deldev/api/postcontroller.php', {
           method: 'post',
 
@@ -249,7 +249,7 @@ export default class EditRecipePage extends React.Component{
     This sends a recipeID in a message to the users follower group
   */
   sendAsMessage(postID){
-    if(this.state.messageID == undefined || this.state.messageID == 0){
+    if(this.state.messageID === undefined || this.state.messageID === 0){
       return fetch('http://stark.cse.buffalo.edu/cse410/deldev/api/messagecontroller.php', {
         method: 'post',
 
@@ -315,8 +315,7 @@ export default class EditRecipePage extends React.Component{
                 }
               }
               this.setState({titleID: 0});
-              var len = this.ingredientIDs.length;
-              var i;
+              len = this.ingredientIDs.length;
               for(i = 0; i < len; i++){//ingredient
                 this.ingredientIDs[i] = 0;
               }
@@ -331,7 +330,7 @@ export default class EditRecipePage extends React.Component{
     -update/adds tags
   */
   uploadDataPublic = (event) => {
-    if(this.state.postID == 0){
+    if(this.state.postID === 0){
       this.uploadData("Empty").then(() => {
         this.addFilters().then(() => {
           this.combineData();
@@ -355,7 +354,7 @@ export default class EditRecipePage extends React.Component{
     -sends private message
   */
   uploadDataPrivate = (event) => {
-    if(this.state.postID == 0){
+    if(this.state.postID === 0){
       this.uploadData("Empty").then(() => {
         this.deleteTags().then(() => {
           this.sendAsMessage(this.state.postID).then(() => {

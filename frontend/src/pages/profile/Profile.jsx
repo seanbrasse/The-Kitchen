@@ -23,18 +23,6 @@ class Profile extends React.Component {
       picID: 0,
       profileImageTemp: avatar,
       profileImage: avatar
-
-    }
-  }
-
-  componentDidMount() {
-    this.updatePageData();
-    this.fetchProfilePic();
-  }
-
-  componentDidUpdate(prevProps) {
-    if (this.props.match.params.userID !== prevProps.match.params.userID) {
-      this.updatePageData();
     }
   }
 
@@ -49,7 +37,9 @@ class Profile extends React.Component {
       })
     }).then(res => res.json()).then(
         response => {
-            if(response.user_artifacts != undefined){
+            console.log("Got response");
+            if(response.user_artifacts !== undefined){
+              console.log("Exists");
               this.setState({
                 picID: response.user_artifacts[0].artifact_id,
                 profileImageTemp: response.user_artifacts[0].artifact_url,
@@ -62,7 +52,6 @@ class Profile extends React.Component {
                     action: 'addOrEditUserArtifacts',
                     userid: this.props.match.params.userID,
                     user_id: this.props.match.params.userID,
-                    artifacttype: 'profilePic',
                   	session_token: sessionStorage.getItem('token'),
                   	artifacturl: avatar,
                   	artifactcategory: "image",
@@ -73,24 +62,6 @@ class Profile extends React.Component {
                     this.setState({picID: response["Record Id"]})
                 })
             }
-        }
-    );
-  }
-
-  updatePageData() {
-    this.setState({posts: []});
-    fetch('http://stark.cse.buffalo.edu/cse410/deldev/api/postcontroller.php', {
-        method: 'post',
-        body: JSON.stringify({
-            action: 'getPosts',
-            userid: this.props.match.params.userID,
-            posttype: 'Recipe'
-        })
-    }).then(res => res.json()).then(
-        response => {
-            this.setState({
-                posts: response.posts ? response.posts : []
-            });
         }
     );
   }
@@ -111,14 +82,30 @@ class Profile extends React.Component {
           action: 'addOrEditUserArtifacts',
           userid: sessionStorage.getItem('userID'),
           user_id: sessionStorage.getItem('userID'),
-	        artifactid: this.state.picID,
-          artifacttype: 'profilePic',
+	        artifactid: this.state.picID !== 0 ? this.state.picID : null,
           session_token: sessionStorage.getItem('token'),
           artifacturl: this.state.profileImageTemp,
           artifactcategory: "image",
           artifacttype: "profilePic"
       })
     })
+  }
+
+  componentDidMount() {
+    this.fetchProfilePic();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.match.params.userID !== prevProps.match.params.userID) {
+      this.setState({
+        posts: [],
+        hidden: true,
+        picID: 0,
+        profileImageTemp: avatar,
+        profileImage: avatar
+      });
+      this.fetchProfilePic();
+    }
   }
 
   render() {
@@ -240,9 +227,7 @@ class Profile extends React.Component {
         <div className="card profile">
           <img className="profile-image" src={this.state.profileImage} alt="Avatar" />
           <EditProfilePicture handler={this.showPopUp} />
-          {/* {console.log("myUserId: " + myUserId)} */}
-          {/* {console.log("userID: " + userID)} */}
-          <h1 className="profile-name">{userID}</h1>
+          <h1 className="profile-name">User {userID}</h1>
           {
             userID !== myUserId ? <FollowButton userID={userID} /> : (null)
           }
@@ -272,7 +257,11 @@ class Profile extends React.Component {
           </div>
           <div className="profileFeed">
             <NewPost />
-            <PostList posts={this.state.posts}/>
+            <PostList fetchParams={{
+                action: 'getPosts',
+                userid: this.props.match.params.userID,
+                posttype: 'Recipe'
+            }}/>
           </div>
         </div>
 
