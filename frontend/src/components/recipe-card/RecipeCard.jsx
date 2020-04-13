@@ -3,6 +3,7 @@ import {Link} from 'react-router-dom';
 import styles from './RecipeCard.module.css';
 
 export default class RecipeCard extends React.Component {
+
     render() {
         return (
             <article className={`card ${styles.card} ${sessionStorage.getItem('smallCards') ? styles.small : ''}`}>
@@ -13,6 +14,8 @@ export default class RecipeCard extends React.Component {
                     <div className={styles.topInfo}>
                         <Link to={`/recipe/${this.props.recipeID}`}><h2>{this.props.title}</h2></Link>
                         <span>By <Link to={`/user/${this.props.userid}`}>{this.props.username}</Link></span>
+                       
+                        
                         { 
                             /*
                             // TODO: separate component with filled/unfilled/partially filled [actual icon] stars

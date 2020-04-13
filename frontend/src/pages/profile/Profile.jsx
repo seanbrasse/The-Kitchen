@@ -1,5 +1,5 @@
 import React from "react";
-import {withRouter} from "react-router";
+import { withRouter } from "react-router";
 import { Link } from "react-router-dom";
 import avatar from "./img_avatar.png";
 import FollowButton from "./FollowButton/FollowButton";
@@ -7,19 +7,19 @@ import {
   faEllipsisV,
   faEdit,
   faCog,
-  faPlus
+  faPlus,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import AccountSettings from "../account-settings/AccountSettings";
 import "./Profile.css";
-import {PostList} from 'components';
+import ProfileList from "./ProfileList";
+// import AccountSettings from './../account-settings/AccountSettings';
 
 class Profile extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      posts: []
-    }
+      posts: [],
+    };
   }
 
   componentDidMount() {
@@ -33,27 +33,27 @@ class Profile extends React.Component {
   }
 
   updatePageData() {
-    this.setState({posts: []});
-    fetch('http://stark.cse.buffalo.edu/cse410/deldev/api/postcontroller.php', {
-        method: 'post',
-        body: JSON.stringify({
-            action: 'getPosts',
-            userid: this.props.match.params.userID,
-            posttype: 'Recipe'
-        })
-    }).then(res => res.json()).then(
-        response => {
-            this.setState({
-                posts: response.posts ? response.posts : []
-            });
-        }
-    );
+    this.setState({ posts: [] });
+    fetch("http://stark.cse.buffalo.edu/cse410/deldev/api/postcontroller.php", {
+      method: "post",
+      body: JSON.stringify({
+        action: "getPosts",
+        userid: this.props.match.params.userID,
+        posttype: "Recipe",
+      }),
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        this.setState({
+          posts: response.posts ? response.posts : [],
+        });
+      });
   }
 
   render() {
     let myUserId = sessionStorage.getItem("userID");
     let userID = this.props.match.params.userID;
-
+    let delete_val = myUserId == userID;
     const followers = [];
     //var followerState = true;
     for (var i = 0; i <= 5; i++) {
@@ -75,7 +75,7 @@ class Profile extends React.Component {
             <FontAwesomeIcon
               icon={faEdit}
               size="1x"
-              onClick={AccountSettings}
+              // onClick={AccountSettings}
               color="black"
             ></FontAwesomeIcon>
           </Link>
@@ -83,7 +83,7 @@ class Profile extends React.Component {
       }
       return null;
     }
-  
+
     function EditBioButton() {
       if (myUserId === userID) {
         return (
@@ -91,7 +91,7 @@ class Profile extends React.Component {
             <FontAwesomeIcon
               icon={faEdit}
               size="1x"
-              onClick={AccountSettings}
+              // onClick={AccountSettings}
               color="black"
             ></FontAwesomeIcon>
           </Link>
@@ -99,17 +99,16 @@ class Profile extends React.Component {
       }
       return null;
     }
-  
-    function NewPost(){
-      if(myUserId === userID){
+
+    function NewPost() {
+      if (myUserId === userID) {
         return (
-          <Link to= "/recipe/create">
+          <Link to="/recipe/create">
             <div className="card">
               <h2 className="newpostHeader"> New Post</h2>
               <FontAwesomeIcon
                 icon={faPlus}
-                size = "2x"
-                onClick={EditRecipe}
+                size="2x"
                 color="black"
               ></FontAwesomeIcon>
             </div>
@@ -118,23 +117,7 @@ class Profile extends React.Component {
       }
       return null;
     }
-  
-    function EditRecipe() {
-      if (myUserId === userID) {
-        return (
-          <Link to="/recipe/:recipeID/edit" className="editRecipe">
-            <FontAwesomeIcon
-              icon={faEdit}
-              size="1x"
-              onClick={AccountSettings}
-              color="black"
-            ></FontAwesomeIcon>
-          </Link>
-        );
-      }
-      return null;
-    }
-  
+
     function Settings() {
       if (userID === myUserId) {
         return (
@@ -142,14 +125,14 @@ class Profile extends React.Component {
             <FontAwesomeIcon
               icon={faCog}
               size="lg"
-              onClick={AccountSettings}
+              // onClick={AccountSettings}
               color="black"
             ></FontAwesomeIcon>
           </Link>
         );
       }
       return null;
-    }  
+    }
 
     return (
       <main>
@@ -159,26 +142,24 @@ class Profile extends React.Component {
           {/* {console.log("myUserId: " + myUserId)} */}
           {/* {console.log("userID: " + userID)} */}
           <h1 className="profile-name">{userID}</h1>
-          {
-            userID !== myUserId ? <FollowButton userID={userID} /> : (null)
-          }
+          {userID !== myUserId ? <FollowButton userID={userID} /> : null}
           <Settings />
         </div>
-  
+
         <div className="feed">
           <div className="card sidebar">
             <div className="BioRow">
               <h1 className="left-text"> Bio </h1>
               <EditBioButton />
             </div>
-  
+
             <p className="left-text">
               Duis aute irure dolor in reprehenderit in voluptate velit esse
               cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
               cupidatat non proident, sunt in culpa qui officia deserunt mollit
               anim id est laborum.
             </p>
-  
+
             <div className="followersRow">
               <h1 className="left-text" id="followers">
                 Followers
@@ -188,10 +169,9 @@ class Profile extends React.Component {
           </div>
           <div className="profileFeed">
             <NewPost />
-            <PostList posts={this.state.posts}/>
+            <ProfileList posts={this.state.posts} delete={delete_val} />
           </div>
         </div>
-  
       </main>
     );
   }
