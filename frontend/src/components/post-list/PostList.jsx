@@ -7,7 +7,7 @@ import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import AccountSettings from "./../../pages/account-settings/AccountSettings";
 
-export default function PostList(props) {
+export default function PostList(props) { 
   return props.posts.length > 0 ? (
     <ul className={`unstyled ${props.className}`}>
       {props.posts.map((post) => {

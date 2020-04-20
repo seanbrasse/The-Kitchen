@@ -65,7 +65,7 @@ export default class FollowButton extends React.Component {
             </button>
         );
     }
-
+ 
     onClick() {
         //What I added
         if(this.state.currentlyFollowed !== true){

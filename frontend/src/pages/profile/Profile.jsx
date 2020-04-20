@@ -54,6 +54,7 @@ class Profile extends React.Component {
     let myUserId = sessionStorage.getItem("userID");
     let userID = this.props.match.params.userID;
     let delete_val = myUserId == userID;
+   
     const followers = [];
     //var followerState = true;
     for (var i = 0; i <= 5; i++) {
