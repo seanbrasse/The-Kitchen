@@ -4,6 +4,7 @@ import IngredientsList from '../recipe-components/IngredientsList'
 import Recipe from '../recipe-components/Recipe'
 import Description from '../recipe-components/Description'
 import Title from '../recipe-components/Title'
+import Comment from './comment'
 import {parseRecipe} from 'util/parseRecipe.js'
 
 export default class ViewRecipePage extends React.Component{
@@ -286,6 +287,7 @@ export default class ViewRecipePage extends React.Component{
       <IngredientsList ingredients={this.state.ingredients}/>
       <RecipeHeader>Recipe</RecipeHeader>
       <Recipe recipe={this.state.recipe}/>
+      <Comment/>
       </div>
       </div>
     )

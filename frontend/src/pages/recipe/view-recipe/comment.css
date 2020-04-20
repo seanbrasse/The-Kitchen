@@ -1,0 +1,66 @@
++.postlist {
+    text-align: left;
+    background:lightgreen;
+    border-radius: 20px;
+    padding:30px;
+    margin:10px;
+  
+    width:60%;
+    display: inline-flex;
+  }
+.comments{
+    background:white;
+    width:90%;
+    display:block;
+    border-radius: 20px;
+    padding:10px;
+    margin:10px;
+    color:black;
+}
+.comment-block{
+    width:100%;
+    display:flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+  }
+  .postbody{
+    width:60%;
+    display:flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+  }
+  
+.posts{
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+.commentlist {
+    text-align: left;
+    background: lightgreen;
+    color:black;
+    border-radius: 20px;
+    padding:10px;
+    margin:10px;
+    font-size: 12px;
+    width:90%;
+    display:block;
+  }
+ 
+.sidenav-icon{
+    width:40px;
+    height:40px;
+  
+    margin-bottom:15px;
+  }
+  
+  
+.comment-icon{
+    width:40px;
+    height:40px;
+    float:right;
+}
+  
