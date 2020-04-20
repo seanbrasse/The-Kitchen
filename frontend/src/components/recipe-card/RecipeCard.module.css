@@ -7,12 +7,19 @@
     flex-direction: row;
     height: 160px;
     color: black;
+    position: relative;
 }
 
 :local(.card.small) {
     width: 250px;
     height: 350px;
     flex-direction: column;
+}
+
+:local(.card > .infoCol) {
+    display: block;
+    overflow: hidden;
+    flex-grow: 1;
 }
 
 :local(.card.small > .infoCol) {
@@ -28,10 +35,8 @@
     margin-right: 10px;
 }
 
-:local(.card > .infoCol) {
-    display: block;
-    overflow: hidden;
-    flex-grow: 1;
+:local(.card.small .image) {
+    height: 160px;
 }
 
 :local(.topInfo) {
@@ -58,4 +63,17 @@
 :local(.tags li) {
     display: inline-block;
     margin: 0 3px;
+}
+
+:local(.editRecipe) {
+    position: absolute;
+    right: 25px;
+    top: 5px;
+}
+
+:local(.deleteRecipe) {
+    position: absolute;
+    right: 8px;
+    top: 9px;
+    cursor: pointer;
 }

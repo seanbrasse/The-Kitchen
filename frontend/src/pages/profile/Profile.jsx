@@ -11,7 +11,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./Profile.css";
-import ProfileList from "./ProfileList";
+import {PostList} from "components";
 // import AccountSettings from './../account-settings/AccountSettings';
 
 class Profile extends React.Component {
@@ -19,42 +19,98 @@ class Profile extends React.Component {
     super(props);
     this.state = {
       posts: [],
-    };
+      hidden: true,
+      picID: 0,
+      profileImageTemp: avatar,
+      profileImage: avatar
+    }
+  }
+
+  fetchProfilePic(){
+    fetch('http://stark.cse.buffalo.edu/cse410/deldev/api/uacontroller.php', {
+      method: 'post',
+      body: JSON.stringify({
+          action: 'getUserArtifacts',
+          userid: this.props.match.params.userID,
+          posttype: 'Recipe',
+          artifacttype: 'profilePic'
+      })
+    }).then(res => res.json()).then(
+        response => {
+            console.log("Got response");
+            if(response.user_artifacts !== undefined){
+              console.log("Exists");
+              this.setState({
+                picID: response.user_artifacts[0].artifact_id,
+                profileImageTemp: response.user_artifacts[0].artifact_url,
+                profileImage: response.user_artifacts[0].artifact_url
+              })
+            }else{
+              fetch('http://stark.cse.buffalo.edu/cse410/deldev/api/uacontroller.php', {
+                method: 'post',
+                body: JSON.stringify({
+                    action: 'addOrEditUserArtifacts',
+                    userid: this.props.match.params.userID,
+                    user_id: this.props.match.params.userID,
+                  	session_token: sessionStorage.getItem('token'),
+                  	artifacturl: avatar,
+                  	artifactcategory: "image",
+                  	artifacttype: "profilePic"
+                })
+              }).then(res => res.json()).then(
+                  response => {
+                    this.setState({picID: response["Record Id"]})
+                })
+            }
+        }
+    );
+  }
+
+  showPopUp = () => {
+    this.setState({hidden: false});
+  }
+
+  changePic = (event) => {
+    this.setState({profileImageTemp: event.target.value});
+  }
+
+  savePic = (event) => {
+    this.setState({profileImage: this.state.profileImageTemp});
+    fetch('http://stark.cse.buffalo.edu/cse410/deldev/api/uacontroller.php', {
+      method: 'post',
+      body: JSON.stringify({
+          action: 'addOrEditUserArtifacts',
+          userid: sessionStorage.getItem('userID'),
+          user_id: sessionStorage.getItem('userID'),
+	        artifactid: this.state.picID !== 0 ? this.state.picID : null,
+          session_token: sessionStorage.getItem('token'),
+          artifacturl: this.state.profileImageTemp,
+          artifactcategory: "image",
+          artifacttype: "profilePic"
+      })
+    })
   }
 
   componentDidMount() {
-    this.updatePageData();
+    this.fetchProfilePic();
   }
 
   componentDidUpdate(prevProps) {
     if (this.props.match.params.userID !== prevProps.match.params.userID) {
-      this.updatePageData();
-    }
-  }
-
-  updatePageData() {
-    this.setState({ posts: [] });
-    fetch("http://stark.cse.buffalo.edu/cse410/deldev/api/postcontroller.php", {
-      method: "post",
-      body: JSON.stringify({
-        action: "getPosts",
-        userid: this.props.match.params.userID,
-        posttype: "Recipe",
-      }),
-    })
-      .then((res) => res.json())
-      .then((response) => {
-        this.setState({
-          posts: response.posts ? response.posts : [],
-        });
+      this.setState({
+        posts: [],
+        hidden: true,
+        picID: 0,
+        profileImageTemp: avatar,
+        profileImage: avatar
       });
+      this.fetchProfilePic();
+    }
   }
 
   render() {
     let myUserId = sessionStorage.getItem("userID");
     let userID = this.props.match.params.userID;
-    let delete_val = myUserId == userID;
-   
     const followers = [];
     //var followerState = true;
     for (var i = 0; i <= 5; i++) {
@@ -69,17 +125,19 @@ class Profile extends React.Component {
       );
     }
 
-    function EditProfilePicture() {
+    function EditProfilePicture(props) {
       if (myUserId === userID) {
         return (
-          <Link to="/settings" className="editPfp">
+          <div>
+          <button className="changePicButton" onClick={props.handler}>
             <FontAwesomeIcon
               icon={faEdit}
               size="1x"
               // onClick={AccountSettings}
               color="black"
             ></FontAwesomeIcon>
-          </Link>
+          </button>
+          </div>
         );
       }
       return null;
@@ -137,13 +195,24 @@ class Profile extends React.Component {
 
     return (
       <main>
+
+        <div className="popUpBackground" style={{display: (this.state.hidden ? 'none' : 'flex')}}>
+          <div className="popUpWindow">
+          <button className="exitButton" onClick={() => this.setState({hidden: true})}>+</button>
+          <h2>Change Profile Picture</h2>
+          <input type="text" placeholder="Paste Image or URL" onChange={this.changePic}></input>
+          <img id="image" className="profile-image-large" src={this.state.profileImageTemp} alt="Avatar"/>
+          <button onClick={this.savePic}>Save Changes</button>
+          </div>
+        </div>
+
         <div className="card profile">
-          <img className="profile-image" src={avatar} alt="Avatar" />
-          <EditProfilePicture />
-          {/* {console.log("myUserId: " + myUserId)} */}
-          {/* {console.log("userID: " + userID)} */}
-          <h1 className="profile-name">{userID}</h1>
-          {userID !== myUserId ? <FollowButton userID={userID} /> : null}
+          <img className="profile-image" src={this.state.profileImage} alt="Avatar" />
+          <EditProfilePicture handler={this.showPopUp} />
+          <h1 className="profile-name">User {userID}</h1>
+          {
+            userID !== myUserId ? <FollowButton userID={userID} /> : (null)
+          }
           <Settings />
         </div>
 
@@ -170,9 +239,14 @@ class Profile extends React.Component {
           </div>
           <div className="profileFeed">
             <NewPost />
-            <ProfileList posts={this.state.posts} delete={delete_val} />
+            <PostList fetchParams={{
+                action: 'getPosts',
+                userid: this.props.match.params.userID,
+                posttype: 'Recipe'
+            }}/>
           </div>
         </div>
+
       </main>
     );
   }

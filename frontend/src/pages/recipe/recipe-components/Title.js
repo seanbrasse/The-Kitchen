@@ -1,5 +1,10 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
+import {Link} from 'react-router-dom';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+    faEdit
+} from "@fortawesome/free-solid-svg-icons";
 import './recipe.css';
 
 const Title = (props) => {
@@ -20,7 +25,19 @@ const Title = (props) => {
   }else{
     return(
       <div className="title">
-      <h1>{props.title}</h1>
+      <h1>
+        {props.title}
+        {
+          props.canEdit ? 
+            <Fragment>&nbsp;<Link to={`/recipe/${props.postID}/edit`}>
+                <FontAwesomeIcon
+                icon={faEdit}
+                size="1x"
+                color="black"
+                ></FontAwesomeIcon>
+            </Link></Fragment> : null
+        }
+      </h1>
       <img src={props.image} alt="Recipe dish"/>
       </div>
     )
