@@ -151,6 +151,8 @@ class Profile extends React.Component {
         picID: 0,
         profileImageTemp: avatar,
         profileImage: avatar,
+        followers: [],
+        following: []
       });
       this.getFollowing();
       this.getFollowers();
