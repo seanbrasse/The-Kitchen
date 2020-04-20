@@ -75,6 +75,10 @@ if (isValidJSON($json_params)) {
     if (array_key_exists('offset', $decoded_params)) {
         $offset =  $decoded_params['offset'];
     }
+    $tagFilters = "";
+    if (array_key_exists('tag_filters', $decoded_params)) {
+        $tagFilters = $decoded_params['tag_filters'];
+    }
     if ($action == "addOrEditPosts") {
         if (validateAPIKey($authUserId, $sessionToken)) {
             $args = array();
@@ -259,6 +263,41 @@ if (isValidJSON($json_params)) {
                 $sql .= " AND exists (select 'x' from post_tags pt where pt.post_id = posts.post_id and pt.tag_type=?) ";
             }
             array_push($args, $tagType);
+        }
+        if (!IsNullOrEmpty($tagFilters) && is_array($tagFilters)) {
+            foreach ($tagFilters as $filter) {
+                if (is_array($filter)) {
+                    $include = true;
+                    if (array_key_exists('include', $filter)) $include = $filter['include'];
+                    $tag = "";
+                    if (array_key_exists('tag', $filter)) $tag = $filter['tag'];
+                    $tagType= "";
+                    if (array_key_exists('type', $filter)) $type = $filter['type'];
+                    if (!IsNullOrEmpty($tag) || !IsNullOrEmpty($tagType)) {
+                        if ($first) {
+                            $sql .= " WHERE ";
+                            $first = false;
+                        } else {
+                            $sql .= " AND ";
+                        }
+                        
+                        if ($include == false) $sql .= "not ";
+
+                        $sql .= "exists (select 'x' from post_tags pt where pt.post_id = posts.post_id";
+                        
+                        if (!IsNullOrEmpty($tag)) {
+                            $sql .= " and pt.tag=?";
+                            array_push($args, $tag);
+                        }
+                        if (!IsNullOrEmpty($tagType)) {
+                            $sql .= "and pt.tag_type=?";
+                            array_push($args, $tagType);
+                        }
+
+                        $sql .= ") ";
+                    }
+                }
+            }
         }
 
         $sql .= " order by timestamp desc ";
