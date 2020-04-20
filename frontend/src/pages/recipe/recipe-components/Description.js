@@ -5,7 +5,7 @@ const Description = (props) => {
   if(props.type === "edit"){
     return(
       <div className="description">
-      <textarea name="description" value={props.description} onChange={props.handle}></textarea>
+      <textarea name="description" placeholder="Write desciprition of recipe here" value={props.description} onChange={props.handle}></textarea>
       </div>
     )
   }else{

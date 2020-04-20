@@ -13,13 +13,13 @@ const Title = (props) => {
       <div className="title">
       <div>
         <label htmlFor="textbox">Title</label><br></br>
-        <input type="text" name="title" value={props.title} onChange={props.handle}></input>
+        <input type="text" name="title" placeholder="Title" value={props.title} onChange={props.handle}></input>
       </div>
       <div>
         <label htmlFor="textbox">Image URL</label><br></br>
-        <input type="text" name="image" value={props.image} onChange={props.handle}></input>
+        <input type="text" name="image" placeholder="Paste Image or URL" value={props.image} onChange={props.handle}></input>
       </div>
-      <img src={props.image} alt="Recipe dish"/>
+      <img src={props.image} alt=""/>
       </div>
     )
   }else{
@@ -28,7 +28,7 @@ const Title = (props) => {
       <h1>
         {props.title}
         {
-          props.canEdit ? 
+          props.canEdit ?
             <Fragment>&nbsp;<Link to={`/recipe/${props.postID}/edit`}>
                 <FontAwesomeIcon
                 icon={faEdit}
