@@ -9,6 +9,7 @@ import {parseRecipe} from 'util/parseRecipe.js'
 export default class ViewRecipePage extends React.Component{
   constructor(props){
     super(props);
+    this.tagIDs = [];
 
     this.state = {
       title: "",
@@ -18,12 +19,16 @@ export default class ViewRecipePage extends React.Component{
       recipe: [[], []],
       content: "",
       editMode: false,
-      userid: null
+      userid: null,
+      tags: "",
+      prepTime: 0,
+      cookTime: 0
 		}
   }
 
   componentDidMount() {
     this.loadData(this.props.postID);
+    this.loadTags(this.props.postID);
   }
 
   componentDidUpdate(prevProps) {
@@ -61,6 +66,108 @@ export default class ViewRecipePage extends React.Component{
           this.setState({ingredients: recipe.ingredients});
           this.setState({recipe: recipe.recipe});
       })
+  }
+
+  /*
+    Loads all the tags and time for the recipe
+  */
+  loadTags(postID){
+    fetch('http://stark.cse.buffalo.edu/cse410/deldev/api/ptcontroller.php', {
+        method: 'post',
+
+        body: JSON.stringify({
+            action: 'getPostTags',
+            postid: "" + postID,
+            tagtype: "Tag"
+            })
+        }).then(res => res.json()).then(parsedRes => {
+              var tagsArray = parsedRes['post_tags'];
+              var tagIDs = [];
+              var tags = "";
+              var len;
+              var i;
+
+              if(tagsArray !== undefined){
+                len =  tagsArray.length;
+                tags += tagsArray[0].tag;
+                tagIDs[0] = tagsArray[0].post_tag_id;
+
+                for(i = 1; i < len; i++){
+                  tags += ", " + tagsArray[i].tag;
+                  tagIDs[i] = tagsArray[i].post_tag_id;
+                }
+              }
+
+              this.setState({
+                tags: tags
+              });
+              this.tagIDs = this.tagIDs.concat(tagIDs);
+        })
+    fetch('http://stark.cse.buffalo.edu/cse410/deldev/api/ptcontroller.php', {
+        method: 'post',
+
+        body: JSON.stringify({
+            action: 'getPostTags',
+            postid: "" + postID,
+            tagtype: "PrepTime"
+            })
+        }).then(res => res.json()).then(parsedRes => {
+              var tagsArray = parsedRes['post_tags'];
+              var tagIDs = [];
+              var prepTime = 0;
+
+              if(tagsArray !== undefined){
+                prepTime = tagsArray[0].tag;
+                tagIDs[0] = tagsArray[0].post_tag_id;
+              }
+
+              this.setState({
+                prepTime: prepTime
+              });
+              this.tagIDs = this.tagIDs.concat(tagIDs);
+        })
+    fetch('http://stark.cse.buffalo.edu/cse410/deldev/api/ptcontroller.php', {
+        method: 'post',
+
+        body: JSON.stringify({
+            action: 'getPostTags',
+            postid: "" + postID,
+            tagtype: "CookTime"
+            })
+        }).then(res => res.json()).then(parsedRes => {
+              var tagsArray = parsedRes['post_tags'];
+              var tagIDs = [];
+              var cookTime = 0;
+
+              if(tagsArray !== undefined){
+                cookTime = tagsArray[0].tag;
+                tagIDs[0] = tagsArray[0].post_tag_id;
+              }
+
+              this.setState({
+                cookTime: cookTime
+              });
+              this.tagIDs = this.tagIDs.concat(tagIDs);
+        })
+    fetch('http://stark.cse.buffalo.edu/cse410/deldev/api/ptcontroller.php', {
+        method: 'post',
+
+        body: JSON.stringify({
+            action: 'getPostTags',
+            postid: "" + postID,
+            tagtype: "TotalTime"
+            })
+        }).then(res => res.json()).then(parsedRes => {
+              var tagsArray = parsedRes['post_tags'];
+              var tagIDs = [];
+
+              if(tagsArray !== undefined){
+                tagIDs[0] = tagsArray[0].post_tag_id;
+              }
+
+              this.tagIDs = this.tagIDs.concat(tagIDs);
+        })
+
   }
 
   combineData(){
@@ -151,6 +258,28 @@ export default class ViewRecipePage extends React.Component{
         canEdit={this.state.userid === sessionStorage.getItem('userID')}
         postID={this.props.postID}
       />
+
+      <div className="tagsContainer">
+        <div className="totalTime">
+          <label for="textbox">Tags</label><br></br>
+          <a>{this.state.tags}</a>
+        </div>
+      </div>
+      <div className="tagsContainer">
+        <div className="totalTime">
+          <label for="textbox">Prep Time</label><br></br>
+          <a>{parseInt(this.state.prepTime) + " min"}</a>
+        </div>
+        <div className="totalTime">
+          <label for="textbox">Cook Time</label><br></br>
+          <a>{parseInt(this.state.cookTime) + " min"}</a>
+        </div>
+        <div className="totalTime">
+          <label for="paragraph">Total Time</label><br></br>
+          <a>{parseInt(this.state.prepTime) + parseInt(this.state.cookTime) + " min"}</a>
+        </div>
+      </div>
+
       <RecipeHeader>Description</RecipeHeader>
       <Description description={this.state.description}/>
       <RecipeHeader>Ingredients</RecipeHeader>

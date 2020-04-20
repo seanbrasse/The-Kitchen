@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { MdDelete } from 'react-icons/md';
+import placeHolderImg from "./placeHolderImg.png";
 import './recipe.css';
 
 
@@ -26,29 +27,26 @@ const GetElem = (props) => {
   }else if (props.type === "text") {
     return(<p>{props.elem}</p>)
   }else{
-    return(<img src={props.elem} alt="Visual of this step"/>)
+    return(<img src={props.elem} alt="Recipe Image"/>)
   }
 }
 
 const EditElem = (props) => {
   if(props.type === "header"){
   return(<div>
+            <input type="text" name="update" placeholder="Step" value={props.value} onChange={(e) => props.handle(e, props.index)}></input>
             <button className="icon" name="Delete" onClick={(e) => props.handle(e, props.index)}><MdDelete/></button>
-            <label for="textbox">Header</label><br></br>
-            <input type="text" name="update" value={props.value} onChange={(e) => props.handle(e, props.index)}></input>
           </div>)
   }else if (props.type === "text") {
     return(<div>
-            <button className="icon" name="Delete" onClick={(e) => props.handle(e, props.index)}><MdDelete/></button>
-            <label for="textbox">Description</label><br></br>
-            <textarea name="update" value={props.value} onChange={(e) => props.handle(e, props.index)}></textarea>
+            <textarea name="update" placeholder="Write step here" value={props.value} onChange={(e) => props.handle(e, props.index)}></textarea>
           </div>)
   }else{
     return(<div>
-            <button className="icon" name="Delete" onClick={(e) => props.handle(e, props.index)}><MdDelete/></button>
-            <label for="textbox">Image URL</label><br></br>
-            <input type="text" name="update" value={props.value} onChange={(e) => props.handle(e, props.index)}></input>
-            <img src={props.value} alt="Visual of this step"/>
+            <label for="textbox">Image URL</label>
+            <button className="icon" name="Delete" onClick={(e) => props.handle(e, props.index)}><MdDelete/></button><br></br>
+            <input type="text" placeholder="Paste Image or URL" name="update" value={props.value} onChange={(e) => props.handle(e, props.index)}></input><br></br>
+            <img src={props.value} alt=""/>
           </div>)
   }
 }

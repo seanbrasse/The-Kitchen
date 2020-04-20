@@ -201,7 +201,7 @@ class Profile extends React.Component {
           <button className="exitButton" onClick={() => this.setState({hidden: true})}>+</button>
           <h2>Change Profile Picture</h2>
           <input type="text" placeholder="Paste Image or URL" onChange={this.changePic}></input>
-          <img id="image" className="profile-image-large" src={this.state.profileImageTemp} alt="Avatar"/>
+          <img id="image" className="profile-image-large" src={this.state.profileImageTemp} alt=""/>
           <button onClick={this.savePic}>Save Changes</button>
           </div>
         </div>
@@ -241,8 +241,7 @@ class Profile extends React.Component {
             <NewPost />
             <PostList fetchParams={{
                 action: 'getPosts',
-                userid: this.props.match.params.userID,
-                posttype: 'Recipe'
+                userid: this.props.match.params.userID
             }}/>
           </div>
         </div>

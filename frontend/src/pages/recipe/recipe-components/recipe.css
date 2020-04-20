@@ -9,6 +9,45 @@
 .recipe-content{
   display: inline-block;
   align-items: left;
+  width:100%;
+  max-width:640px;
+}
+
+.upload{
+  margin-left: 5px;
+}
+
+.uploadDisabled{
+  margin-left: 5px;
+  background-color: lightgrey;
+  color: grey;
+}
+
+.uploadDisabled:hover{
+  cursor: default;
+  margin-left: 5px;
+  background-color: lightgrey;
+  color: grey;
+}
+
+.ErrorMsg{
+  background-color: #ffc7c7;
+  color:red;
+  border-radius: 2px;
+}
+
+.ErrorMsg p{
+  padding: 5px;
+}
+
+.SuccessMsg{
+  background-color: #c8ffc7;
+  color:green;
+  border-radius: 2px;
+}
+
+.SuccessMsg p{
+  padding: 5px;
 }
 
 /*----------------Title----------------*/
@@ -29,7 +68,7 @@
 }
 
 .title input{
-  width: 30%;
+  width: 40%;
   margin-bottom: 4px;
 }
 
@@ -46,7 +85,9 @@
 }
 
 .recipe-header button{
-  margin: 5px;
+  margin-left: 5px;
+  position: relative;
+  top: -6px;
 }
 
 /*----------------Description----------------*/
@@ -83,6 +124,17 @@
   margin: 0px;
 }
 
+.icon{
+  all: initial;
+  position: relative;
+  top: 3px;
+  left: 2px;
+  cursor: pointer;
+}
+.icon:hover{
+  background-color: rgba(0, 0, 0, 0);
+}
+
 /*----------------Recipe----------------*/
 .recipe{
   margin: 10px;
@@ -98,4 +150,37 @@
 .recipe input{
   width: 30%;
   margin-bottom: 4px;
+}
+
+/*----------------Tags and Time----------------*/
+.tagsContainer{
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.tagsContainer div{
+  flex: 1;
+  margin: 5px;
+  padding: 5px;
+  min-width: 90px;
+  border-radius: 2px;
+  border: solid 1px lightgrey;
+  background-color: #fff;
+  min-height: 50px;
+}
+
+.tagsContainer input{
+  margin: 5px;
+  width: 40px;
+}
+
+.tags input{
+  width: 90%;
+}
+
+.totalTime a{
+  position: relative;
+  top: 5px;
+  left: 5px;
 }
