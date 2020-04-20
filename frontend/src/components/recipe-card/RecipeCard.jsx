@@ -50,7 +50,7 @@ export default class RecipeCard extends React.Component {
                 <div className={styles.imgCol}>
                     <img src={this.props.image} className={styles.image} alt="Recipe dish"/>
                 </div>
-                <div className={styles.infoCol}>
+                <div className={styles.infoCol}> 
                     <div className={styles.topInfo}>
                         <Link to={`/recipe/${this.props.recipeID}`}><h2>{this.props.title}</h2></Link>
                         <span>By <Link to={`/user/${this.props.userid}`}>{this.props.username}</Link></span>

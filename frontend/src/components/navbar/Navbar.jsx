@@ -7,7 +7,7 @@ class Navbar extends React.Component {
   logout() {
     fetch("http://stark.cse.buffalo.edu/cse410/deldev/api/SocialAuth.php", {
       method: "post",
-      body: JSON.stringify({
+      body: JSON.stringify({ 
         action: "logout",
         username: sessionStorage.getItem("userEmail"),
         session_token: sessionStorage.getItem("token"),
