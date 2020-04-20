@@ -23,6 +23,7 @@
 :local(.navbar a) {
     text-decoration: none;
     padding: 0 15px;
+    color: white;
 }
 
 :local(.rightNav) {

@@ -4,7 +4,7 @@ import IngredientsList from '../recipe-components/IngredientsList'
 import Recipe from '../recipe-components/Recipe'
 import Description from '../recipe-components/Description'
 import Title from '../recipe-components/Title'
-import {parseRecipe} from 'components/parseRecipe.js'
+import {parseRecipe} from 'util/parseRecipe.js'
 
 export default class EditRecipePage extends React.Component{
 
@@ -21,7 +21,8 @@ export default class EditRecipePage extends React.Component{
       ingredients: [[], [], []],
       recipe: [[], []],
       postID: 0,
-      editMode: true
+      editMode: true,
+      messageID: 0
 		}
   }
 
@@ -52,6 +53,7 @@ export default class EditRecipePage extends React.Component{
               this.setState({description: recipe.description});
               this.setState({ingredients: recipe.ingredients});
               this.setState({recipe: recipe.recipe});
+              this.setState({messageID: recipe.messageID});
       })
   }
 
@@ -100,6 +102,9 @@ export default class EditRecipePage extends React.Component{
     //titleID
     str = this.titleID;
 
+    //messageID
+    str += "\0" + this.state.messageID;
+
     //title
     str += "\0" + this.state.title;
 
@@ -147,8 +152,6 @@ export default class EditRecipePage extends React.Component{
 
     //adds ingredients filter
     len = this.state.ingredients[0].length;
-
-    console.log(this.ingredientIDs)
 
     for(i = 0; i < len; i++){
       this.addTag(this.ingredientIDs[i], this.state.ingredients[0][i], "ingredient", i).then(
@@ -223,8 +226,108 @@ export default class EditRecipePage extends React.Component{
 	}
 
   uploadDataPrivate = (event) => {
-    this.saveData();
+    this.combineData();
+    this.deleteTags(this.state.postID);
+    if(this.state.postID != 0){
+      this.sendAsMessage(this.state.postID);
+      fetch('http://stark.cse.buffalo.edu/cse410/deldev/api/postcontroller.php', {
+        method: 'post',
+
+        body: JSON.stringify({
+            action: 'addOrEditPosts',
+            postid: this.state.postID,
+            user_id: sessionStorage.getItem('userID'),
+            session_token: sessionStorage.getItem('token'),
+            posttype: "Private",
+            posttext: this.content,
+            postpicurl: this.state.mainImage,
+            parentid: null
+            })
+        })
+    }else{
+      fetch('http://stark.cse.buffalo.edu/cse410/deldev/api/postcontroller.php', {
+          method: 'post',
+
+          body: JSON.stringify({
+              action: 'addOrEditPosts',
+              user_id: sessionStorage.getItem('userID'),
+              session_token: sessionStorage.getItem('token'),
+              posttype: "Private",
+              posttext: this.content,
+              postpicurl: this.state.mainImage,
+              parentid: null
+              })
+          }).then(res => res.json()).then(parsedRes => {
+                this.setState({postID: parsedRes['Record Id']});
+                this.sendAsMessage(parsedRes['Record Id']);
+                this.uploadDataPrivate();
+      })
+    }
 	}
+
+  sendAsMessage(postID){
+    if(this.state.messageID != 0){
+    fetch('http://stark.cse.buffalo.edu/cse410/deldev/api/messagecontroller.php', {
+        method: 'post',
+
+        body: JSON.stringify({
+            	action: "addOrEditMessages",
+            	user_id: sessionStorage.getItem('userID'),
+            	userid: sessionStorage.getItem('userID'),
+            	session_token: sessionStorage.getItem('token'),
+            	groupid: sessionStorage.getItem('groupID'),
+            	message: postID,
+              messageid: this.state.messageID
+            })
+        })
+    }else{
+      fetch('http://stark.cse.buffalo.edu/cse410/deldev/api/messagecontroller.php', {
+          method: 'post',
+
+          body: JSON.stringify({
+            	action: "addOrEditMessages",
+            	user_id: sessionStorage.getItem('userID'),
+            	userid: sessionStorage.getItem('userID'),
+            	session_token: sessionStorage.getItem('token'),
+            	groupid: sessionStorage.getItem('groupID'),
+            	message: postID,
+            })
+          }).then(res => res.json()).then(parsedRes => {
+                this.setState({messageID: parsedRes['Record Id']});
+          })
+    }
+  }
+
+  deleteTags(postID){
+    fetch('http://stark.cse.buffalo.edu/cse410/deldev/api/ptcontroller.php', {
+        method: 'post',
+
+        body: JSON.stringify({
+            action: 'getPostTags',
+            postid: postID
+            })
+        }).then(res => res.json()).then(parsedRes => {
+              var tags = parsedRes['post_tags'];
+              var len;
+              var i;
+
+              if(tags != undefined){
+                len =  tags.length;
+                for(i = 0; i < len; i++){
+                  fetch('http://stark.cse.buffalo.edu/cse410/deldev/api/ptcontroller.php', {
+                      method: 'post',
+
+                      body: JSON.stringify({
+                          action: 'deletePostTags',
+                          user_id: sessionStorage.getItem('userID'),
+                          session_token: sessionStorage.getItem('token'),
+                          posttagid: tags[i].post_tag_id
+                          })
+                  })
+                }
+              }
+        })
+  }
 
   addIngredient = (event, i) => {
     var array;
@@ -350,6 +453,7 @@ export default class EditRecipePage extends React.Component{
       <button id="smallButton" onClick={this.uploadDataPublic}>Upload Public</button>
       <button id="smallButton" onClick={this.uploadDataPrivate}>Upload Private</button>
       <h3>{"PostID: " + this.state.postID}</h3>
+      <h3>{"MessageID: " + this.state.messageID}</h3>
       </div>
       </div>
     )

@@ -2,7 +2,7 @@ import React from "react";
 import "./comment.css";
 import PostingList from "./PostingList.js";
 
-export default class CommentForm extends React.Component {
+export default class PostForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -18,21 +18,21 @@ export default class CommentForm extends React.Component {
 
     //make the api call to the authentication page
     fetch("http://stark.cse.buffalo.edu/cse410/deldev/api/postcontroller.php", {
-   
+      
       method: "post",
       body: JSON.stringify({
         action: "addOrEditPosts",
         user_id: sessionStorage.getItem("user"),
         session_token: sessionStorage.getItem("token"),
-        posttext: this.state.post_text,
-        parentid: this.props.parent
+        posttext: this.state.post_text
       })
     })
       .then(res => res.json())
       .then(
         result => {
-          // update the count in the UI manually, to avoid a database hit
-          this.props.onAddComment(this.props.commentCount + 1);
+          this.setState({
+            postmessage: result.Status
+          });
           this.postListing.current.loadPosts();
         },
         error => {
@@ -52,22 +52,18 @@ export default class CommentForm extends React.Component {
       <div>
         <form onSubmit={this.submitHandler}>
           <label>
-            Add A Comment to Post {this.props.parent}
-            <br />  <textarea rows="10" cols="70" onChange={this.myChangeHandler} />
+            Post Something!
+            <br />
+            <textarea rows="10" cols="70" onChange={this.myChangeHandler} />
           </label>
-          
           <br />
 
           <input type="submit" value="submit" />
           <br />
           {this.state.postmessage}
         </form>
-        <PostingList
-          ref={this.postListing}
-          parentid={this.props.parent}
-          type="commentlist"
-        />
+        <PostingList ref={this.postListing} type="postlist" />
       </div>
-    );g
+    );
   }
 }

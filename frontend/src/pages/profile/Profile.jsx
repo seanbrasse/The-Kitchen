@@ -84,7 +84,7 @@ export default function Profile() {
 
   return (
     <main>
-      <div className="profile">
+      <div className="card profile">
         <img className="profile-image" src={avatar} alt="Avatar" />
         {/* {console.log("myUserId: " + myUserId)} */}
         {/* {console.log("userID: " + userID)} */}
@@ -94,7 +94,7 @@ export default function Profile() {
         <Settings/>
       </div>
 
-      <div className="sidebar">
+      <div className="card sidebar">
         <div className="BioRow">
           <h1 className="left-text"> Bio </h1>
           <EditBioButton />

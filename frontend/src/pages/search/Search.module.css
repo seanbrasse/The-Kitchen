@@ -1,0 +1,18 @@
+:local(ul.recipeList) {
+    padding: 0 30px;
+}
+
+:local(.searchbar) {
+    width: calc(100% - 60px);
+    margin: 0 30px;
+    display: flex;
+    flex-direction: row;
+}
+
+:local(.searchbar input[type="text"]) {
+    flex-grow: 1;
+}
+
+:local(.searchbar input[type="submit"]) {
+    margin-left: 5px;
+}

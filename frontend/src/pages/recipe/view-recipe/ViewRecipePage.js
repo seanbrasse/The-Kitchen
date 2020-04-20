@@ -4,9 +4,11 @@ import IngredientsList from '../recipe-components/IngredientsList'
 import Recipe from '../recipe-components/Recipe'
 import Description from '../recipe-components/Description'
 import Title from '../recipe-components/Title'
-import styles from '../recipe-components/recipe.css';
-import {parseRecipe} from 'components/parseRecipe.js'
+import styles from '../recipe-components/recipe.css'
 
+import Comment from './comment.js'
+import'./comment.svg'
+import {parseRecipe} from 'util/parseRecipe.js';
 export default class ViewRecipePage extends React.Component{
   constructor(props){
     super(props);
@@ -124,7 +126,6 @@ export default class ViewRecipePage extends React.Component{
       this.setState({recipe: array});
     }
   }
-
   render(){
     return(
       <div class="recipe-page">
@@ -136,6 +137,7 @@ export default class ViewRecipePage extends React.Component{
       <IngredientsList ingredients={this.state.ingredients}/>
       <RecipeHeader>Recipe</RecipeHeader>
       <Recipe recipe={this.state.recipe}/>
+      <Comment/>
       </div>
       </div>
     )

@@ -1,5 +1,5 @@
 import React from "react";
-import "../App.css";
+import "./comment.css";
 import PostingList from "./PostingList.js";
 
 export default class CommentForm extends React.Component {
@@ -18,6 +18,7 @@ export default class CommentForm extends React.Component {
 
     //make the api call to the authentication page
     fetch("http://stark.cse.buffalo.edu/cse410/deldev/api/postcontroller.php", {
+   
       method: "post",
       body: JSON.stringify({
         action: "addOrEditPosts",
@@ -31,7 +32,7 @@ export default class CommentForm extends React.Component {
       .then(
         result => {
           // update the count in the UI manually, to avoid a database hit
-          this.props.onAddComment(this.props.commentCount + 1);
+          //this.props.onAddComment(this.props.commentCount + 1);
           this.postListing.current.loadPosts();
         },
         error => {
@@ -52,9 +53,9 @@ export default class CommentForm extends React.Component {
         <form onSubmit={this.submitHandler}>
           <label>
             Add A Comment to Post {this.props.parent}
-            <br />
-            <textarea rows="10" cols="70" onChange={this.myChangeHandler} />
+            <br />  <textarea rows="10" cols="70" onChange={this.myChangeHandler} />
           </label>
+          
           <br />
 
           <input type="submit" value="submit" />
@@ -67,6 +68,6 @@ export default class CommentForm extends React.Component {
           type="commentlist"
         />
       </div>
-    );
+    )
   }
 }

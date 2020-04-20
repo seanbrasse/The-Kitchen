@@ -1,0 +1,7 @@
+:local(ul.recipeList) {
+    padding: 0 30px;
+}
+
+:local(.recipeList li) {
+    margin: 20px 0;
+}

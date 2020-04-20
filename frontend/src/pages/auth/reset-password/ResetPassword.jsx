@@ -75,7 +75,7 @@ class ResetPassword extends React.Component {
     render() {
         return (
             <main className={styles.authContainer}>
-                <article>
+                <article class="card">
                     <h1>Welcome to The Kitchen</h1>
                     <h2>Reset Password</h2>
                     An email has been sent to you with a one-time password.
