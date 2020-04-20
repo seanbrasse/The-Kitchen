@@ -63,13 +63,32 @@
   margin-left: 10px;
 }
 
-.follower {
+.follow {
   margin: 10px;
+  width: 180px;
   padding: 12px 16px;
   border-radius: 16px;
   cursor: pointer;
   text-align: center;
   background-color: #ddd;
+}
+
+.following-count{
+  margin-left: 20px;
+  align-self: center;
+}
+
+.follower-count{
+  margin-left: 20px;
+  align-self: center;
+}
+
+.lonely{
+  margin-top : 10px;
+}
+
+.lonely2{
+  margin-top : 10px;
 }
 
 .btn-setting {
@@ -95,7 +114,7 @@
   margin-left: auto;
 }
 
-.followersRow {
+.followRow {
   display: flex;
   flex-direction: row;
 }
