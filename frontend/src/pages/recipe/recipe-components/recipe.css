@@ -153,14 +153,14 @@
 }
 
 /*----------------Tags and Time and Rating----------------*/
-.tagsContainer{
+.container{
   margin-top: 10px;
   display: flex;
+  flex-flow: row;
   flex-wrap: wrap;
 }
 
-.tagsContainer div{
-  flex: 1;
+.container div{
   margin: 5px;
   margin-bottom: 0px;
   margin-top: 0px;
@@ -172,20 +172,50 @@
   min-height: 50px;
 }
 
-.tagsContainer input{
+.container input{
   margin: 5px;
   width: 40px;
 }
 
-.tags input{
+.tagsItem input{
   width: 90%;
 }
 
-.totalTime a{
+.container a{
   position: relative;
   top: 5px;
   left: 5px;
   padding-bottom: 5px;
+}
+
+.tagsItem{
+    flex: 1;
+    flex-grow: 100;
+}
+
+.ratingItem {
+  min-width: 205px;
+  max-width: 100%;
+  flex-basis: auto; /* default value */
+  flex-grow: 1;
+}
+
+.ratingItem div{
+    border: none;
+    margin: 0;
+    padding: 0;
+}
+
+.prepTime{
+  flex: 1;
+}
+
+.cookTime{
+  flex: 1;
+}
+
+.totalTime{
+  flex: 1;
 }
 
 /*StarRating*/
@@ -195,7 +225,6 @@
 }
 
 .starRatingContainer div{
-  all: initial;
   display: inline-block;
 }
 

@@ -332,6 +332,55 @@ export default class ViewRecipePage extends React.Component{
     }
   }
 
+  StarRating(){
+    return <div className="starRatingContainer">
+      <div>
+        <form className="starRatingForm">
+          <input type="radio" id="1Star" name="rating" value="1" onClick={this.addRating}></input>
+          <label for="1Star">
+          <MdStar
+            color={1 <= (this.state.hover || this.state.userRating || this.state.rating) ? "#fd0" : "lightgrey"}
+            onMouseEnter={() => this.setState({hover: 1})}
+            onMouseLeave={() => this.setState({hover: 0})}
+          />
+          </label>
+          <input type="radio" id="2Star" name="rating" value="2" onClick={this.addRating}></input>
+          <label for="2Star">
+          <MdStar
+            color={2 <= (this.state.hover || this.state.userRating || this.state.rating) ? "#fd0" : "lightgrey"}
+            onMouseEnter={() => this.setState({hover: 2})}
+            onMouseLeave={() => this.setState({hover: 0})}
+          />
+          </label>
+          <input type="radio" id="3Star" name="rating" value="3" onClick={this.addRating}></input>
+          <label for="3Star">
+          <MdStar
+            color={3 <= (this.state.hover || this.state.userRating || this.state.rating) ? "#fd0" : "lightgrey"}
+            onMouseEnter={() => this.setState({hover: 3})}
+            onMouseLeave={() => this.setState({hover: 0})}
+          />
+          </label>
+          <input type="radio" id="4Star" name="rating" value="4" onClick={this.addRating}></input>
+          <label for="4Star">
+          <MdStar
+            color={4 <= (this.state.hover || this.state.userRating || this.state.rating) ? "#fd0" : "lightgrey"}
+            onMouseEnter={() => this.setState({hover: 4})}
+            onMouseLeave={() => this.setState({hover: 0})}
+          />
+          </label>
+          <input type="radio" id="5Star" name="rating" value="5" onClick={this.addRating}></input>
+          <label for="5Star">
+          <MdStar
+            color={5 <= (this.state.hover || this.state.userRating || this.state.rating) ? "#fd0" : "lightgrey"}
+            onMouseEnter={() => this.setState({hover: 5})}
+            onMouseLeave={() => this.setState({hover: 0})}
+          />
+          </label>
+        </form>
+      </div>
+    </div>;
+  }
+
   addRating = (event) => {
     var numberOfRatings = parseInt(this.state.numberOfRatings);
     var userRating = parseInt(event.target.value);
@@ -471,69 +520,24 @@ export default class ViewRecipePage extends React.Component{
         postID={this.props.postID}
       />
 
-      <div className="tagsContainer">
-        <div className="totalTime">
+      <div className="container">
+        <div className="tagsItem">
           <label for="textbox">Tags</label><br></br>
           <a>{this.state.tags}</a>
         </div>
 
-        <div className="clearDivStyle">
+        <div className="ratingItem">
           <label for="textbox">Rating</label><br></br>
-          <div className="starRatingContainer">
-            <div>
-              <form className="starRatingForm">
-                <input type="radio" id="1Star" name="rating" value="1" onClick={this.addRating}></input>
-                <label for="1Star">
-                <MdStar
-                  color={1 <= (this.state.hover || this.state.userRating || this.state.rating) ? "#fd0" : "lightgrey"}
-                  onMouseEnter={() => this.setState({hover: 1})}
-                  onMouseLeave={() => this.setState({hover: 0})}
-                />
-                </label>
-                <input type="radio" id="2Star" name="rating" value="2" onClick={this.addRating}></input>
-                <label for="2Star">
-                <MdStar
-                  color={2 <= (this.state.hover || this.state.userRating || this.state.rating) ? "#fd0" : "lightgrey"}
-                  onMouseEnter={() => this.setState({hover: 2})}
-                  onMouseLeave={() => this.setState({hover: 0})}
-                />
-                </label>
-                <input type="radio" id="3Star" name="rating" value="3" onClick={this.addRating}></input>
-                <label for="3Star">
-                <MdStar
-                  color={3 <= (this.state.hover || this.state.userRating || this.state.rating) ? "#fd0" : "lightgrey"}
-                  onMouseEnter={() => this.setState({hover: 3})}
-                  onMouseLeave={() => this.setState({hover: 0})}
-                />
-                </label>
-                <input type="radio" id="4Star" name="rating" value="4" onClick={this.addRating}></input>
-                <label for="4Star">
-                <MdStar
-                  color={4 <= (this.state.hover || this.state.userRating || this.state.rating) ? "#fd0" : "lightgrey"}
-                  onMouseEnter={() => this.setState({hover: 4})}
-                  onMouseLeave={() => this.setState({hover: 0})}
-                />
-                </label>
-                <input type="radio" id="5Star" name="rating" value="5" onClick={this.addRating}></input>
-                <label for="5Star">
-                <MdStar
-                  color={5 <= (this.state.hover || this.state.userRating || this.state.rating) ? "#fd0" : "lightgrey"}
-                  onMouseEnter={() => this.setState({hover: 5})}
-                  onMouseLeave={() => this.setState({hover: 0})}
-                />
-                </label>
-              </form>
-            </div>
-          </div>
+          {this.StarRating()}
         </div>
 
       </div>
-      <div className="tagsContainer">
-        <div className="totalTime">
+      <div className="container">
+        <div className="prepTime">
           <label for="textbox">Prep Time</label><br></br>
           <a>{parseInt(this.state.prepTime) + " min"}</a>
         </div>
-        <div className="totalTime">
+        <div className="cookTime">
           <label for="textbox">Cook Time</label><br></br>
           <a>{parseInt(this.state.cookTime) + " min"}</a>
         </div>

@@ -720,20 +720,20 @@ export default class EditRecipePage extends React.Component{
         handle={this.updateTitle}
       />
 
-      <div className="tagsContainer">
-        <div className="tags">
+      <div className="container">
+        <div className="tagsItem">
           <label for="textbox">Tags</label><br></br>
           <input type="text" placeholder="Cake, Chocolate, Birthday" value={this.state.tags} onChange={(e) => {
             this.setState({tags: e.target.value});
           }}></input>
         </div>
-        <div>
+        <div className="prepTime">
           <label for="textbox">Prep Time</label><br></br>
           <input type="number" value={this.state.prepTime} onChange={(e) => {
             this.setState({prepTime: e.target.value});
           }}></input><a> min</a>
         </div>
-        <div>
+        <div className="cookTime">
           <label for="textbox">Cook Time</label><br></br>
           <input type="number" value={this.state.cookTime} onChange={(e) => {
             this.setState({cookTime: e.target.value});
