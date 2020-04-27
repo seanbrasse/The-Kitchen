@@ -10,6 +10,7 @@ export default class Search extends React.Component {
             posts: [],
             search: '',
             excludeIngredients: '',
+            tags: '',
             minPrepTime: null,
             maxPrepTime: null,
             minCookTime: null,
@@ -26,7 +27,8 @@ export default class Search extends React.Component {
     
     genTagFilters(state) {
         return [
-            ...state.excludeIngredients.split(',').filter(str=>str).map(ing => ({method: 'exclude', tag: ing, type: 'ingredient'})),
+            ...state.excludeIngredients.split(',').filter(str=>str).map(tag => ({method: 'exclude', tag, type: 'ingredient'})),
+            ...state.tags.split(',').filter(str=>str).map(tag => ({method: 'include', tag, type: 'Tag'})),
             {method: 'min', tag: state.minPrepTime, type: 'PrepTime'},
             {method: 'max', tag: state.maxPrepTime, type: 'PrepTime'},
             {method: 'min', tag: state.minCookTime, type: 'CookTime'},
@@ -59,6 +61,10 @@ export default class Search extends React.Component {
                         <PostList fetchParams={this.state.fetchParams} className={styles.recipeList}/>
                         <div className={`card ${styles.extraSearch}`}>
                             <h3>Search Details</h3>
+                            <label htmlFor="tags">Tags</label><br/>
+                            <input name="tags" type="text" onChange={e => this.setState({tags: e.target.value})}/>
+                            <br/><br/>
+
                             <label htmlFor="exclude-ingredients">Exclude Ingredients</label><br/>
                             <input name="exclude-ingredients" type="text" onChange={e => this.setState({excludeIngredients: e.target.value})}/>
                             <br/><br/>
