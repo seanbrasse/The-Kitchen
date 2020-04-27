@@ -1,6 +1,7 @@
 import React from 'react';
 import {PostList} from 'components';
 import styles from './Search.module.css';
+import { MdStar } from 'react-icons/md';
 
 export default class Search extends React.Component {
     constructor(props) {
@@ -13,6 +14,7 @@ export default class Search extends React.Component {
             maxPrepTime: null,
             minCookTime: null,
             maxCookTime: null,
+            minRating: null,
             fetchParams: {
                 action: 'getPosts',
                 posttype: 'Recipe',
@@ -29,6 +31,7 @@ export default class Search extends React.Component {
             {method: 'max', tag: state.maxPrepTime, type: 'PrepTime'},
             {method: 'min', tag: state.minCookTime, type: 'CookTime'},
             {method: 'max', tag: state.maxCookTime, type: 'CookTime'},
+            {method: 'min', tag: state.minRating, type: 'Rating'},
         ];
     }
 
@@ -60,16 +63,61 @@ export default class Search extends React.Component {
                             <input name="exclude-ingredients" type="text" onChange={e => this.setState({excludeIngredients: e.target.value})}/>
                             <br/><br/>
 
-                            <label htmlFor="min-prep-time">Min Prep Time</label><br/>
+                            <label htmlFor="min-prep-time">Minimum Prep Time</label><br/>
                             <input name="min-prep-time" type="number" onChange={e => this.setState({minPrepTime: e.target.value})}/><br/>
-                            <label htmlFor="max-prep-time">Max Prep Time</label><br/>
+                            <label htmlFor="max-prep-time">Maximum Prep Time</label><br/>
                             <input name="max-prep-time" type="number" onChange={e => this.setState({maxPrepTime: e.target.value})}/>
                             <br/><br/>
                             
-                            <label htmlFor="min-cook-time">Min Cook Time</label><br/>
+                            <label htmlFor="min-cook-time">Minimum Cook Time</label><br/>
                             <input name="min-cook-time" type="number" onChange={e => this.setState({minCookTime: e.target.value})}/><br/>
-                            <label htmlFor="max-cook-time">Max Cook Time</label><br/>
+                            <label htmlFor="max-cook-time">Maximum Cook Time</label><br/>
                             <input name="max-cook-time" type="number" onChange={e => this.setState({maxCookTime: e.target.value})}/>
+                            <br/><br/>
+
+                            Minimum Rating<br/>
+                            <div className={"starRatingContainer"}>
+                                <input type="radio" id="1Star" name="rating" value="1" onClick={() => this.setState({minRating: 1})}></input>
+                                <label for="1Star">
+                                <MdStar
+                                color={1 <= (this.state.hover || this.state.minRating) ? "#fd0" : "lightgrey"}
+                                onMouseEnter={() => this.setState({hover: 1})}
+                                onMouseLeave={() => this.setState({hover: 0})}
+                                />
+                                </label>
+                                <input type="radio" id="2Star" name="rating" value="2" onClick={() => this.setState({minRating: 2})}></input>
+                                <label for="2Star">
+                                <MdStar
+                                color={2 <= (this.state.hover || this.state.minRating) ? "#fd0" : "lightgrey"}
+                                onMouseEnter={() => this.setState({hover: 2})}
+                                onMouseLeave={() => this.setState({hover: 0})}
+                                />
+                                </label>
+                                <input type="radio" id="3Star" name="rating" value="3" onClick={() => this.setState({minRating: 3})}></input>
+                                <label for="3Star">
+                                <MdStar
+                                color={3 <= (this.state.hover || this.state.minRating) ? "#fd0" : "lightgrey"}
+                                onMouseEnter={() => this.setState({hover: 3})}
+                                onMouseLeave={() => this.setState({hover: 0})}
+                                />
+                                </label>
+                                <input type="radio" id="4Star" name="rating" value="4" onClick={() => this.setState({minRating: 4})}></input>
+                                <label for="4Star">
+                                <MdStar
+                                color={4 <= (this.state.hover || this.state.minRating) ? "#fd0" : "lightgrey"}
+                                onMouseEnter={() => this.setState({hover: 4})}
+                                onMouseLeave={() => this.setState({hover: 0})}
+                                />
+                                </label>
+                                <input type="radio" id="5Star" name="rating" value="5" onClick={() => this.setState({minRating: 5})}></input>
+                                <label for="5Star">
+                                <MdStar
+                                color={5 <= (this.state.hover || this.state.minRating) ? "#fd0" : "lightgrey"}
+                                onMouseEnter={() => this.setState({hover: 5})}
+                                onMouseLeave={() => this.setState({hover: 0})}
+                                />
+                                </label>
+                            </div>
                             <br/><br/>
 
                             <input type="submit" value="Search"/>
