@@ -268,12 +268,13 @@ if (isValidJSON($json_params)) {
             foreach ($tagFilters as $filter) {
                 if (is_array($filter)) {
                     $method = 'include';
-                    if (array_key_exists('method', $filter)) $include = $filter['method'];
+                    if (array_key_exists('method', $filter)) $method = $filter['method'];
                     $tag = "";
                     if (array_key_exists('tag', $filter)) $tag = $filter['tag'];
                     $tagType= "";
-                    if (array_key_exists('type', $filter)) $type = $filter['type'];
-                    if (!IsNullOrEmpty($tag) || !IsNullOrEmpty($tagType)) {
+                    if (array_key_exists('type', $filter)) $tagType = $filter['type'];
+                    
+                    if (!IsNullOrEmpty($tag) || (!IsNullOrEmpty($tagType) && ($method == 'include' || $method == 'exclude'))) {
                         if ($first) {
                             $sql .= " WHERE ";
                             $first = false;
@@ -286,7 +287,7 @@ if (isValidJSON($json_params)) {
                         $sql .= "exists (select 'x' from post_tags pt where pt.post_id = posts.post_id";
 
                         if (!IsNullOrEmpty($tagType)) {
-                            $sql .= "and pt.tag_type=?";
+                            $sql .= " and pt.tag_type=?";
                             array_push($args, $tagType);
                         }
                         

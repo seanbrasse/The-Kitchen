@@ -24,11 +24,11 @@ export default class Search extends React.Component {
     
     genTagFilters(state) {
         return [
-            ...state.excludeIngredients.split(',').map(ing => ({method: 'exclude', tag: ing, type: 'ingredient'})),
-            {method: 'min', tag: this.minPrepTime, type: 'PrepTime'},
-            {method: 'max', tag: this.maxPrepTime, type: 'PrepTime'},
-            {method: 'min', tag: this.minCookTime, type: 'CookTime'},
-            {method: 'max', tag: this.maxCookTime, type: 'CookTime'},
+            ...state.excludeIngredients.split(',').filter(str=>str).map(ing => ({method: 'exclude', tag: ing, type: 'ingredient'})),
+            {method: 'min', tag: state.minPrepTime, type: 'PrepTime'},
+            {method: 'max', tag: state.maxPrepTime, type: 'PrepTime'},
+            {method: 'min', tag: state.minCookTime, type: 'CookTime'},
+            {method: 'max', tag: state.maxCookTime, type: 'CookTime'},
         ];
     }
 
@@ -36,13 +36,15 @@ export default class Search extends React.Component {
         return (
             <main>
                 <h1>SEARCH</h1>
-                <form
-                    onSubmit={() => this.setState(prevState => ({fetchParams:{
-                        ...prevState.fetchParams,
-                        posttext: prevState.search,
-                        tag_filters: this.genTagFilters(prevState)
-                    }}))}
-                >
+                <form onSubmit={(e) => {
+                        this.setState(prevState => ({fetchParams:{
+                            ...prevState.fetchParams,
+                            posttext: prevState.search,
+                            tag_filters: this.genTagFilters(prevState)
+                        }}));
+                        e.preventDefault();
+                    }
+                }>
                     <div className={styles.searchbar}>
                         <input
                             type="text" value={this.state.search} className={styles.search}
@@ -54,19 +56,19 @@ export default class Search extends React.Component {
                         <PostList fetchParams={this.state.fetchParams} className={styles.recipeList}/>
                         <div className={`card ${styles.extraSearch}`}>
                             <h3>Search Details</h3>
-                            <label for="exclude-ingredients">Exclude Ingredients</label>
+                            <label htmlFor="exclude-ingredients">Exclude Ingredients</label><br/>
                             <input name="exclude-ingredients" type="text" onChange={e => this.setState({excludeIngredients: e.target.value})}/>
                             <br/><br/>
 
-                            <label for="min-prep-time">Min Prep Time</label>
-                            <input name="min-prep-time" type="number" onChange={e => this.setState({minPrepTime: e.target.value})}/>
-                            <label for="max-prep-time">Max Prep Time</label>
+                            <label htmlFor="min-prep-time">Min Prep Time</label><br/>
+                            <input name="min-prep-time" type="number" onChange={e => this.setState({minPrepTime: e.target.value})}/><br/>
+                            <label htmlFor="max-prep-time">Max Prep Time</label><br/>
                             <input name="max-prep-time" type="number" onChange={e => this.setState({maxPrepTime: e.target.value})}/>
                             <br/><br/>
                             
-                            <label for="min-cook-time">Min Cook Time</label>
-                            <input name="min-cook-time" type="number" onChange={e => this.setState({minCookTime: e.target.value})}/>
-                            <label for="max-cook-time">Max Cook Time</label>
+                            <label htmlFor="min-cook-time">Min Cook Time</label><br/>
+                            <input name="min-cook-time" type="number" onChange={e => this.setState({minCookTime: e.target.value})}/><br/>
+                            <label htmlFor="max-cook-time">Max Cook Time</label><br/>
                             <input name="max-cook-time" type="number" onChange={e => this.setState({maxCookTime: e.target.value})}/>
                             <br/><br/>
 
