@@ -267,8 +267,8 @@ if (isValidJSON($json_params)) {
         if (!IsNullOrEmpty($tagFilters) && is_array($tagFilters)) {
             foreach ($tagFilters as $filter) {
                 if (is_array($filter)) {
-                    $include = true;
-                    if (array_key_exists('include', $filter)) $include = $filter['include'];
+                    $method = 'include';
+                    if (array_key_exists('method', $filter)) $include = $filter['method'];
                     $tag = "";
                     if (array_key_exists('tag', $filter)) $tag = $filter['tag'];
                     $tagType= "";
@@ -281,17 +281,26 @@ if (isValidJSON($json_params)) {
                             $sql .= " AND ";
                         }
                         
-                        if ($include == false) $sql .= "not ";
+                        if ($method == 'exclude') $sql .= "not ";
 
                         $sql .= "exists (select 'x' from post_tags pt where pt.post_id = posts.post_id";
-                        
-                        if (!IsNullOrEmpty($tag)) {
-                            $sql .= " and pt.tag=?";
-                            array_push($args, $tag);
-                        }
+
                         if (!IsNullOrEmpty($tagType)) {
                             $sql .= "and pt.tag_type=?";
                             array_push($args, $tagType);
+                        }
+                        
+                        if (!IsNullOrEmpty($tag)) { {
+                            if ($method == 'include' || $method == 'exclude') {
+                                $sql .= " and pt.tag=?";
+                                array_push($args, $tag);
+                            } else if ($method == 'min') {
+                                $sql .= " and CAST(pt.tag as int)>=?";
+                                array_push($args, $tag);
+                            } else if ($method == 'max') {
+                                $sql .= " and CAST(pt.tag as int)<=?";
+                                array_push($args, $tag);
+                            }
                         }
 
                         $sql .= ") ";

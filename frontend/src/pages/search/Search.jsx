@@ -9,6 +9,10 @@ export default class Search extends React.Component {
             posts: [],
             search: '',
             excludeIngredients: '',
+            minPrepTime: null,
+            maxPrepTime: null,
+            minCookTime: null,
+            maxCookTime: null,
             fetchParams: {
                 action: 'getPosts',
                 posttype: 'Recipe',
@@ -20,7 +24,11 @@ export default class Search extends React.Component {
     
     genTagFilters(state) {
         return [
-            ...state.excludeIngredients.split(',').map(ing => ({include: false, tag: ing, type: 'ingredient'}))
+            ...state.excludeIngredients.split(',').map(ing => ({method: 'exclude', tag: ing, type: 'ingredient'})),
+            {method: 'min', tag: this.minPrepTime, type: 'PrepTime'},
+            {method: 'max', tag: this.maxPrepTime, type: 'PrepTime'},
+            {method: 'min', tag: this.minCookTime, type: 'CookTime'},
+            {method: 'max', tag: this.maxCookTime, type: 'CookTime'},
         ];
     }
 
@@ -40,17 +48,30 @@ export default class Search extends React.Component {
                             type="text" value={this.state.search} className={styles.search}
                             onChange={e => this.setState({search: e.target.value})}
                         />
-                        <input
-                            type="submit" value="Search"
-                        />
+                        <input type="submit" value="Search"/>
                     </div>
                     <div className={styles.listWrapper}>
                         <PostList fetchParams={this.state.fetchParams} className={styles.recipeList}/>
-                        <form className={`card ${styles.extraSearch}`}>
-                            <h3>Additional Search Details</h3>
-                            <h4>Exclude Ingredients</h4>
-                            <input type="text" onChange={e => this.setState({excludeIngredients: e.target.value})}/>
-                        </form>
+                        <div className={`card ${styles.extraSearch}`}>
+                            <h3>Search Details</h3>
+                            <label for="exclude-ingredients">Exclude Ingredients</label>
+                            <input name="exclude-ingredients" type="text" onChange={e => this.setState({excludeIngredients: e.target.value})}/>
+                            <br/><br/>
+
+                            <label for="min-prep-time">Min Prep Time</label>
+                            <input name="min-prep-time" type="number" onChange={e => this.setState({minPrepTime: e.target.value})}/>
+                            <label for="max-prep-time">Max Prep Time</label>
+                            <input name="max-prep-time" type="number" onChange={e => this.setState({maxPrepTime: e.target.value})}/>
+                            <br/><br/>
+                            
+                            <label for="min-cook-time">Min Cook Time</label>
+                            <input name="min-cook-time" type="number" onChange={e => this.setState({minCookTime: e.target.value})}/>
+                            <label for="max-cook-time">Max Cook Time</label>
+                            <input name="max-cook-time" type="number" onChange={e => this.setState({maxCookTime: e.target.value})}/>
+                            <br/><br/>
+
+                            <input type="submit" value="Search"/>
+                        </div>
                     </div>
                 </form>
             </main>
