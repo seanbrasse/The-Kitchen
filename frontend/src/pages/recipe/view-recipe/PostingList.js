@@ -21,7 +21,7 @@ export default class PostingList extends React.Component {
       method: "post",
       body: JSON.stringify({
         action: "getPosts",
-        max_posts: "1",
+        max_posts: "6",
         parentid: this.props.parentid
       })
     })
