@@ -290,7 +290,7 @@ if (isValidJSON($json_params)) {
                             array_push($args, $tagType);
                         }
                         
-                        if (!IsNullOrEmpty($tag)) { {
+                        if (!IsNullOrEmpty($tag)) {
                             if ($method == 'include' || $method == 'exclude') {
                                 $sql .= " and pt.tag=?";
                                 array_push($args, $tag);
