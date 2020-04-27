@@ -13,7 +13,7 @@ export default class EditRecipePage extends React.Component{
     super(props);
     this.content = "";
     this.ingredientIDs = [];
-    this.stepCount = 0;
+    this.stepCount = 1;
     this.tagIDs = [];
 
     this.state = {
@@ -74,6 +74,7 @@ export default class EditRecipePage extends React.Component{
               this.setState({recipe: recipe.recipe});
               this.setState({messageID: recipe.messageID});
 
+              this.stepCount = 0;
               for(var i = 0; i < this.state.recipe[0].length; i++){
                 if(this.state.recipe[0][i] === "header"){
                   this.stepCount++;
