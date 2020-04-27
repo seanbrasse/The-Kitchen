@@ -22,7 +22,7 @@ export default class PostForm extends React.Component {
       method: "post",
       body: JSON.stringify({
         action: "addOrEditPosts",
-        user_id: sessionStorage.getItem("user"),
+        user_id: sessionStorage.getItem("userID"),
         session_token: sessionStorage.getItem("token"),
         posttext: this.state.post_text
       })
@@ -52,7 +52,7 @@ export default class PostForm extends React.Component {
       <div>
         <form onSubmit={this.submitHandler}>
           <label>
-            Post Something!
+          Add A Comment to the Recipe!
             <br />
             <textarea rows="10" cols="70" onChange={this.myChangeHandler} />
           </label>

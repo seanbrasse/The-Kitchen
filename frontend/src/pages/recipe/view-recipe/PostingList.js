@@ -21,7 +21,7 @@ export default class PostingList extends React.Component {
       method: "post",
       body: JSON.stringify({
         action: "getPosts",
-        max_posts: "1",
+        max_posts: "3",
         parentid: this.props.parentid
       })
     })
@@ -31,10 +31,9 @@ export default class PostingList extends React.Component {
           if (result.posts) {
             this.setState({
               isLoaded: true,
-
               posts: result.posts
             });
-          }
+         }
         },
         error => {
           this.setState({
@@ -46,7 +45,7 @@ export default class PostingList extends React.Component {
   }
 
   render() {
-    //this.loadPosts();
+    this.loadPosts();
     const {error, isLoaded, posts} = this.state;
     if (error) {
       return <div> Error: {error.message} </div>;
