@@ -124,7 +124,7 @@ export default class Search extends React.Component {
                                 />
                                 </label>
                             </div>
-                            <br/><br/>
+                            <br/>
 
                             <input type="submit" value="Search"/>
                         </div>
