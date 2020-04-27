@@ -75,6 +75,10 @@ if (isValidJSON($json_params)) {
     if (array_key_exists('offset', $decoded_params)) {
         $offset =  $decoded_params['offset'];
     }
+    $showUserPosts = "false";
+    if (array_key_exists('showuserposts', $decoded_params)) {
+        $showUserPosts =  $decoded_params['showuserposts'];
+    }
     $tagFilters = "";
     if (array_key_exists('tag_filters', $decoded_params)) {
         $tagFilters = $decoded_params['tag_filters'];
@@ -111,10 +115,10 @@ if (isValidJSON($json_params)) {
                     $json['Exception'] =  $e->getMessage();
                 }
             } else {
-                $sql = "UPDATE posts SET user_id = ?,post_type = ?,timestamp = ?,post_text = ?,post_pic_url = ?,comment_flag = ?,parent_id = ? WHERE post_id = ?; ";
+                $sql = "UPDATE posts SET user_id = ?,post_type = ?,timestamp = now(),post_text = ?,post_pic_url = ?,comment_flag = ?,parent_id = ? WHERE post_id = ?; ";
                 array_push($args, $userId);
                 array_push($args, $postType);
-                array_push($args, $timestamp);
+                
                 array_push($args, $postText);
                 array_push($args, $postPicUrl);
                 array_push($args, $commentFlag);
@@ -334,8 +338,17 @@ if (isValidJSON($json_params)) {
         }
     } elseif ($action == "getConnectionPosts") {
         $args = array();
-        $sql = "SELECT * FROM posts where user_id in (SELECT connect_user_id from connections where user_id = ?) ";
+        $sql = "SELECT posts.*, users.name FROM posts, users where posts.user_id = users.user_id   ";
+
+        if ($showUserPosts == "true") {
+            $sql .= "and (posts.user_id in (SELECT distinct connect_user_id from connections where connections.user_id = ?) OR posts.user_id = ?)";
+            array_push($args, $userId);
+        } else {
+            $sql .= "and posts.user_id in (SELECT distinct connect_user_id from connections where connections.user_id = ?)";
+        }
+
         array_push($args, $userId);
+
         $first = false;
         if (!IsNullOrEmpty($postId)) {
             if ($first) {
@@ -402,10 +415,10 @@ if (isValidJSON($json_params)) {
             array_push($args, $parentId);
         } else {
             if ($first) {
-                $sql .= " WHERE parent_id IS NULL ";
+                $sql .= " WHERE (parent_id is null or parent_id =  0)  ";
                 $first = false;
             } else {
-                $sql .= " AND parent_id IS NULL ";
+                $sql .= " AND (parent_id is null or parent_id =  0) ";
             }
         }
 

@@ -62,20 +62,24 @@ if (isValidJSON($json_params)) {
         if (validateAPIKey($authUserId, $sessionToken)) {
             $args = array();
             if (IsNullOrEmpty($connectionId)) {
-                $sql = "INSERT INTO connections (connection_id,user_id,connect_user_id,connection_type,connection_status) VALUES ( ?,?,?,?,?);";
-                array_push($args, $connectionId);
-                array_push($args, $userId);
-                array_push($args, $connectUserId);
-                array_push($args, $connectionType);
-                array_push($args, $connectionStatus);
-                try {
-                    $statement = $conn->prepare($sql);
-                    $statement->execute($args);
-                    $last_id = $conn->lastInsertId();
-                    $json['Record Id'] = $last_id;
-                    $json['Status'] = "SUCCESS - Inserted Id $last_id";
-                } catch (Exception $e) {
-                    $json['Exception'] =  $e->getMessage();
+                if (IsNullOrEmpty($userId) || IsNullOrEmpty($connectUserId)) {
+                    $json['Status'] = "ERROR - Missing required fields.  Both userid and connectuserid are required. ";
+                } else {
+                    $sql = "INSERT INTO connections (connection_id,user_id,connect_user_id,connection_type,connection_status) VALUES ( ?,?,?,?,?);";
+                    array_push($args, $connectionId);
+                    array_push($args, $userId);
+                    array_push($args, $connectUserId);
+                    array_push($args, $connectionType);
+                    array_push($args, $connectionStatus);
+                    try {
+                        $statement = $conn->prepare($sql);
+                        $statement->execute($args);
+                        $last_id = $conn->lastInsertId();
+                        $json['Record Id'] = $last_id;
+                        $json['Status'] = "SUCCESS - Inserted Id $last_id";
+                    } catch (Exception $e) {
+                        $json['Exception'] =  $e->getMessage();
+                    }
                 }
             } else {
                 $sql = "UPDATE connections SET user_id = ?,connect_user_id = ?,connection_type = ?,connection_status = ? WHERE connection_id = ?; ";
@@ -128,7 +132,7 @@ if (isValidJSON($json_params)) {
         }
     } elseif ($action == "getConnections") {
         $args = array();
-        $sql = "SELECT connections.*, users.name FROM connections, users where connections.connect_user_id = users.user_id  ";
+        $sql = "SELECT connections.*, users.name, users2.name as user_name FROM connections, users, users as users2 where connections.connect_user_id = users.user_id and connections.user_id = users2.user_id   ";
         $first = false;
         if (!IsNullOrEmpty($connectionId)) {
             if ($first) {
