@@ -25,9 +25,13 @@ class Profile extends React.Component {
       picID: 0,
       profileImageTemp: avatar,
       profileImage: avatar,
+      blocked: false,
     };
   }
 
+  /*********************************API_WORK*********************************/
+
+  /*Gets Following for the Following List*/
   getFollowing() {
     fetch(
       "http://stark.cse.buffalo.edu/cse410/deldev/api/connectioncontroller.php",
@@ -48,6 +52,7 @@ class Profile extends React.Component {
       });
   }
 
+  /*Gets Followers for the Followers List*/
   getFollowers() {
     fetch(
       "http://stark.cse.buffalo.edu/cse410/deldev/api/connectioncontroller.php",
@@ -56,7 +61,7 @@ class Profile extends React.Component {
         body: JSON.stringify({
           action: "getConnections",
           connectuserid: this.props.match.params.userID,
-          connectionstatus: 'Active'
+          connectionstatus: "Active",
         }),
       }
     )
@@ -68,6 +73,222 @@ class Profile extends React.Component {
       });
   }
 
+  /*Checks if user is blocked*/
+  checkBlocked() {
+    fetch("http://stark.cse.buffalo.edu/cse410/deldev/api/gmcontroller.php", {
+      method: "post",
+      body: JSON.stringify({
+        action: "getGroupMembers",
+        userid: this.props.match.params.userID,
+        groupid: sessionStorage.getItem("blocked_groupID"),
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.group_members !== undefined) {
+          this.setState({ blocked: true });
+        }
+      });
+  }
+
+  /*Creates a Blocked Users List*/
+  blockedList() {
+    fetch(
+      "http://stark.cse.buffalo.edu/cse410/deldev/api/groupcontroller.php",
+      {
+        method: "post",
+        body: JSON.stringify({
+          action: "getGroups",
+          user_id: sessionStorage.getItem("userID"),
+          grouptype: "blocked",
+        }),
+      }
+    )
+      .then((res) => res.json())
+      .then((response) => {
+        if (response.groups !== undefined) {
+          sessionStorage.setItem(
+            "blocked_groupID",
+            response.groups[0].group_id /*should [0] be [1]?*/
+          );
+        } else {
+          fetch(
+            "http://stark.cse.buffalo.edu/cse410/deldev/api/groupcontroller.php",
+            {
+              method: "post",
+              body: JSON.stringify({
+                action: "addOrEditGroups",
+                user_id: sessionStorage.getItem("userID"),
+                userid: sessionStorage.getItem("userID"),
+                session_token: sessionStorage.getItem("token"),
+                groupname:
+                  "TestBlockList_1.0" + sessionStorage.getItem("userID"),
+                grouptype: "blocked",
+              }),
+            }
+          )
+            .then((res) => res.json())
+            .then((response) => {
+              sessionStorage.setItem("blocked_groupID", response["Record Id"]);
+            });
+        }
+      });
+  }
+
+  /*Adds a User to the Blocked List*/
+  addToBlockedList(userToBlock) {
+    console.log("block clicked");
+    fetch("http://stark.cse.buffalo.edu/cse410/deldev/api/gmcontroller.php", {
+      method: "post",
+      body: JSON.stringify({
+        action: "addOrEditGroupMembers",
+        user_id: sessionStorage.getItem("userID"),
+        session_token: sessionStorage.getItem("token"),
+        groupid: sessionStorage.getItem("blocked_groupID"),
+        userid: userToBlock,
+      }),
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        console.log(response);
+        if (response["Record Id"] !== undefined) {
+          console.log("done");
+          this.setState({ blocked: true });
+          // this.unfollow();
+          window.location.reload();
+        }
+      });
+  }
+
+  unfollow() {
+    if (this.state.currentlyFollowed !== true) {
+      fetch("http://stark.cse.buffalo.edu/cse410/deldev/api/gmcontroller.php", {
+        method: "post",
+        body: JSON.stringify({
+          action: "addOrEditGroupMembers",
+          groupid: sessionStorage.getItem("groupID"),
+          user_id: sessionStorage.getItem("userID"),
+          userid: this.props.userID,
+          session_token: sessionStorage.getItem("token"),
+          membertype: this.props.userID,
+        }),
+      });
+    } else {
+      fetch("http://stark.cse.buffalo.edu/cse410/deldev/api/gmcontroller.php", {
+        method: "post",
+        body: JSON.stringify({
+          action: "getGroupMembers",
+          groupid: sessionStorage.getItem("groupID"),
+          membertype: sessionStorage.getItem("userID"),
+        }),
+      })
+        .then((res) => res.json())
+        .then((response) => {
+          fetch(
+            "http://stark.cse.buffalo.edu/cse410/deldev/api/gmcontroller.php",
+            {
+              method: "post",
+              body: JSON.stringify({
+                action: "deleteGroupMembers",
+                user_id: sessionStorage.getItem("userID"),
+                session_token: sessionStorage.getItem("token"),
+                gmid: response.group_members
+                  ? response.group_members[0].gm_id
+                  : undefined,
+              }),
+            }
+          );
+        });
+    }
+    //end
+
+    if (this.state.currentlyFollowed) {
+      fetch(
+        "http://stark.cse.buffalo.edu/cse410/deldev/api/connectioncontroller.php",
+        {
+          method: "post",
+          body: JSON.stringify({
+            action: "deleteConnections",
+            user_id: sessionStorage.getItem("userID"),
+            connectionid: this.state.connectionID,
+            session_token: sessionStorage.getItem("token"),
+          }),
+        }
+      )
+        .then((res) => res.json())
+        .then((response) => {
+          if (response.Status.startsWith("SUCCESS"))
+            this.setState({ currentlyFollowed: false });
+        });
+    } else {
+      fetch(
+        "http://stark.cse.buffalo.edu/cse410/deldev/api/connectioncontroller.php",
+        {
+          method: "post",
+          body: JSON.stringify({
+            action: "addOrEditConnections",
+            user_id: sessionStorage.getItem("userID"),
+            userid: sessionStorage.getItem("userID"),
+            connectuserid: this.props.userID,
+            connectiontype: "Follow",
+            connectionstatus: "Active",
+            connectionid: this.state.connectionID,
+            session_token: sessionStorage.getItem("token"),
+          }),
+        }
+      )
+        .then((res) => res.json())
+        .then((response) => {
+          if (response.Status.startsWith("SUCCESS"))
+            this.setState({ currentlyFollowed: true });
+        });
+    }
+  }
+
+  /*Adds a User to the Blocked List*/
+  deleteFromBlockedList() {
+    var gid;
+    fetch("http://stark.cse.buffalo.edu/cse410/deldev/api/gmcontroller.php", {
+      method: "post",
+      body: JSON.stringify({
+        action: "getGroupMembers",
+        userid: sessionStorage.getItem("userID"),
+        group_id: sessionStorage.getItem("blocked_groupID"),
+      }),
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        var groupList = response.group_members;
+        groupList.forEach(function (value) {
+          if (value.user_id === this.props.match.params.userID) {
+            gid = value.gm_id;
+            return;
+          }
+        });
+        /* if (data.connections != null) { //We shouldn't be using data.connections
+          this.setState({ blocked: [...data.connections] }); 
+        } */
+      });
+
+    fetch("http://stark.cse.buffalo.edu/cse410/deldev/api/gmcontroller.php", {
+      method: "post",
+      body: JSON.stringify({
+        action: "deleteGroupMembers",
+        user_id: this.props.match.params.userID,
+        session_token: sessionStorage.getItem("token"),
+        gmid: gid,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.Exception === undefined) {
+          this.setState({ blocked: false });
+          window.location.reload();
+        }
+      });
+  }
+
+  /*Gets the Profile Picture*/
   fetchProfilePic() {
     fetch("http://stark.cse.buffalo.edu/cse410/deldev/api/uacontroller.php", {
       method: "post",
@@ -112,6 +333,8 @@ class Profile extends React.Component {
       });
   }
 
+  /* Edits Pfp*/
+
   showPopUp = () => {
     this.setState({ hidden: false });
   };
@@ -137,10 +360,13 @@ class Profile extends React.Component {
     });
   };
 
+  /*Updates the page*/
   componentDidMount() {
     this.getFollowing();
     this.getFollowers();
     this.fetchProfilePic();
+    this.blockedList();
+    this.checkBlocked();
   }
 
   componentDidUpdate(prevProps) {
@@ -152,18 +378,23 @@ class Profile extends React.Component {
         profileImageTemp: avatar,
         profileImage: avatar,
         followers: [],
-        following: []
+        following: [],
       });
       this.getFollowing();
       this.getFollowers();
       this.fetchProfilePic();
+      this.blockedList();
+      this.checkBlocked();
     }
   }
+
+  /*********************************RENDER_FUNCTIONS*********************************/
 
   render() {
     let myUserId = sessionStorage.getItem("userID");
     let userID = this.props.match.params.userID;
 
+    /*Following List*/
     var list = [];
     var i = 0;
     if (this.state.following.length != 0) {
@@ -187,6 +418,7 @@ class Profile extends React.Component {
       list.push(<div className="lonely"> Not Following Anyone Yet! </div>);
     }
 
+    /*Followers List*/
     var list2 = [];
     var j = 0;
     if (this.state.followers.length != 0) {
@@ -208,22 +440,7 @@ class Profile extends React.Component {
       list2.push(<div className="lonely2"> No Followers Yet! </div>);
     }
 
-    // console.log(this.state.followers);
-    // const {followers}
-    // const followers = this.state.followers;
-    //var followerState = true;
-    // for (var i = 0; i <= 5; i++) {
-    //   followers.push(
-    //     <button className="follower" key={i}>
-    //       Follower
-    //
-    //         icon={faEllipsisV}
-    //         className="btn-setting"
-    //       ></FontAwesomeIcon>
-    //     </button>
-    //   );
-    // }
-
+    /*Edit Pfp Button*/
     function EditProfilePicture(props) {
       if (myUserId === userID) {
         return (
@@ -242,6 +459,7 @@ class Profile extends React.Component {
       return null;
     }
 
+    /*Edit Bio Button*/
     function EditBioButton() {
       if (myUserId === userID) {
         return (
@@ -258,6 +476,7 @@ class Profile extends React.Component {
       return null;
     }
 
+    /*New Post Button*/
     function NewPost() {
       if (myUserId === userID) {
         return (
@@ -276,6 +495,7 @@ class Profile extends React.Component {
       return null;
     }
 
+    /*Settings Button*/
     function Settings() {
       if (userID === myUserId) {
         return (
@@ -292,21 +512,10 @@ class Profile extends React.Component {
       return null;
     }
 
-    return (
-      <main>
-        <div
-          className="popUpBackground"
-          style={{ display: this.state.hidden ? "none" : "flex" }}
-        >
-          <div className="popUpWindow">
-          <button className="exitButton" onClick={() => this.setState({hidden: true})}>+</button>
-          <h2>Change Profile Picture</h2>
-          <input type="text" placeholder="Paste Image or URL" onChange={this.changePic}></input>
-          <img id="image" className="profile-image-large" src={this.state.profileImageTemp} alt=""/>
-          <button onClick={this.savePic}>Save Changes</button>
-          </div>
-        </div>
+    // /*Adds a User to the Blocked List*/
 
+    var retValue =
+      this.state.blocked && userID !== myUserId ? (
         <div className="card profile">
           <img
             className="profile-image"
@@ -315,55 +524,105 @@ class Profile extends React.Component {
           />
           <EditProfilePicture handler={this.showPopUp} />
           <h1 className="profile-name">User {userID}</h1>
-          {userID !== myUserId ? <FollowButton userID={userID} /> : null}
+          <button onClick={() => this.deleteFromBlockedList}>Unblock</button>
           <Settings />
         </div>
-
-        <div className="feed">
-          <div className="card sidebar">
-            <div className="BioRow">
-              <h1 className="left-text"> Bio </h1>
-              <EditBioButton />
+      ) : (
+        <main>
+          <div
+            className="popUpBackground"
+            style={{ display: this.state.hidden ? "none" : "flex" }}
+          >
+            <div className="popUpWindow">
+              <button
+                className="exitButton"
+                onClick={() => this.setState({ hidden: true })}
+              >
+                +
+              </button>
+              <h2>Change Profile Picture</h2>
+              <input
+                type="text"
+                placeholder="Paste Image or URL"
+                onChange={this.changePic}
+              ></input>
+              <img
+                id="image"
+                className="profile-image-large"
+                src={this.state.profileImageTemp}
+                alt=""
+              />
+              <button onClick={this.savePic}>Save Changes</button>
             </div>
-
-            <p className="left-text">
-              Duis aute irure dolor in reprehenderit in voluptate velit esse
-              cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-              cupidatat non proident, sunt in culpa qui officia deserunt mollit
-              anim id est laborum.
-            </p>
-
-            <div className="followRow">
-              <h1 className="left-text" id="followers">
-                Following
-              </h1>
-              <h2 className="following-count">
-                ({this.state.following.length})
-              </h2>
-            </div>
-            {list}
-
-            <div className = "followRow">
-              <h1 className="left-text" id="followers">
-                Followers
-              </h1>
-              <h2 className="following-count">
-                ({this.state.followers.length})
-              </h2>
-            </div>
-            {list2}
           </div>
 
-          <div className="profileFeed">
-            <NewPost />
-            <PostList fetchParams={{
-                action: 'getPosts',
-                userid: this.props.match.params.userID
-            }}/>
+          <div className="card profile">
+            <img
+              className="profile-image"
+              src={this.state.profileImage}
+              alt="Avatar"
+            />
+            <EditProfilePicture handler={this.showPopUp} />
+            <h1 className="profile-name">User {userID}</h1>
+            {userID !== myUserId ? <FollowButton userID={userID} /> : null}
+            {userID !== myUserId ? (
+              <button onClick={() => this.addToBlockedList(userID)}>
+                Block
+              </button>
+            ) : null}
+
+            <Settings />
           </div>
-        </div>
-      </main>
-    );
+
+          <div className="feed">
+            <div className="card sidebar">
+              <div className="BioRow">
+                <h1 className="left-text"> Bio </h1>
+                <EditBioButton />
+              </div>
+
+              <p className="left-text">
+                Duis aute irure dolor in reprehenderit in voluptate velit esse
+                cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
+                cupidatat non proident, sunt in culpa qui officia deserunt
+                mollit anim id est laborum.
+              </p>
+
+              <div className="followRow">
+                <h1 className="left-text" id="followers">
+                  Following
+                </h1>
+                <h2 className="following-count">
+                  ({this.state.following.length})
+                </h2>
+              </div>
+              {list}
+
+              <div className="followRow">
+                <h1 className="left-text" id="followers">
+                  Followers
+                </h1>
+                <h2 className="following-count">
+                  ({this.state.followers.length})
+                </h2>
+              </div>
+              {list2}
+            </div>
+
+            <div className="profileFeed">
+              <NewPost />
+              <PostList
+                fetchParams={{
+                  action: "getPosts",
+                  userid: this.props.match.params.userID,
+                }}
+              />
+            </div>
+          </div>
+        </main>
+      );
+
+    return retValue;
   }
 }
 

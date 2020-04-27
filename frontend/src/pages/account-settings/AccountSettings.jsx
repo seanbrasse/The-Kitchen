@@ -14,9 +14,11 @@ export default class AccountSettings extends React.Component {
     super(props);
     this.state = {
       posts: [],
+      blocked: [],
     };
   }
 
+  /*Deletes the user's profile */
   deleteProfile() {
     alert("Your account is being deleted....");
     var delayInMilliseconds = 1000; //1 second
@@ -42,6 +44,27 @@ export default class AccountSettings extends React.Component {
         if (response.Exception == null) {
           document.getElementById("logout").click();
         }
+      });
+  }
+
+  /*Gets the list of blocked users*/
+  blockedUsers() {
+    fetch("http://stark.cse.buffalo.edu/cse410/deldev/api/gmcontroller.php", {
+      method: "post",
+      body: JSON.stringify({
+        action: "getGroupMembers",
+        user_id: this.props.match.params.userID,
+        session_token: sessionStorage.getItem("token"),
+        gmid: 7 /* response.group_members
+          ? response.group_members[0].gm_id
+          : undefined */,
+      }),
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        /* if (data.connections != null) { //We shouldn't be using data.connections
+          this.setState({ blocked: [...data.connections] }); 
+        } */
       });
   }
 
@@ -74,11 +97,6 @@ export default class AccountSettings extends React.Component {
                 color="black"
               />
             </Link>
-
-            {/* <Link to="/settings" classname="Delete">
-              {""}
-              Delete Your Account
-            </Link> */}
           </div>
         </div>
       </main>
