@@ -5,6 +5,7 @@ import Recipe from '../recipe-components/Recipe'
 import Description from '../recipe-components/Description'
 import Title from '../recipe-components/Title'
 import Comment from './comment'
+import { MdStar } from 'react-icons/md';
 import {parseRecipe} from 'util/parseRecipe.js'
 
 export default class ViewRecipePage extends React.Component{
@@ -13,6 +14,7 @@ export default class ViewRecipePage extends React.Component{
     this.tagIDs = [];
 
     this.state = {
+      postID: 0,
       title: "",
       mainImage: "",
       description: "",
@@ -23,13 +25,22 @@ export default class ViewRecipePage extends React.Component{
       userid: null,
       tags: "",
       prepTime: 0,
-      cookTime: 0
+      cookTime: 0,
+      numberOfRatingsID: 0,
+      numberOfRatings: 0,
+      userRatingID: 0,
+      userRating: 0,
+      ratingID: 0,
+      rating: 0,
+      hover: 0
 		}
   }
 
   componentDidMount() {
     this.loadData(this.props.postID);
     this.loadTags(this.props.postID);
+    this.loadRating(this.props.postID);
+    this.setState({postID: this.props.postID});
   }
 
   componentDidUpdate(prevProps) {
@@ -168,7 +179,78 @@ export default class ViewRecipePage extends React.Component{
 
               this.tagIDs = this.tagIDs.concat(tagIDs);
         })
+  }
 
+  loadRating(postID){
+    fetch('http://stark.cse.buffalo.edu/cse410/deldev/api/ptcontroller.php', {
+        method: 'post',
+
+        body: JSON.stringify({
+            action: 'getPostTags',
+            postid: "" + postID,
+            tagtype: "Rating"
+            })
+        }).then(res => res.json()).then(parsedRes => {
+            var tagsArray = parsedRes['post_tags'];
+            var ratingID = 0;
+            var rating = 0;
+
+            if(tagsArray !== undefined){
+              rating = tagsArray[0].tag;
+              ratingID = tagsArray[0].post_tag_id;
+            }
+
+            this.setState({
+              ratingID: ratingID,
+              rating: rating
+            });
+    })
+    fetch('http://stark.cse.buffalo.edu/cse410/deldev/api/ptcontroller.php', {
+        method: 'post',
+
+        body: JSON.stringify({
+            action: 'getPostTags',
+            postid: "" + postID,
+            tagtype: "NumberOfRatings"
+            })
+        }).then(res => res.json()).then(parsedRes => {
+            var tagsArray = parsedRes['post_tags'];
+            var numberOfRatingsID = 0;
+            var numberOfRatings = 0;
+
+            if(tagsArray !== undefined){
+              numberOfRatings = tagsArray[0].tag;
+              numberOfRatingsID = tagsArray[0].post_tag_id;
+            }
+
+            this.setState({
+              numberOfRatingsID: numberOfRatingsID,
+              numberOfRatings: numberOfRatings
+            });
+    })
+    fetch('http://stark.cse.buffalo.edu/cse410/deldev/api/uacontroller.php', {
+        method: 'post',
+
+        body: JSON.stringify({
+        	action: "getUserArtifacts",
+        	userid: sessionStorage.getItem('userID'),
+        	artifactcategory: "" + postID
+        })
+        }).then(res => res.json()).then(parsedRes => {
+            var array = parsedRes['user_artifacts'];
+            var userRatingID = 0;
+            var userRating = 0;
+
+            if(array !== undefined){
+              userRatingID = array[0].artifact_id;
+              userRating = array[0].artifact_url;
+            }
+
+            this.setState({
+              userRatingID: userRatingID,
+              userRating: userRating
+            });
+    })
   }
 
   combineData(){
@@ -250,6 +332,135 @@ export default class ViewRecipePage extends React.Component{
     }
   }
 
+  addRating = (event) => {
+    var numberOfRatings = parseInt(this.state.numberOfRatings);
+    var userRating = parseInt(event.target.value);
+    var rating = parseFloat(this.state.rating);
+
+    if(this.state.userRating == 0){
+      rating = rating * numberOfRatings;
+      numberOfRatings++;
+      rating += userRating;
+      rating = rating / numberOfRatings;
+    }else{
+      rating = rating * numberOfRatings;
+      rating -= this.state.userRating;
+      rating += userRating;
+      rating = rating / numberOfRatings;
+    }
+
+    this.setState({
+      numberOfRatings: numberOfRatings,
+      userRating: userRating,
+      rating: rating
+    })
+
+    if(this.state.numberOfRatingsID != 0){
+      fetch('http://stark.cse.buffalo.edu/cse410/deldev/api/ptcontroller.php', {
+          method: 'post',
+
+          body: JSON.stringify({
+            action: 'addOrEditPostTags',
+            user_id: sessionStorage.getItem('userID'),
+            userid: sessionStorage.getItem('userID'),
+            session_token: sessionStorage.getItem('token'),
+            postid: this.state.postID,
+            tagtype: "NumberOfRatings",
+            tag: numberOfRatings,
+            posttagid: this.state.numberOfRatingsID
+          })
+      })
+    }else{
+      fetch('http://stark.cse.buffalo.edu/cse410/deldev/api/ptcontroller.php', {
+          method: 'post',
+
+          body: JSON.stringify({
+            action: 'addOrEditPostTags',
+            user_id: sessionStorage.getItem('userID'),
+            userid: sessionStorage.getItem('userID'),
+            session_token: sessionStorage.getItem('token'),
+            postid: this.state.postID,
+            tagtype: "NumberOfRatings",
+            tag: numberOfRatings
+          })
+      }).then(res => res.json()).then(parsedRes => {
+        this.setState({
+          numberOfRatingsID: parsedRes['Record Id']
+        })
+      })
+    }
+
+    if(this.state.ratingID != 0){
+      fetch('http://stark.cse.buffalo.edu/cse410/deldev/api/ptcontroller.php', {
+          method: 'post',
+
+          body: JSON.stringify({
+            action: 'addOrEditPostTags',
+            user_id: sessionStorage.getItem('userID'),
+            userid: sessionStorage.getItem('userID'),
+            session_token: sessionStorage.getItem('token'),
+            postid: this.state.postID,
+            tagtype: "Rating",
+            tag: rating,
+            posttagid: this.state.ratingID
+          })
+      })
+    }else{
+      fetch('http://stark.cse.buffalo.edu/cse410/deldev/api/ptcontroller.php', {
+          method: 'post',
+
+          body: JSON.stringify({
+            action: 'addOrEditPostTags',
+            user_id: sessionStorage.getItem('userID'),
+            userid: sessionStorage.getItem('userID'),
+            session_token: sessionStorage.getItem('token'),
+            postid: this.state.postID,
+            tagtype: "Rating",
+            tag: rating,
+          })
+      }).then(res => res.json()).then(parsedRes => {
+        this.setState({
+          ratingID: parsedRes['Record Id']
+        })
+      })
+    }
+
+    if(this.state.userRatingID != 0){
+      fetch('http://stark.cse.buffalo.edu/cse410/deldev/api/uacontroller.php', {
+          method: 'post',
+
+          body: JSON.stringify({
+          	action: "addOrEditUserArtifacts",
+          	userid: sessionStorage.getItem('userID'),
+          	user_id: sessionStorage.getItem('userID'),
+          	artifactid: this.state.userRatingID,
+          	session_token: sessionStorage.getItem('token'),
+          	artifacturl: userRating,
+          	artifactcategory: "" + this.state.postID,
+          	artifacttype: "userRating"
+          })
+      })
+    }else{
+        fetch('http://stark.cse.buffalo.edu/cse410/deldev/api/uacontroller.php', {
+            method: 'post',
+
+            body: JSON.stringify({
+            	action: "addOrEditUserArtifacts",
+            	userid: sessionStorage.getItem('userID'),
+            	user_id: sessionStorage.getItem('userID'),
+            	session_token: sessionStorage.getItem('token'),
+            	artifacturl: userRating,
+            	artifactcategory: "" + this.state.postID,
+            	artifacttype: "userRating"
+            })
+            }).then(res => res.json()).then(parsedRes => {
+              this.setState({
+                userRatingID: parsedRes['Record Id']
+              })
+        })
+    }
+  }
+
   render(){
     return(
       <div class="recipe-page">
@@ -265,6 +476,57 @@ export default class ViewRecipePage extends React.Component{
           <label for="textbox">Tags</label><br></br>
           <a>{this.state.tags}</a>
         </div>
+
+        <div className="clearDivStyle">
+          <label for="textbox">Rating</label><br></br>
+          <div className="starRatingContainer">
+            <div>
+              <form className="starRatingForm">
+                <input type="radio" id="1Star" name="rating" value="1" onClick={this.addRating}></input>
+                <label for="1Star">
+                <MdStar
+                  color={1 <= (this.state.hover || this.state.userRating || this.state.rating) ? "#fd0" : "lightgrey"}
+                  onMouseEnter={() => this.setState({hover: 1})}
+                  onMouseLeave={() => this.setState({hover: 0})}
+                />
+                </label>
+                <input type="radio" id="2Star" name="rating" value="2" onClick={this.addRating}></input>
+                <label for="2Star">
+                <MdStar
+                  color={2 <= (this.state.hover || this.state.userRating || this.state.rating) ? "#fd0" : "lightgrey"}
+                  onMouseEnter={() => this.setState({hover: 2})}
+                  onMouseLeave={() => this.setState({hover: 0})}
+                />
+                </label>
+                <input type="radio" id="3Star" name="rating" value="3" onClick={this.addRating}></input>
+                <label for="3Star">
+                <MdStar
+                  color={3 <= (this.state.hover || this.state.userRating || this.state.rating) ? "#fd0" : "lightgrey"}
+                  onMouseEnter={() => this.setState({hover: 3})}
+                  onMouseLeave={() => this.setState({hover: 0})}
+                />
+                </label>
+                <input type="radio" id="4Star" name="rating" value="4" onClick={this.addRating}></input>
+                <label for="4Star">
+                <MdStar
+                  color={4 <= (this.state.hover || this.state.userRating || this.state.rating) ? "#fd0" : "lightgrey"}
+                  onMouseEnter={() => this.setState({hover: 4})}
+                  onMouseLeave={() => this.setState({hover: 0})}
+                />
+                </label>
+                <input type="radio" id="5Star" name="rating" value="5" onClick={this.addRating}></input>
+                <label for="5Star">
+                <MdStar
+                  color={5 <= (this.state.hover || this.state.userRating || this.state.rating) ? "#fd0" : "lightgrey"}
+                  onMouseEnter={() => this.setState({hover: 5})}
+                  onMouseLeave={() => this.setState({hover: 0})}
+                />
+                </label>
+              </form>
+            </div>
+          </div>
+        </div>
+
       </div>
       <div className="tagsContainer">
         <div className="totalTime">
@@ -288,6 +550,15 @@ export default class ViewRecipePage extends React.Component{
       <RecipeHeader>Recipe</RecipeHeader>
       <Recipe recipe={this.state.recipe}/>
       <Comment/>
+
+      <p>
+      numberOfRatingsID: {this.state.numberOfRatingsID}<br></br>
+      numberOfRatings: {this.state.numberOfRatings}<br></br>
+      userRatingID: {this.state.userRatingID}<br></br>
+      userRating: {this.state.userRating}<br></br>
+      ratingID: {this.state.ratingID}<br></br>
+      rating: {this.state.rating}<br></br>
+      </p>
       </div>
       </div>
     )

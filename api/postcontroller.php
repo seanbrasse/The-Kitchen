@@ -75,6 +75,10 @@ if (isValidJSON($json_params)) {
     if (array_key_exists('offset', $decoded_params)) {
         $offset =  $decoded_params['offset'];
     }
+    $showUserPosts = "false";
+    if (array_key_exists('showuserposts', $decoded_params)) {
+        $showUserPosts =  $decoded_params['showuserposts'];
+    }
     $tagFilters = "";
     if (array_key_exists('tag_filters', $decoded_params)) {
         $tagFilters = $decoded_params['tag_filters'];
@@ -111,10 +115,10 @@ if (isValidJSON($json_params)) {
                     $json['Exception'] =  $e->getMessage();
                 }
             } else {
-                $sql = "UPDATE posts SET user_id = ?,post_type = ?,timestamp = ?,post_text = ?,post_pic_url = ?,comment_flag = ?,parent_id = ? WHERE post_id = ?; ";
+                $sql = "UPDATE posts SET user_id = ?,post_type = ?,timestamp = now(),post_text = ?,post_pic_url = ?,comment_flag = ?,parent_id = ? WHERE post_id = ?; ";
                 array_push($args, $userId);
                 array_push($args, $postType);
-                array_push($args, $timestamp);
+                
                 array_push($args, $postText);
                 array_push($args, $postPicUrl);
                 array_push($args, $commentFlag);
@@ -164,8 +168,8 @@ if (isValidJSON($json_params)) {
         }
     } elseif ($action == "getPosts") {
         $args = array();
-        $sql = "SELECT posts.*, users.name FROM posts, users where posts.user_id = users.user_id ";
-        $first = false;
+        $sql = "SELECT posts.*, users.name FROM posts left join users on posts.user_id = users.user_id ";
+        $first = true;
         if (!IsNullOrEmpty($postId)) {
             if ($first) {
                 $sql .= " WHERE post_id = ? ";
@@ -267,13 +271,14 @@ if (isValidJSON($json_params)) {
         if (!IsNullOrEmpty($tagFilters) && is_array($tagFilters)) {
             foreach ($tagFilters as $filter) {
                 if (is_array($filter)) {
-                    $include = true;
-                    if (array_key_exists('include', $filter)) $include = $filter['include'];
+                    $method = 'include';
+                    if (array_key_exists('method', $filter)) $method = $filter['method'];
                     $tag = "";
                     if (array_key_exists('tag', $filter)) $tag = $filter['tag'];
                     $tagType= "";
-                    if (array_key_exists('type', $filter)) $type = $filter['type'];
-                    if (!IsNullOrEmpty($tag) || !IsNullOrEmpty($tagType)) {
+                    if (array_key_exists('type', $filter)) $tagType = $filter['type'];
+                    
+                    if (!IsNullOrEmpty($tag) || (!IsNullOrEmpty($tagType) && ($method == 'include' || $method == 'exclude'))) {
                         if ($first) {
                             $sql .= " WHERE ";
                             $first = false;
@@ -281,17 +286,26 @@ if (isValidJSON($json_params)) {
                             $sql .= " AND ";
                         }
                         
-                        if ($include == false) $sql .= "not ";
+                        if ($method == 'exclude') $sql .= "not ";
 
                         $sql .= "exists (select 'x' from post_tags pt where pt.post_id = posts.post_id";
+
+                        if (!IsNullOrEmpty($tagType)) {
+                            $sql .= " and pt.tag_type=?";
+                            array_push($args, $tagType);
+                        }
                         
                         if (!IsNullOrEmpty($tag)) {
-                            $sql .= " and pt.tag=?";
-                            array_push($args, $tag);
-                        }
-                        if (!IsNullOrEmpty($tagType)) {
-                            $sql .= "and pt.tag_type=?";
-                            array_push($args, $tagType);
+                            if ($method == 'include' || $method == 'exclude') {
+                                $sql .= " and pt.tag=?";
+                                array_push($args, $tag);
+                            } else if ($method == 'min') {
+                                $sql .= " and CAST(pt.tag as int)>=?";
+                                array_push($args, $tag);
+                            } else if ($method == 'max') {
+                                $sql .= " and CAST(pt.tag as int)<=?";
+                                array_push($args, $tag);
+                            }
                         }
 
                         $sql .= ") ";
@@ -324,8 +338,17 @@ if (isValidJSON($json_params)) {
         }
     } elseif ($action == "getConnectionPosts") {
         $args = array();
-        $sql = "SELECT * FROM posts where user_id in (SELECT connect_user_id from connections where user_id = ?) ";
+        $sql = "SELECT posts.*, users.name FROM posts, users where posts.user_id = users.user_id   ";
+
+        if ($showUserPosts == "true") {
+            $sql .= "and (posts.user_id in (SELECT distinct connect_user_id from connections where connections.user_id = ?) OR posts.user_id = ?)";
+            array_push($args, $userId);
+        } else {
+            $sql .= "and posts.user_id in (SELECT distinct connect_user_id from connections where connections.user_id = ?)";
+        }
+
         array_push($args, $userId);
+
         $first = false;
         if (!IsNullOrEmpty($postId)) {
             if ($first) {
@@ -392,10 +415,10 @@ if (isValidJSON($json_params)) {
             array_push($args, $parentId);
         } else {
             if ($first) {
-                $sql .= " WHERE parent_id IS NULL ";
+                $sql .= " WHERE (parent_id is null or parent_id =  0)  ";
                 $first = false;
             } else {
-                $sql .= " AND parent_id IS NULL ";
+                $sql .= " AND (parent_id is null or parent_id =  0) ";
             }
         }
 
