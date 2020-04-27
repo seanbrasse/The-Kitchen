@@ -168,7 +168,7 @@ if (isValidJSON($json_params)) {
         }
     } elseif ($action == "getPosts") {
         $args = array();
-        $sql = "SELECT posts.*, users.name FROM posts, users where posts.user_id = users.user_id ";
+        $sql = "SELECT posts.*, users.name FROM posts left join users on posts.user_id = users.user_id ";
         $first = false;
         if (!IsNullOrEmpty($postId)) {
             if ($first) {
