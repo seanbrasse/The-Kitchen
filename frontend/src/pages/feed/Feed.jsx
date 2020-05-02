@@ -20,7 +20,9 @@ export default class Feed extends React.Component {
         return (
             <main>
                 <h1 className= "feed-type">FEED</h1>
-                <PostList fetchParams={this.state.fetchParams} className={styles.recipeList}/>
+                <div className={styles.listWrapper}>
+                    <PostList fetchParams={this.state.fetchParams} className/>
+                </div>
             </main>
         );
     }

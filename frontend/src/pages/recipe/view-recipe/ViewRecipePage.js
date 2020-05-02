@@ -32,7 +32,9 @@ export default class ViewRecipePage extends React.Component{
       userRating: 0,
       ratingID: 0,
       rating: 0,
-      hover: 0
+      hover: 0,
+      header: ["title", "description", "ingredients", "recipe", "comments"],
+      headerIndex: 0
 		}
   }
 
@@ -381,6 +383,18 @@ export default class ViewRecipePage extends React.Component{
     </div>;
   }
 
+  nextHeader = () => {
+    if(this.state.headerIndex != 4){
+      this.setState({
+        headerIndex: this.state.headerIndex + 1
+      });
+    }else{
+      this.setState({
+        headerIndex: 0
+      });
+    }
+  }
+
   addRating = (event) => {
     var numberOfRatings = parseInt(this.state.numberOfRatings);
     var userRating = parseInt(event.target.value);
@@ -514,6 +528,13 @@ export default class ViewRecipePage extends React.Component{
     return(
       <div class="recipe-page">
       <div class="recipe-content">
+      <div id={"/recipe/" + this.state.postID + "/#title"}></div>
+
+      <div className="bottomCorner">
+        <a href={"#/recipe/" + this.state.postID + "/#title"}><button>Top</button></a>
+        <a href={"#/recipe/" + this.state.postID + "/#" + this.state.header[this.state.headerIndex]}><button onClick={this.nextHeader}>Next</button></a>
+      </div>
+
       <Title
         title={this.state.title} image={this.state.mainImage}
         canEdit={this.state.userid === sessionStorage.getItem('userID')}
@@ -547,22 +568,20 @@ export default class ViewRecipePage extends React.Component{
         </div>
       </div>
 
+      <div id={"/recipe/" + this.state.postID + "/#description"}></div>
       <RecipeHeader>Description</RecipeHeader>
       <Description description={this.state.description}/>
+
+      <div id={"/recipe/" + this.state.postID + "/#ingredients"}></div>
       <RecipeHeader>Ingredients</RecipeHeader>
       <IngredientsList ingredients={this.state.ingredients}/>
+
+      <div id={"/recipe/" + this.state.postID + "/#recipe"}></div>
       <RecipeHeader>Recipe</RecipeHeader>
       <Recipe recipe={this.state.recipe}/>
-      <Comment/>
 
-      <p>
-      numberOfRatingsID: {this.state.numberOfRatingsID}<br></br>
-      numberOfRatings: {this.state.numberOfRatings}<br></br>
-      userRatingID: {this.state.userRatingID}<br></br>
-      userRating: {this.state.userRating}<br></br>
-      ratingID: {this.state.ratingID}<br></br>
-      rating: {this.state.rating}<br></br>
-      </p>
+      <div id={"/recipe/" + this.state.postID + "/#comments"}></div>
+      <Comment/>
       </div>
       </div>
     )

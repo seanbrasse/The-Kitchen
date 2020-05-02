@@ -18,11 +18,11 @@ export default class CommentForm extends React.Component {
 
     //make the api call to the authentication page
     fetch("http://stark.cse.buffalo.edu/cse410/deldev/api/postcontroller.php", {
-   
+
       method: "post",
       body: JSON.stringify({
         action: "addOrEditPosts",
-        user_id: sessionStorage.getItem("user"),
+        user_id: sessionStorage.getItem("userID"),
         session_token: sessionStorage.getItem("token"),
         posttext: this.state.post_text,
         parentid: this.props.parent
@@ -31,6 +31,10 @@ export default class CommentForm extends React.Component {
       .then(res => res.json())
       .then(
         result => {
+          if (this.state.socket) {
+            this.state.socket.emit('newComment', { room: this.state.imageName, comment: this.state.post_text });
+        }
+
           // update the count in the UI manually, to avoid a database hit
           //this.props.onAddComment(this.props.commentCount + 1);
           this.postListing.current.loadPosts();
@@ -43,7 +47,7 @@ export default class CommentForm extends React.Component {
 
   myChangeHandler = event => {
     this.setState({
-      post_text: event.target.value
+     post_text: event.target.value
     });
   };
 
@@ -53,9 +57,8 @@ export default class CommentForm extends React.Component {
         <form onSubmit={this.submitHandler}>
           <label>
             Add A Comment to Post {this.props.parent}
-            <br />  <textarea rows="10" cols="70" onChange={this.myChangeHandler} />
+            <br />   <textarea className="newComment" placeholder="Comment here..." onChange={this.myChangeHandler}  />
           </label>
-          
           <br />
 
           <input type="submit" value="submit" />

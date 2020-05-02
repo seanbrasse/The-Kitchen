@@ -791,10 +791,6 @@ export default class EditRecipePage extends React.Component{
         id="smallButton"
         onClick={this.uploadDataPrivate}
       >Upload Private</button>
-
-      <h3>{"TitleID: " + this.state.titleID}</h3>
-      <h3>{"PostID: " + this.state.postID}</h3>
-      <h3>{"MessageID: " + this.state.messageID}</h3>
       </div>
       </div>
     )
