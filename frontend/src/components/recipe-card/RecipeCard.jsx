@@ -35,7 +35,7 @@ export default class RecipeCard extends React.Component {
                                 <FontAwesomeIcon
                                 icon={faEdit}
                                 size="1x"
-                                color="black"
+                                color="black" 
                                 ></FontAwesomeIcon>
                             </Link>
                             <FontAwesomeIcon

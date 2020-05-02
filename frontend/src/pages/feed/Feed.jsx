@@ -17,7 +17,7 @@ export default class Feed extends React.Component {
     }
     
     render() {
-        return (
+        return ( 
             <main>
                 <h1 className= "feed-type">FEED</h1>
                 <PostList fetchParams={this.state.fetchParams} className={styles.recipeList}/>
