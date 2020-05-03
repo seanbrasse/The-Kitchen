@@ -1,5 +1,5 @@
 import React from "react";
-import "./comment.css";
+import "./comment.css"
 import CommentForm from "./comment.js";
 
 export default class Post extends React.Component {

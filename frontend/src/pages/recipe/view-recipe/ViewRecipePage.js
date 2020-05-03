@@ -7,7 +7,7 @@ import Title from '../recipe-components/Title'
 import styles from '../recipe-components/recipe.css'
 import Postform from './PostForm.js'
 import Comment from './comment.js'
-
+import Post from './Post.js'
 import {parseRecipe} from 'util/parseRecipe.js';
 import PostForm from './PostForm'
 export default class ViewRecipePage extends React.Component{
@@ -46,6 +46,7 @@ export default class ViewRecipePage extends React.Component{
               this.setState({description: recipe.description});
               this.setState({ingredients: recipe.ingredients});
               this.setState({recipe: recipe.recipe});
+             
       })
   }
 
@@ -138,8 +139,8 @@ export default class ViewRecipePage extends React.Component{
       <IngredientsList ingredients={this.state.ingredients}/>
       <RecipeHeader>Recipe</RecipeHeader>
       <Recipe recipe={this.state.recipe}/>
-      <Comment/>
-      
+      <RecipeHeader>Comment</RecipeHeader>
+      <Comment parent={this.props.postID}/>
       </div>
       </div>
     )
