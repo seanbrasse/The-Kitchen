@@ -93,9 +93,9 @@ export default class AccountSettings extends React.Component {
       list.push(<h3>No Blocked Users</h3>);
     }
     return (
-      <main>
-        <div className="TheBox">
-          <h1 className="Header">ACCOUNT SETTINGS</h1>
+      <main className="TheBoxContainer">
+        <div className="TheBox card">
+          <h1 className="Header">Account Settings</h1>
           <br />
           <Link to="/forgot-password" className="ChangePassword">
             {" "}
@@ -107,8 +107,10 @@ export default class AccountSettings extends React.Component {
             Change Your Username
           </Link>
           <div className="BlockedList">
-            <h1>Blocked Users</h1>
+            <h2>Blocked Users</h2>
+            <ul class="unstyled">
             {list}
+            </ul>
           </div>
           <div className="Delete">
             <h2 className="DeleteAccount">Delete Your Account</h2>

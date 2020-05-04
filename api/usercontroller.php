@@ -207,6 +207,16 @@ if (isValidJSON($json_params)) {
                     $count = $statement->rowCount();
                     if ($count > 0) {
                         $json['Status'] = "SUCCESS - Deleted $count Rows";
+
+                        $sql2 = "DELETE FROM posts WHERE user_id = ?";
+                        $statement = $conn->prepare($sql2);
+                        $statement->execute($args);
+                        $count = $statement->rowCount();
+                        if ($count > 0) {
+                            $json['Status'] = "SUCCESS - Deleted $count Rows";
+                        } else {
+                            $json['Status'] = "ERROR - Deleted 0 Rows - Check for Valid Ids ";
+                        }
                     } else {
                         $json['Status'] = "ERROR - Deleted 0 Rows - Check for Valid Ids ";
                     }

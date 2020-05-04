@@ -3,6 +3,7 @@ export { default as CreateAccount } from './auth/create-account/CreateAccount';
 export { default as ForgotPassword } from './auth/forgot-password/ForgotPassword';
 export { default as Login } from './auth/login/Login';
 export { default as ResetPassword } from './auth/reset-password/ResetPassword';
+export { default as FinalizeAccount } from './auth/reset-password/FinalizeAccount';
 export { default as Feed } from './feed/Feed';
 export { default as Profile } from './profile/Profile';
 export { default as EditRecipe } from './recipe/edit-recipe/EditRecipe';

@@ -73,7 +73,7 @@ export default class Post extends React.Component {
         key={this.props.post.post_id}
         className={[this.props.type, "postbody"].join(" ")}
       >
-        {this.props.post.name} {this.props.post.timestamp} <br />{" "}
+        <span style={{fontWeight: 'bold'}}>{this.props.post.name} commented at {this.props.post.timestamp}</span> <br />{" "}
         {this.props.post.post_text}
         {this.conditionalDisplay()}
       </div>

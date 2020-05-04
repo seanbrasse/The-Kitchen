@@ -24,6 +24,7 @@ export default class CommentForm extends React.Component {
       body: JSON.stringify({
         action: "addOrEditPosts",
         user_id: sessionStorage.getItem("userID"),
+        userid: sessionStorage.getItem("userID"),
         session_token: sessionStorage.getItem("token"),
         posttext: this.state.post_text,
         parentid: this.props.parent

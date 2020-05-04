@@ -11,6 +11,7 @@ import {
   ForgotPassword,
   Login,
   ResetPassword,
+  FinalizeAccount,
   Feed,
   Profile,
   EditRecipe,
@@ -53,7 +54,7 @@ export default function App() {
     <div className={styles.app}>
       <Router>
         <Switch>
-          <Route exact path={['/', '/login', '/create-account', '/reset-password', '/change-password', '/forgot-password']}></Route>
+          <Route exact path={['/', '/login', '/create-account', '/reset-password', '/change-password', '/forgot-password', '/finalize-account']}></Route>
           <Route>
             <Navbar/>
           </Route>
@@ -70,6 +71,9 @@ export default function App() {
           </Route>
           <LoginRoute exact path='/reset-password'>
             <ResetPassword/>
+          </LoginRoute>
+          <LoginRoute exact path='/finalize-account'>
+            <FinalizeAccount/>
           </LoginRoute>
           <AuthenticatedRoute exact path='/feed'>
             <Feed/>

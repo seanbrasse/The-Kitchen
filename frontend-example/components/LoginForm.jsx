@@ -59,7 +59,7 @@ export default class LoginForm extends React.Component {
           }
         },
         error => {
-          alert("error!");
+          //alert("error!");
         }
       );
   };

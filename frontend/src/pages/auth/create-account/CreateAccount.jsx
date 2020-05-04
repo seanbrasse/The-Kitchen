@@ -58,7 +58,7 @@ class CreateAccount extends React.Component {
             })
         }).then(res => res.json()).then(
             response => {
-                this.props.history.replace('/reset-password')
+                this.props.history.replace('/finalize-account')
             }
         );
     }
