@@ -83,6 +83,10 @@ if (isValidJSON($json_params)) {
     if (array_key_exists('tag_filters', $decoded_params)) {
         $tagFilters = $decoded_params['tag_filters'];
     }
+    $sort = "new";
+    if (array_key_exists('sort', $decoded_params)) {
+        $sort = $decoded_params['sort'];
+    }
     if ($action == "addOrEditPosts") {
         if (validateAPIKey($authUserId, $sessionToken)) {
             $args = array();
@@ -314,7 +318,13 @@ if (isValidJSON($json_params)) {
             }
         }
 
-        $sql .= " order by timestamp desc ";
+        if ($sort == "new") {
+            $sql .= " order by timestamp desc ";
+        } else if ($sort == "old") {
+            $sql .= " order by timestamp asc ";
+        } else if ($sort == "top") {
+            $sql .= " order by (SELECT CAST(pt.tag as int) from post_tags pt where pt.post_id = posts.post_id and pt.tag_type = 'Rating')";
+        }
 
         if (!IsNullOrEmpty($maxPosts)) {
             if (!IsNullOrEmpty($offset)) {

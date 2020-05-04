@@ -9,6 +9,7 @@ export default class Search extends React.Component {
         this.state = {
             posts: [],
             search: '',
+            sort: 'new',
             excludeIngredients: '',
             tags: '',
             minPrepTime: null,
@@ -45,6 +46,7 @@ export default class Search extends React.Component {
                         this.setState(prevState => ({fetchParams:{
                             ...prevState.fetchParams,
                             posttext: prevState.search,
+                            sort: prevState.sort,
                             tag_filters: this.genTagFilters(prevState)
                         }}));
                         e.preventDefault();
@@ -61,6 +63,14 @@ export default class Search extends React.Component {
                         <PostList fetchParams={this.state.fetchParams} className={styles.recipeList}/>
                         <div className={`card ${styles.extraSearch}`}>
                             <h3>Search Details</h3>
+                            <label htmlFor="order">Order By</label><br/>
+                            <select name="order" value={this.state.sort} onChange={e => this.setState({sort: e.target.value})}>
+                                <option value="new">Newest</option>
+                                <option value="old">Oldest</option>
+                                <option value="top">Highest Rated</option>
+                            </select>
+                            <br/><br/>
+
                             <label htmlFor="tags">Tags</label><br/>
                             <input name="tags" type="text" onChange={e => this.setState({tags: e.target.value})}/>
                             <br/><br/>

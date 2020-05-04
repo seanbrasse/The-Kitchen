@@ -10,6 +10,7 @@
 
 :local(.listWrapper) {
     min-width: 0;
+    flex-grow: 1;
 }
 
 :local(.listWrapper ul) {

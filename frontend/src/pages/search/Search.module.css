@@ -22,3 +22,11 @@
     height: min-content;
     margin-left: 20px;
 }
+
+select {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 5px 0;
+    width: 100%;
+    background: white;
+}
