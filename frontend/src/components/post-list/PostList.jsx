@@ -92,7 +92,7 @@ export default class PostList extends React.Component {
                                 this.state.posts.map(post => {
                                     const recipe = parseRecipe(post.post_text);
                                     return (
-                                        <li key={post.post_id} className={`${styles.cardli} ${sessionStorage.getItem('smallCards') ? styles.small : ''}`}>
+                                        <li key={post.post_id} className={`${styles.cardli} ${styles.small}`}>
                                             <RecipeCard
                                                 recipeID={post.post_id}
                                                 title={recipe.title}

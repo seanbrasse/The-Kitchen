@@ -19,15 +19,6 @@ class Navbar extends React.Component {
     this.props.history.replace("/");
   }
 
-  swapAB() {
-    if (sessionStorage.getItem("smallCards")) {
-      sessionStorage.removeItem("smallCards");
-    } else {
-      sessionStorage.setItem("smallCards", true);
-    }
-    window.location.reload();
-  }
-
   render() {
     return (
       <nav className={styles.navbar}>
@@ -49,17 +40,6 @@ class Navbar extends React.Component {
           <div className={styles.rightNav}>
             {sessionStorage.getItem("userID") ? (
               <Fragment>
-                <li>
-                  <NavLink
-                    to="#"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      this.swapAB();
-                    }}
-                  >
-                    Swap AB Test
-                  </NavLink>
-                </li>
                 <li>
                   <NavLink to={"/recipe/create"}>Create Post</NavLink>
                 </li>

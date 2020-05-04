@@ -27,7 +27,7 @@ export default class RecipeCard extends React.Component {
 
     render() {
         return (
-            <article className={`card ${styles.card} ${sessionStorage.getItem('smallCards') ? styles.small : ''}`}>
+            <article className={`card ${styles.card} ${styles.small}`}>
                 {
                     this.props.userid === sessionStorage.getItem('userID') ? 
                         <React.Fragment>
