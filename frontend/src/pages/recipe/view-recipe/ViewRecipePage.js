@@ -34,7 +34,8 @@ export default class ViewRecipePage extends React.Component{
       rating: 0,
       hover: 0,
       header: ["title", "description", "ingredients", "recipe", "comments"],
-      headerIndex: 0
+      headerIndex: 0,
+      name: ''
 		}
   }
 
@@ -55,7 +56,8 @@ export default class ViewRecipePage extends React.Component{
         recipe: [[], []],
         content: "",
         editMode: false,
-        userid: null
+        userid: null,
+        name: ''
       });
       this.loadData(this.props.postID);
     }
@@ -72,7 +74,8 @@ export default class ViewRecipePage extends React.Component{
           this.setState({
             content: parsedRes.posts[0].post_text,
             mainImage: parsedRes.posts[0].post_pic_url,
-            userid: parsedRes.posts[0].user_id
+            userid: parsedRes.posts[0].user_id,
+            name: parsedRes.posts[0].name
           });
           var recipe = parseRecipe(this.state.content);
           this.setState({title: recipe.title});
@@ -536,7 +539,7 @@ export default class ViewRecipePage extends React.Component{
       </div>
 
       <Title
-        title={this.state.title} image={this.state.mainImage}
+        title={this.state.title} image={this.state.mainImage} name={this.state.name} userid={this.state.userid}
         canEdit={this.state.userid === sessionStorage.getItem('userID')}
         postID={this.props.postID}
       />

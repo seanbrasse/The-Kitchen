@@ -52,7 +52,7 @@ export default class RecipeCard extends React.Component {
                 </div>
                 <div className={styles.infoCol}> 
                     <div className={styles.topInfo}>
-                        <Link to={`/recipe/${this.props.recipeID}`}><h2>{this.props.title}</h2></Link>
+                        <Link to={`/recipe/${this.props.recipeID}`}><h2>{this.props.title}</h2></Link><br/>
                         <span>By <Link to={`/user/${this.props.userid}`}>{this.props.username}</Link></span>
                        
                         
@@ -71,7 +71,7 @@ export default class RecipeCard extends React.Component {
                             */
                         }
                         <p>
-                            {this.props.description}
+                            {/*this.props.description*/}
                         </p>
                     </div>
                     <div className={styles.bottomInfo}>

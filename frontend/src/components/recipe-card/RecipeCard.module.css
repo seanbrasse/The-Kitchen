@@ -12,7 +12,7 @@
 
 :local(.card.small) {
     width: 250px;
-    height: 350px;
+    height: 300px;
     flex-direction: column;
 }
 

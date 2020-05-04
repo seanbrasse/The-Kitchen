@@ -33,6 +33,7 @@ class Profile extends React.Component {
       bio: "",
       bioTemp: "",
       bioID: 7,
+      name: ''
     };
   }
 
@@ -488,8 +489,23 @@ class Profile extends React.Component {
     this.setState({ profileImageTemp: event2.target.value });
   };
 
+  updateName() {
+    fetch("http://stark.cse.buffalo.edu/cse410/deldev/api/usercontroller.php", {
+      method: "post",
+      body: JSON.stringify({
+        action: "getUsers",
+        userid: this.props.match.params.userID
+      })
+    }).then(res => res.json()).then(res => {
+      if (res && res.users && res.users[0]) {
+        this.setState({name: res.users[0].name})
+      }
+    })
+  }
+
   /*Updates the page*/
   componentDidMount() {
+    this.updateName();
     this.updateFollowed();
     this.getFollowing();
     this.getFollowers();
@@ -512,8 +528,10 @@ class Profile extends React.Component {
         bioID: 0,
         bio: 0, //nonono
         bioTemp: 0, //nonono
+        name: ''
       });
       this.setState({ loadingFollowStatus: true });
+      this.updateName();
       this.updateFollowed();
       this.getFollowing();
       this.getFollowers();
@@ -539,7 +557,7 @@ class Profile extends React.Component {
           <Link to={`/user/${element.connect_user_id}`}>
             <button className="follow" key={i}>
               <Link to={`/user/${element.connect_user_id}`}>
-                {`User ${element.connect_user_id}`}
+                {`${element.name}`}
               </Link>
               <FontAwesomeIcon
                 icon={faEllipsisV}
@@ -564,7 +582,7 @@ class Profile extends React.Component {
             <button className="follow" key={j}>
               <Link to={`/user/${element.user_id}`}>
                 {" "}
-                {`User ${element.user_id}`}
+                {`${element.user_name}`}
               </Link>
               <FontAwesomeIcon
                 icon={faEllipsisV}
@@ -664,7 +682,7 @@ class Profile extends React.Component {
             alt="Avatar"
           />
           <EditProfilePicture handler={this.showPopUp} />
-          <h1 className="profile-name">User {userID}</h1>
+          <h1 className="profile-name">{this.state.name}</h1>
           <button onClick={() => this.deleteFromBlockedList()}>Unblock</button>
           <Settings />
         </div>
@@ -704,7 +722,7 @@ class Profile extends React.Component {
               alt="Avatar"
             />
             <EditProfilePicture handler={this.showPopUp} />
-            <h1 className="profile-name">User {userID}</h1>
+            <h1 className="profile-name">{this.state.name}</h1>
             {userID !== myUserId ? <FollowButton userID={userID} /> : null}
             {userID !== myUserId ? (
               <button onClick={() => this.addToBlockedList(userID)}>

@@ -38,7 +38,8 @@ const Title = (props) => {
             </Link></Fragment> : null
         }
       </h1>
-      <img src={props.image} alt="Recipe dish"/>
+      <h2 style={{textAlign: 'center'}}>By <Link to={`/user/${props.userid}`}>{props.name}</Link></h2>
+      <img src={props.image} alt="Recipe dish" style={{height: '400px', objectFit: 'cover'}}/>
       </div>
     )
   }
