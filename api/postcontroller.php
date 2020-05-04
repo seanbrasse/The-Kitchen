@@ -323,7 +323,7 @@ if (isValidJSON($json_params)) {
         } else if ($sort == "old") {
             $sql .= " order by timestamp asc ";
         } else if ($sort == "top") {
-            $sql .= " order by (SELECT CAST(pt.tag as int) from post_tags pt where pt.post_id = posts.post_id and pt.tag_type = 'Rating')";
+            $sql .= " order by (SELECT CAST(pt.tag as int) from post_tags pt where pt.post_id = posts.post_id and pt.tag_type = 'Rating') desc";
         }
 
         if (!IsNullOrEmpty($maxPosts)) {
