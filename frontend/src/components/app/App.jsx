@@ -65,9 +65,9 @@ export default function App() {
           <LoginRoute exact path='/create-account'>
             <CreateAccount/>
           </LoginRoute>
-          <LoginRoute exact path='/forgot-password'>
+          <Route exact path='/forgot-password'>
             <ForgotPassword/>
-          </LoginRoute>
+          </Route>
           <LoginRoute exact path='/reset-password'>
             <ResetPassword/>
           </LoginRoute>
