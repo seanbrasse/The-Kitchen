@@ -61,7 +61,7 @@ export default class CommentForm extends React.Component {
         <form onSubmit={this.submitHandler}>
           <label>
             Add A Comment to Post {this.props.parent}
-            <br />   <textarea className="newComment" placeholder="Comment here..." onChange={this.myChangeHandler}  />
+            <br />   <textarea className="newComment" placeholder="Comment here..." onChange={this.myChangeHandler} value={this.state.post_text} />
           </label>
           <br />
 

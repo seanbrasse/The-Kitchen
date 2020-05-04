@@ -9,13 +9,13 @@ const RecipeHeader = (props) => {
   if(buttons && props.type === "edit"){
     return(
       <div className="recipe-header">
-        <h1>{props.children}{props.buttons.map((b, i) => <button className="largeButton" key={i} name={i} onClick={props.handle}>{b}</button>)}</h1>
+        <h2>{props.children}{props.buttons.map((b, i) => <button className="largeButton" key={i} name={i} onClick={props.handle}>{b}</button>)}</h2>
       </div>
     )
   }else{
     return(
       <div className="recipe-header">
-        <h1>{props.children}</h1>
+        <h2>{props.children}</h2>
       </div>
     )
   }

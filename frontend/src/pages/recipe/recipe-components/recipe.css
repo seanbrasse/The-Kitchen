@@ -82,7 +82,7 @@ html {
 }
 
 /*----------------RecipeHeader----------------*/
-.recipe-header h1{
+.recipe-header h2{
   background-color: #FFA357;
   border-radius: 2px;
   padding: 5px;
