@@ -4,19 +4,10 @@ import IngredientsList from '../recipe-components/IngredientsList'
 import Recipe from '../recipe-components/Recipe'
 import Description from '../recipe-components/Description'
 import Title from '../recipe-components/Title'
-<<<<<<< HEAD
 import Comment from './comment'
 import { MdStar } from 'react-icons/md';
 import {parseRecipe} from 'util/parseRecipe.js'
 
-=======
-import styles from '../recipe-components/recipe.css'
-import Postform from './PostForm.js'
-import Comment from './comment.js'
-import Post from './Post.js'
-import {parseRecipe} from 'util/parseRecipe.js';
-import PostForm from './PostForm'
->>>>>>> origin/comments
 export default class ViewRecipePage extends React.Component{
   constructor(props){
     super(props);
