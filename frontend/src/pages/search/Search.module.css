@@ -16,6 +16,7 @@
 :local(.listWrapper) {
     display: flex;
     margin: 20px 30px;
+    width: 100%;
 }
 
 :local(.extraSearch) {

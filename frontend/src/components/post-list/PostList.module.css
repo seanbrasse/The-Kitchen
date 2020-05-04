@@ -4,10 +4,16 @@
 
 :local(.cardli.small) {
     display: inline-block;
-    margin: 10px 10px;
+    margin: 0 10px 10px 10px;
     overflow: hidden;
 }
 
 :local(.listWrapper) {
-    flex-grow: 1;
+    min-width: 0;
+}
+
+:local(.listWrapper ul) {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
 }
