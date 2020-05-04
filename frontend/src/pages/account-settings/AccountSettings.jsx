@@ -19,7 +19,7 @@ export default class AccountSettings extends React.Component {
   }
 
   /*Deletes the user's profile */
-  deleteProfile() {
+  deleteProfile() { 
     alert("Your account is being deleted....");
     var delayInMilliseconds = 1000; //1 second
     setTimeout(function () {}, delayInMilliseconds);

@@ -22,6 +22,7 @@ class Profile extends React.Component {
       followers: [],
       following: [],
       hidden: true,
+      hiddenEdit: true,
       picID: 0,
       profileImageTemp: avatar,
       profileImage: avatar,
@@ -29,6 +30,9 @@ class Profile extends React.Component {
       currentlyFollowed: false,
       loadingFollowStatus: true,
       connectionID: undefined,
+      bio: "",
+      bioTemp: "",
+      bioID: 7,
     };
   }
 
@@ -337,6 +341,113 @@ class Profile extends React.Component {
       });
   }
 
+  /*Edit Bio */
+  updateFunc(paramUser, paramBio) {
+    var bio = document.getElementById("bioArea");
+    var bioMessage = bio.children[1].value;
+    // console.log(bioMessage);
+    // console.log(bio);
+
+    fetch("http://stark.cse.buffalo.edu/cse410/deldev/api/uacontroller.php", {
+      method: "post",
+      body: JSON.stringify({
+        action: "getUserArtifacts",
+        userid: sessionStorage.getItem("userID"),
+        posttype: "Recipe",
+        artifacttype: "bio",
+      }),
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        // console.log("Got response");
+        if (response.user_artifacts !== undefined) {
+          // console.log("Exists");
+          // console.log(response.user_artifacts[response.user_artifacts.length-1].artifact_id);
+          this.setState({
+            bioID:
+              response.user_artifacts[response.user_artifacts.length - 1]
+                .artifact_id,
+            bioTemp:
+              response.user_artifacts[response.user_artifacts.length - 1]
+                .artifact_url,
+            bio:
+              response.user_artifacts[response.user_artifacts.length - 1]
+                .artifact_url,
+          });
+          console.log(this.state.bioID);
+          console.log(this.state.bioTemp);
+          console.log(this.state.bio);
+        }
+        // this.setState.bioID =
+        //   response.user_artifacts[
+        //     response.user_artifacts.length - 1
+        //   ].artifact_id;
+        console.log(this.state.bioID);
+        // console.log(param.props.match.params.userID);
+        fetch(
+          "http://stark.cse.buffalo.edu/cse410/deldev/api/uacontroller.php",
+          {
+            method: "post",
+            body: JSON.stringify({
+              action: "addOrEditUserArtifacts",
+              userid: sessionStorage.getItem("userID"),
+              session_token: sessionStorage.getItem("token"),
+              artifactid: this.state.bioID,
+              user_id: sessionStorage.getItem("userID"),
+              artifacturl: bioMessage,
+              artifactcategory: "text",
+              artifacttype: "bio",
+            }),
+          }
+        )
+          .then((res) => res.json())
+          .then((response) => {
+            console.log("Exists2");
+            this.setState({ picID: response["Record Id"] });
+          });
+      });
+    bio.children[0].hidden = false;
+    bio.children[0].innerText = bioMessage;
+    bio.children[1].hidden = true;
+    bio.children[2].hidden = true;
+  }
+
+  editB = () => {
+    var bio = document.getElementById("bioArea");
+    var startingText = bio.children[0].innerText;
+    bio.children[0].hidden = true;
+    bio.children[1].hidden = false;
+    bio.children[1].value = startingText;
+    bio.children[2].hidden = false;
+  };
+
+  loadBio() {
+    fetch("http://stark.cse.buffalo.edu/cse410/deldev/api/uacontroller.php", {
+      method: "post",
+      body: JSON.stringify({
+        action: "getUserArtifacts",
+        userid: this.props.match.params.userID,
+        posttype: "Recipe",
+        artifacttype: "bio",
+      }),
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        // console.log("Got response");
+        if (response.user_artifacts !== undefined) {
+          var bio = document.getElementById("bioArea");
+
+          var words =
+            response.user_artifacts[response.user_artifacts.length - 1]
+              .artifact_url;
+          bio.children[0].innerText = words;
+          console.log(this.state.bioID);
+          console.log(this.state.bioTemp);
+          console.log(this.state.bio);
+        }
+      });
+  }
+
   /* Edits Pfp*/
 
   showPopUp = () => {
@@ -364,6 +475,15 @@ class Profile extends React.Component {
     });
   };
 
+  /*Edits Bio*/
+  showPopUp2 = () => {
+    this.setState({ hiddenEdit: false });
+  };
+
+  changeBio = (event2) => {
+    this.setState({ profileImageTemp: event2.target.value });
+  };
+
   /*Updates the page*/
   componentDidMount() {
     this.updateFollowed();
@@ -372,6 +492,7 @@ class Profile extends React.Component {
     this.fetchProfilePic();
     this.blockedList();
     this.checkBlocked();
+    this.loadBio();
   }
 
   componentDidUpdate(prevProps) {
@@ -384,6 +505,9 @@ class Profile extends React.Component {
         profileImage: avatar,
         followers: [],
         following: [],
+        bioID: 0,
+        bio: 0, //nonono
+        bioTemp: 0, //nonono
       });
       this.setState({ loadingFollowStatus: true });
       this.updateFollowed();
@@ -392,6 +516,7 @@ class Profile extends React.Component {
       this.fetchProfilePic();
       this.blockedList();
       this.checkBlocked();
+      this.loadBio();
     }
   }
 
@@ -470,17 +595,19 @@ class Profile extends React.Component {
     }
 
     /*Edit Bio Button*/
-    function EditBioButton() {
+    function EditBioButton(props) {
       if (myUserId === userID) {
         return (
-          <Link to="/settings" className="editBio">
+          <div>
             <FontAwesomeIcon
+            className = "editBio"
               icon={faEdit}
               size="1x"
-              // onClick={AccountSettings}
+              onClick={props.handler}
               color="black"
+              style={{ cursor: "pointer" }}
             ></FontAwesomeIcon>
-          </Link>
+          </div>
         );
       }
       return null;
@@ -588,16 +715,26 @@ class Profile extends React.Component {
             <div className="card sidebar">
               <div className="BioRow">
                 <h1 className="left-text"> Bio </h1>
-                <EditBioButton />
+                <EditBioButton handler={this.editB} />
               </div>
 
-              <p className="left-text">
-                Duis aute irure dolor in reprehenderit in voluptate velit esse
-                cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-                cupidatat non proident, sunt in culpa qui officia deserunt
-                mollit anim id est laborum.
-              </p>
-
+              <div className="camel">
+                <div id="bioArea">
+                  <h4>No Bio Yet!</h4>
+                  <textarea
+                    name="paragraph_text"
+                    cols="50"
+                    rows="10"
+                    hidden
+                  ></textarea>
+                </div>
+                <button
+                  onClick={() => this.updateFunc(userID, this.state.bioID)}
+                  hidden
+                >
+                  Update
+                </button>
+              </div>
               <div className="followRow">
                 <h1 className="left-text" id="followers">
                   Following
