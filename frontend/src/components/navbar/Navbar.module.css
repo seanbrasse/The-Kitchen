@@ -38,6 +38,8 @@
     color: black;
     font-weight: bold;
     font-size: 24px;
+    align-items: center;
+    display: flex;
 }
 
 /*
@@ -46,7 +48,7 @@
 }
 */
 
-@media only screen and (max-width: 500px) {
+@media only screen and (max-width: 750px) {
     :local(.navbar) {
         display: block;
     }

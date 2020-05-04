@@ -2,6 +2,7 @@ import React, { Fragment } from "react";
 import { withRouter } from "react-router";
 import { NavLink } from "react-router-dom";
 import styles from "./Navbar.module.css";
+import logo from 'assets/KitchenLogo.png';
 
 class Navbar extends React.Component {
   logout() {
@@ -24,6 +25,7 @@ class Navbar extends React.Component {
       <nav className={styles.navbar}>
         <div className={styles.logoWrapper}>
           <NavLink to="/feed" className={styles.logo}>
+            <img src={logo} style={{height: '40px', marginRight: '5px'}}/>
             The Kitchen
           </NavLink>
         </div>
