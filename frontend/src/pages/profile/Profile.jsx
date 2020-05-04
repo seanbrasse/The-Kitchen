@@ -409,7 +409,9 @@ class Profile extends React.Component {
     bio.children[0].hidden = false;
     bio.children[0].innerText = bioMessage;
     bio.children[1].hidden = true;
-    bio.children[2].hidden = true;
+
+    var udb = document.getElementById("bioupdatebtn");
+    udb.hidden = true;
   }
 
   editB = () => {
@@ -418,7 +420,9 @@ class Profile extends React.Component {
     bio.children[0].hidden = true;
     bio.children[1].hidden = false;
     bio.children[1].value = startingText;
-    bio.children[2].hidden = false;
+    
+    var udb = document.getElementById("bioupdatebtn");
+    udb.hidden = false;
   };
 
   loadBio() {
@@ -729,6 +733,7 @@ class Profile extends React.Component {
                   ></textarea>
                 </div>
                 <button
+                  id="bioupdatebtn"
                   onClick={() => this.updateFunc(userID, this.state.bioID)}
                   hidden
                 >
