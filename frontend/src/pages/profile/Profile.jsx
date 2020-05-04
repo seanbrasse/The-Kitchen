@@ -306,8 +306,8 @@ class Profile extends React.Component {
           console.log("Exists");
           this.setState({
             picID: response.user_artifacts[0].artifact_id,
-            profileImageTemp: response.user_artifacts[0].artifact_url,
-            profileImage: response.user_artifacts[0].artifact_url,
+            profileImageTemp: response.user_artifacts[0].artifact_url.replace(/^\/static/, 'static'),
+            profileImage: response.user_artifacts[0].artifact_url.replace(/^\/static/, 'static'),
           });
         } else {
           fetch(
@@ -543,7 +543,7 @@ class Profile extends React.Component {
               <h2>Change Profile Picture</h2>
               <input
                 type="text"
-                placeholder="Paste Image or URL"
+                placeholder="Paste Image URL"
                 onChange={this.changePic}
               ></input>
               <img
