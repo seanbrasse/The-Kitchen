@@ -48,27 +48,50 @@ export default class AccountSettings extends React.Component {
   }
 
   /*Gets the list of blocked users*/
-  blockedUsers() {
+  blockedUserList() {
     fetch("http://stark.cse.buffalo.edu/cse410/deldev/api/gmcontroller.php", {
       method: "post",
       body: JSON.stringify({
         action: "getGroupMembers",
-        user_id: this.props.match.params.userID,
-        session_token: sessionStorage.getItem("token"),
-        gmid: 7 /* response.group_members
-          ? response.group_members[0].gm_id
-          : undefined */,
+        groupid: sessionStorage.getItem("blocked_groupID"),
       }),
     })
       .then((res) => res.json())
-      .then((response) => {
-        /* if (data.connections != null) { //We shouldn't be using data.connections
-          this.setState({ blocked: [...data.connections] }); 
-        } */
+      .then((data) => {
+        if (data.group_members != null) {
+          this.setState({ blocked: [...data.group_members] });
+        }
       });
+    console.log(this.state.blocked);
+  }
+
+  componentDidMount() {
+    this.blockedUserList();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.userID !== prevProps.userID) {
+      this.setState({
+        blocked: [],
+      });
+      this.blockedUserList();
+    }
   }
 
   render() {
+    var list = [];
+    var i = 0;
+    if (this.state.blocked.length != 0) {
+      this.state.blocked.forEach((ele) => {
+        list.push(
+          <li>
+            <Link to={`/user/${ele.user_id}`}>{`User ${ele.user_id}`}</Link>
+          </li>
+        );
+      });
+    } else {
+      list.push(<h3>No Blocked Users</h3>);
+    }
     return (
       <main>
         <div className="TheBox">
@@ -83,9 +106,10 @@ export default class AccountSettings extends React.Component {
             {" "}
             Change Your Username
           </Link>
-          <br />
-          <br />
-          <br />
+          <div className="BlockedList">
+            <h1>Blocked Users</h1>
+            {list}
+          </div>
           <div className="Delete">
             <h2 className="DeleteAccount">Delete Your Account</h2>
             <Link to="/login">

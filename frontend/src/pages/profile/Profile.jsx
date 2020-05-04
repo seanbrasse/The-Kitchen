@@ -26,6 +26,9 @@ class Profile extends React.Component {
       profileImageTemp: avatar,
       profileImage: avatar,
       blocked: false,
+      currentlyFollowed: false,
+      loadingFollowStatus: true,
+      connectionID: undefined,
     };
   }
 
@@ -137,43 +140,70 @@ class Profile extends React.Component {
 
   /*Adds a User to the Blocked List*/
   addToBlockedList(userToBlock) {
-    console.log("block clicked");
-    fetch("http://stark.cse.buffalo.edu/cse410/deldev/api/gmcontroller.php", {
-      method: "post",
-      body: JSON.stringify({
-        action: "addOrEditGroupMembers",
-        user_id: sessionStorage.getItem("userID"),
-        session_token: sessionStorage.getItem("token"),
-        groupid: sessionStorage.getItem("blocked_groupID"),
-        userid: userToBlock,
-      }),
-    })
-      .then((res) => res.json())
-      .then((response) => {
-        console.log(response);
-        if (response["Record Id"] !== undefined) {
-          console.log("done");
-          this.setState({ blocked: true });
-          // this.unfollow();
-          window.location.reload();
-        }
-      });
-  }
-
-  unfollow() {
-    if (this.state.currentlyFollowed !== true) {
+    // console.log("block clicked");
+    // console.log(userToBlock);
+    var isBlocked = false;
+    console.log(isBlocked);
+    if (!isBlocked) {
       fetch("http://stark.cse.buffalo.edu/cse410/deldev/api/gmcontroller.php", {
         method: "post",
         body: JSON.stringify({
           action: "addOrEditGroupMembers",
-          groupid: sessionStorage.getItem("groupID"),
           user_id: sessionStorage.getItem("userID"),
-          userid: this.props.userID,
           session_token: sessionStorage.getItem("token"),
-          membertype: this.props.userID,
+          groupid: sessionStorage.getItem("blocked_groupID"),
+          userid: userToBlock,
         }),
+      })
+        .then((res) => res.json())
+        .then((response) => {
+          console.log(response);
+          if (response["Record Id"] !== undefined) {
+            console.log("done");
+            this.setState({ blocked: true });
+            this.unfollow();
+            // window.location.reload();
+          }
+        });
+    }
+  }
+
+  updateFollowed() {
+    this._getFollowStatus = fetch(
+      "http://stark.cse.buffalo.edu/cse410/deldev/api/connectioncontroller.php",
+      {
+        method: "post",
+        body: JSON.stringify({
+          action: "getConnections",
+          user_id: sessionStorage.getItem("userID"),
+          userid: sessionStorage.getItem("userID"),
+          connectuserid: this.props.match.params.userID,
+          connectiontype: "Follow",
+          //connectionstatus: 'Active',
+          session_token: sessionStorage.getItem("token"),
+        }),
+      }
+    )
+      .then((res) => res.json())
+      .then((response) => {
+        this._getFollowStatus = null;
+        this.setState({
+          currentlyFollowed: response.connections?.some(
+            (connection) => connection.connection_type === "Follow"
+          ),
+          connectionID: response.connections?.find(
+            (connection) => connection.connection_type === "Follow"
+          )?.connection_id,
+          loadingFollowStatus: false,
+        });
       });
-    } else {
+  }
+
+  /*implements unfollow into blocking*/
+
+  unfollow() {
+    //What I added
+    if (this.state.currentlyFollowed === true) {
       fetch("http://stark.cse.buffalo.edu/cse410/deldev/api/gmcontroller.php", {
         method: "post",
         body: JSON.stringify({
@@ -200,8 +230,6 @@ class Profile extends React.Component {
           );
         });
     }
-    //end
-
     if (this.state.currentlyFollowed) {
       fetch(
         "http://stark.cse.buffalo.edu/cse410/deldev/api/connectioncontroller.php",
@@ -220,71 +248,47 @@ class Profile extends React.Component {
           if (response.Status.startsWith("SUCCESS"))
             this.setState({ currentlyFollowed: false });
         });
-    } else {
-      fetch(
-        "http://stark.cse.buffalo.edu/cse410/deldev/api/connectioncontroller.php",
-        {
-          method: "post",
-          body: JSON.stringify({
-            action: "addOrEditConnections",
-            user_id: sessionStorage.getItem("userID"),
-            userid: sessionStorage.getItem("userID"),
-            connectuserid: this.props.userID,
-            connectiontype: "Follow",
-            connectionstatus: "Active",
-            connectionid: this.state.connectionID,
-            session_token: sessionStorage.getItem("token"),
-          }),
-        }
-      )
-        .then((res) => res.json())
-        .then((response) => {
-          if (response.Status.startsWith("SUCCESS"))
-            this.setState({ currentlyFollowed: true });
-        });
     }
   }
 
   /*Adds a User to the Blocked List*/
   deleteFromBlockedList() {
-    var gid;
+    var useriD = this.props.match.params.userID;
+    let currentComponent = this;
     fetch("http://stark.cse.buffalo.edu/cse410/deldev/api/gmcontroller.php", {
       method: "post",
       body: JSON.stringify({
         action: "getGroupMembers",
-        userid: sessionStorage.getItem("userID"),
-        group_id: sessionStorage.getItem("blocked_groupID"),
+        userid: useriD,
+        groupid: sessionStorage.getItem("blocked_groupID"),
       }),
     })
       .then((res) => res.json())
       .then((response) => {
         var groupList = response.group_members;
         groupList.forEach(function (value) {
-          if (value.user_id === this.props.match.params.userID) {
-            gid = value.gm_id;
-            return;
+          if (value.user_id === useriD) {
+            fetch(
+              "http://stark.cse.buffalo.edu/cse410/deldev/api/gmcontroller.php",
+              {
+                method: "post",
+                body: JSON.stringify({
+                  action: "deleteGroupMembers",
+                  user_id: sessionStorage.getItem("userID"),
+                  session_token: sessionStorage.getItem("token"),
+                  gmid: value.gm_id,
+                }),
+              }
+            )
+              .then((res) => res.json())
+              .then((data) => {
+                if (data.Exception === undefined) {
+                  currentComponent.setState({ blocked: false });
+                  // window.location.reload();
+                }
+              });
           }
         });
-        /* if (data.connections != null) { //We shouldn't be using data.connections
-          this.setState({ blocked: [...data.connections] }); 
-        } */
-      });
-
-    fetch("http://stark.cse.buffalo.edu/cse410/deldev/api/gmcontroller.php", {
-      method: "post",
-      body: JSON.stringify({
-        action: "deleteGroupMembers",
-        user_id: this.props.match.params.userID,
-        session_token: sessionStorage.getItem("token"),
-        gmid: gid,
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.Exception === undefined) {
-          this.setState({ blocked: false });
-          window.location.reload();
-        }
       });
   }
 
@@ -362,6 +366,7 @@ class Profile extends React.Component {
 
   /*Updates the page*/
   componentDidMount() {
+    this.updateFollowed();
     this.getFollowing();
     this.getFollowers();
     this.fetchProfilePic();
@@ -380,6 +385,8 @@ class Profile extends React.Component {
         followers: [],
         following: [],
       });
+      this.setState({ loadingFollowStatus: true });
+      this.updateFollowed();
       this.getFollowing();
       this.getFollowers();
       this.fetchProfilePic();
@@ -403,7 +410,7 @@ class Profile extends React.Component {
           <Link to={`/user/${element.connect_user_id}`}>
             <button className="follow" key={i}>
               <Link to={`/user/${element.connect_user_id}`}>
-                {element.connect_user_id}
+                {`User ${element.connect_user_id}`}
               </Link>
               <FontAwesomeIcon
                 icon={faEllipsisV}
@@ -426,7 +433,10 @@ class Profile extends React.Component {
         list2.push(
           <Link to={`/user/${element.user_id}`}>
             <button className="follow" key={j}>
-              <Link to={`/user/${element.user_id}`}>{element.user_id}</Link>
+              <Link to={`/user/${element.user_id}`}>
+                {" "}
+                {`User ${element.user_id}`}
+              </Link>
               <FontAwesomeIcon
                 icon={faEllipsisV}
                 className="btn-setting"
@@ -524,7 +534,7 @@ class Profile extends React.Component {
           />
           <EditProfilePicture handler={this.showPopUp} />
           <h1 className="profile-name">User {userID}</h1>
-          <button onClick={() => this.deleteFromBlockedList}>Unblock</button>
+          <button onClick={() => this.deleteFromBlockedList()}>Unblock</button>
           <Settings />
         </div>
       ) : (

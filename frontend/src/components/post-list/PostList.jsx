@@ -1,54 +1,80 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import {RecipeCard} from 'components';
-import {parseRecipe} from 'util/parseRecipe.js';
-import styles from './PostList.module.css';
-import InfiniteScroll from 'react-infinite-scroller';
+import { RecipeCard } from "components";
+import { parseRecipe } from "util/parseRecipe.js";
+import styles from "./PostList.module.css";
+import InfiniteScroll from "react-infinite-scroller";
 
 export default class PostList extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            posts: [],
-            loading: false,
-            page: 0,
-            outofPosts: false
-        }
-    }
+  constructor(props) {
+    super(props);
+    this.state = {
+      posts: [],
+      loading: false,
+      page: 0,
+      outofPosts: false,
+    };
+  }
 
-    componentDidUpdate(prevProps) {
-        if (JSON.stringify(this.props.fetchParams) !== JSON.stringify(prevProps.fetchParams)) {
-            this.setState({page: 0, posts: [], outofPosts: false});
-            this.forceUpdate();
-        }
+  componentDidUpdate(prevProps) {
+    if (
+      JSON.stringify(this.props.fetchParams) !==
+      JSON.stringify(prevProps.fetchParams)
+    ) {
+      this.setState({ page: 0, posts: [], outofPosts: false });
+      this.forceUpdate();
     }
+  }
 
-    loadItems() {
-        if (!this.state.loading) {
-            this.setState({loading: true});
-            const FETCH_COUNT = 2;
-            fetch('http://stark.cse.buffalo.edu/cse410/deldev/api/postcontroller.php', {
-                method: 'post',
-                body: JSON.stringify({
-                    ...this.props.fetchParams,
-                    max_posts: FETCH_COUNT,
-                    offset: FETCH_COUNT * (this.state.page)
-                })
-            }).then(res => res.json()).then(
-                response => {
-                    if (response.posts) {
-                        this.setState(prevState => ({
-                            posts: [...prevState.posts, ...response.posts],
-                            page: prevState.page + 1
-                        }));
-                    } else {
-                        this.setState({outofPosts: true})
-                    }
-                    this.setState({loading: false});
-                }
-            );
+  loadItems() {
+    if (!this.state.loading) {
+      this.setState({ loading: true });
+      const FETCH_COUNT = 2;
+      fetch(
+        "http://stark.cse.buffalo.edu/cse410/deldev/api/postcontroller.php",
+        {
+          method: "post",
+          body: JSON.stringify({
+            ...this.props.fetchParams,
+            max_posts: FETCH_COUNT,
+            offset: FETCH_COUNT * this.state.page,
+          }),
         }
+      )
+        .then((res) => res.json())
+        .then((response) => {
+          if (response.posts) {
+            this.setState((prevState) => ({
+              posts: [...prevState.posts, ...response.posts],
+              page: prevState.page + 1,
+            }));
+          } else {
+            this.setState({ outofPosts: true });
+          }
+          this.setState({ loading: false });
+        });
     }
+    fetch("http://stark.cse.buffalo.edu/cse410/deldev/api/gmcontroller.php", {
+      method: "post",
+      body: JSON.stringify({
+        action: "getGroupMembers",
+        groupid: sessionStorage.getItem("blocked_groupID"),
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.group_members != null) {
+          for (var i = 0; i < data.group_members.length; i++) {
+            var member = data.group_members[i];
+            for (var j = 0; j < this.state.posts.length; j++) {
+              if (member.user_id == this.state.posts[j].user_id) {
+                this.state.posts.splice(i, 1);
+              }
+            }
+          }
+        }
+      });
+  }
 
     render() {
         return (
