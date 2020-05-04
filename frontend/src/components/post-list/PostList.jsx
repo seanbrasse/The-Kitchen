@@ -26,10 +26,23 @@ export default class PostList extends React.Component {
     }
   }
 
-  loadItems() {
+  async loadItems() {
     if (!this.state.loading) {
       this.setState({ loading: true });
       const FETCH_COUNT = 2;
+
+      let blockeddata = null;
+      if (sessionStorage.getItem("blocked_groupID")) {
+        blockeddata = await fetch("http://stark.cse.buffalo.edu/cse410/deldev/api/gmcontroller.php", {
+          method: "post",
+          body: JSON.stringify({
+            action: "getGroupMembers",
+            groupid: sessionStorage.getItem("blocked_groupID"),
+          }),
+        })
+        .then((res) => res.json())
+      }
+
       fetch(
         "http://stark.cse.buffalo.edu/cse410/deldev/api/postcontroller.php",
         {
@@ -44,37 +57,37 @@ export default class PostList extends React.Component {
         .then((res) => res.json())
         .then((response) => {
           if (response.posts) {
-            this.setState((prevState) => ({
-              posts: [...prevState.posts, ...response.posts],
-              page: prevState.page + 1,
-            }));
+
+            /*if (data.group_members != null) {
+              for (var i = 0; i < data.group_members.length; i++) {
+                var member = data.group_members[i];
+                for (var j = 0; j < this.state.posts.length; j++) {
+                  console.log(`${member.user_id} ${this.state.posts[j].user_id}`)
+                  if (member.user_id == this.state.posts[j].user_id) {
+                    this.state.posts.splice(i, 1);
+                  }
+                }
+              }
+            }*/
+            
+
+            this.setState((prevState) => {
+              let posts = [...prevState.posts, ...response.posts]
+              if (blockeddata !== null && blockeddata.group_members != null) {
+                console.log(blockeddata.group_members);
+                console.log(posts);
+                posts = posts.filter(post => !blockeddata.group_members.some(gm => gm.user_id === post.user_id))
+              }
+              return {
+                posts,
+                page: prevState.page + 1,
+              }
+            });
           } else {
             this.setState({ outofPosts: true });
           }
           this.setState({ loading: false });
         });
-    }
-    if (sessionStorage.getItem("blocked_groupID")) {
-      fetch("http://stark.cse.buffalo.edu/cse410/deldev/api/gmcontroller.php", {
-        method: "post",
-        body: JSON.stringify({
-          action: "getGroupMembers",
-          groupid: sessionStorage.getItem("blocked_groupID"),
-        }),
-      })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.group_members != null) {
-          for (var i = 0; i < data.group_members.length; i++) {
-            var member = data.group_members[i];
-            for (var j = 0; j < this.state.posts.length; j++) {
-              if (member.user_id == this.state.posts[j].user_id) {
-                this.state.posts.splice(i, 1);
-              }
-            }
-          }
-        }
-      });
     }
   }
 

@@ -444,7 +444,7 @@ class Profile extends React.Component {
           var words =
             response.user_artifacts[response.user_artifacts.length - 1]
               .artifact_url;
-          bio.children[0].innerText = words;
+          if(bio) bio.children[0].innerText = words;
           console.log(this.state.bioID);
           console.log(this.state.bioTemp);
           console.log(this.state.bio);
