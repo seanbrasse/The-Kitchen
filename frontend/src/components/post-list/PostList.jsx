@@ -54,13 +54,14 @@ export default class PostList extends React.Component {
           this.setState({ loading: false });
         });
     }
-    fetch("http://stark.cse.buffalo.edu/cse410/deldev/api/gmcontroller.php", {
-      method: "post",
-      body: JSON.stringify({
-        action: "getGroupMembers",
-        groupid: sessionStorage.getItem("blocked_groupID"),
-      }),
-    })
+    if (sessionStorage.getItem("blocked_groupID")) {
+      fetch("http://stark.cse.buffalo.edu/cse410/deldev/api/gmcontroller.php", {
+        method: "post",
+        body: JSON.stringify({
+          action: "getGroupMembers",
+          groupid: sessionStorage.getItem("blocked_groupID"),
+        }),
+      })
       .then((res) => res.json())
       .then((data) => {
         if (data.group_members != null) {
@@ -74,6 +75,7 @@ export default class PostList extends React.Component {
           }
         }
       });
+    }
   }
 
     render() {
