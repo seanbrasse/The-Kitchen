@@ -102,10 +102,6 @@ export default class AccountSettings extends React.Component {
             Change Your Password{" "}
           </Link>
           <br />
-          <Link to="/settings" className="ChangeUsername">
-            {" "}
-            Change Your Username
-          </Link>
           <div className="BlockedList">
             <h2>Blocked Users</h2>
             <ul class="unstyled">
