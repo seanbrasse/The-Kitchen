@@ -602,7 +602,7 @@ class Profile extends React.Component {
       if (myUserId === userID) {
         return (
           <div>
-            <button className="changePicButton" onClick={props.handler}>
+            <button className="changePicButton" aria-label="Change Picture" onClick={props.handler}>
               <FontAwesomeIcon
                 icon={faEdit}
                 size="1x"
@@ -658,7 +658,7 @@ class Profile extends React.Component {
     function Settings() {
       if (userID === myUserId) {
         return (
-          <Link to="/settings" className="settings">
+          <Link to="/settings" className="settings" aria-label="Account Settings">
             <FontAwesomeIcon
               icon={faCog}
               size="lg"
@@ -759,7 +759,7 @@ class Profile extends React.Component {
                 </button>
               </div>
               <div className="followRow">
-                <h1 className="left-text" id="followers">
+                <h1 className="left-text" id="following">
                   Following
                 </h1>
                 <h2 className="following-count">
