@@ -3,9 +3,26 @@ import PropTypes from 'prop-types';
 import {Link} from 'react-router-dom';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-    faEdit
+    faEdit, faTrashAlt
 } from "@fortawesome/free-solid-svg-icons";
 import './recipe.css';
+
+function deletePost(postID) {
+  fetch("http://stark.cse.buffalo.edu/cse410/deldev/api/postcontroller.php", {
+      method: "post",
+      body: JSON.stringify({
+        action: "deletePosts",
+        postid: postID,
+        user_id: sessionStorage.getItem("userID"),
+        session_token: sessionStorage.getItem("token"),
+      }),
+    }
+  ).then((res) => res.json()).then((response) => {
+      if (response.Exception == null) {
+        window.location.hash = '';
+      }
+  });
+}
 
 const Title = (props) => {
   if(props.type === "edit"){
@@ -34,8 +51,18 @@ const Title = (props) => {
                 icon={faEdit}
                 size="1x"
                 color="black"
+                alt="edit"
                 ></FontAwesomeIcon>
-            </Link></Fragment> : null
+            </Link>
+            <FontAwesomeIcon
+                icon={faTrashAlt}
+                style={{cursor: 'pointer', marginLeft: '10px'}}
+                onClick={() => deletePost(props.postID)}
+                size="1x"
+                color="black"
+                alt="delete"
+            />
+            </Fragment> : null
         }
       </h1>
       <h2 style={{textAlign: 'center'}}>By <Link to={`/user/${props.userid}`}>{props.name}</Link></h2>

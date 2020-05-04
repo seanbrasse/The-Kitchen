@@ -8,7 +8,7 @@ const IngredientsList = (props) => {
     return(
       <div className="ingredients">
           <div>
-            <h2>Ingredients</h2>
+            <h3>Ingredients</h3>
             <ul>
             {props.ingredients[0].map((ing, i) => <li key={i}>
             <input type="text" placeholder="Flour" name="Ingredients" value={ing} onChange={(e) => props.handle(e, i)}>
@@ -16,14 +16,14 @@ const IngredientsList = (props) => {
             </ul>
           </div>
           <div>
-            <h2>Amount</h2>
+            <h3>Amount</h3>
             <ul>
             {props.ingredients[1].map((amt, i) => <li key={i}>
             <input type="text" placeholder="1/2" name="Amount" value={amt} onChange={(e) => props.handle(e, i)}></input></li>)}
             </ul>
           </div>
           <div>
-            <h2>Units</h2>
+            <h3>Units</h3>
             <ul>
             {props.ingredients[2].map((unit, i) => <li key={i}>
               <input type="text" placeholder="Cups" name="Units" value={unit} onChange={(e) => props.handle(e, i)}></input>
@@ -38,11 +38,11 @@ const IngredientsList = (props) => {
     return(
       <div className="ingredients">
         <div>
-          <h2>Ingredients</h2>
+          <h3>Ingredients</h3>
           <ul>{props.ingredients[0].map((ing, i) => <li key={i}><input id="autoWidth" type="checkbox"></input> {ing} </li>)}</ul>
         </div>
         <div>
-          <h2>Amount</h2>
+          <h3>Amount</h3>
           <ul>{props.ingredients[1].map((a, i) => <li key={i}>{a} {props.ingredients[2][i]}</li>)}</ul>
         </div>
       </div>

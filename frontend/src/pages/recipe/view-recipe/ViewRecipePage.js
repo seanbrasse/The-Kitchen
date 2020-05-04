@@ -538,12 +538,15 @@ export default class ViewRecipePage extends React.Component{
         <a href={"#/recipe/" + this.state.postID + "/#" + this.state.header[this.state.headerIndex]}><button onClick={this.nextHeader}>Next</button></a>
       </div>
 
+      <div className="card" style={{margin: '10px 0'}}>
       <Title
         title={this.state.title} image={this.state.mainImage} name={this.state.name} userid={this.state.userid}
         canEdit={this.state.userid === sessionStorage.getItem('userID')}
         postID={this.props.postID}
       />
+      </div>
 
+      <div className="card" style={{margin: '10px 0'}}>
       <div className="container">
         <div className="tagsItem">
           <label for="textbox">Tags</label><br></br>
@@ -570,21 +573,30 @@ export default class ViewRecipePage extends React.Component{
           <a>{parseInt(this.state.prepTime) + parseInt(this.state.cookTime) + " min"}</a>
         </div>
       </div>
+      </div>
 
       <div id={"/recipe/" + this.state.postID + "/#description"}></div>
+      <div className="card" style={{margin: '10px 0'}}>
       <RecipeHeader>Description</RecipeHeader>
       <Description description={this.state.description}/>
+      </div>
 
       <div id={"/recipe/" + this.state.postID + "/#ingredients"}></div>
+      <div className="card" style={{margin: '10px 0'}}>
       <RecipeHeader>Ingredients</RecipeHeader>
       <IngredientsList ingredients={this.state.ingredients}/>
+      </div>
 
       <div id={"/recipe/" + this.state.postID + "/#recipe"}></div>
+      <div className="card" style={{margin: '10px 0'}}>
       <RecipeHeader>Recipe</RecipeHeader>
       <Recipe recipe={this.state.recipe}/>
+      </div>
 
       <div id={"/recipe/" + this.state.postID + "/#comments"}></div>
-      <Comment parent={this.props.postID}/>
+      <div className="card" style={{margin: '10px 0'}}>
+        <Comment parent={this.props.postID}/>
+        </div>
       </div>
       </div>
     )

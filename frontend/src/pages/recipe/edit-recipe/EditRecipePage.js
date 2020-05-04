@@ -1,4 +1,5 @@
 import React from 'react';
+import { withRouter } from "react-router";
 import RecipeHeader from '../recipe-components/RecipeHeader'
 import IngredientsList from '../recipe-components/IngredientsList'
 import Recipe from '../recipe-components/Recipe'
@@ -7,7 +8,7 @@ import Title from '../recipe-components/Title'
 import Tags from '../recipe-components/Tags'
 import {parseRecipe} from 'util/parseRecipe.js'
 
-export default class EditRecipePage extends React.Component{
+class EditRecipePage extends React.Component{
 
   constructor(props){
     super(props);
@@ -388,8 +389,9 @@ export default class EditRecipePage extends React.Component{
             if(parsedRes.Status.includes("ERROR") && !parsedRes.Status.includes("Updated 0 Rows")){
               this.printError("Error: Could not upload recipe. Try relogging in");
             }else{
-              this.printSuccess("Success: Uploaded Recipe");
-              this.setState({postID: parsedRes['Record Id']});
+              //this.printSuccess("Success: Uploaded Recipe");
+              //this.setState({postID: parsedRes['Record Id']});
+              this.props.history.replace('/recipe/' + parsedRes['Record Id'])
             }
             this.setState({disabled: false});
       })
@@ -413,6 +415,7 @@ export default class EditRecipePage extends React.Component{
                 this.printError("Error: Could not upload recipe. Try relogging in");
               }else{
                 this.printSuccess("Success: Uploaded Recipe");
+                this.props.history.replace('/recipe/' + this.state.postID)
               }
               this.setState({disabled: false});
           })
@@ -712,15 +715,17 @@ export default class EditRecipePage extends React.Component{
     return(
       <div className="recipe-page">
       <div className="recipe-content">
-      <h1>{this.recipeID}</h1>
 
+      <div className="card" style={{margin: '10px 0'}}>
       <Title
         type={this.state.editMode ? "edit" : "display"}
         title={this.state.title}
         image={this.state.mainImage}
         handle={this.updateTitle}
       />
+      </div>
 
+      <div className="card" style={{margin: '10px 0'}}>
       <div className="container">
         <div className="tagsItem">
           <label for="textbox">Tags</label><br></br>
@@ -745,7 +750,9 @@ export default class EditRecipePage extends React.Component{
           <a>{parseInt(this.state.prepTime) + parseInt(this.state.cookTime) + " min"}</a>
         </div>
       </div>
+      </div>
 
+      <div className="card" style={{margin: '10px 0'}}>
       <RecipeHeader>Description</RecipeHeader>
 
       <Description
@@ -753,7 +760,9 @@ export default class EditRecipePage extends React.Component{
         handle={this.updateDesc}
         description={this.state.description}
       />
+      </div>
 
+      <div className="card" style={{margin: '10px 0'}}>
       <RecipeHeader>Ingredients</RecipeHeader>
 
       <IngredientsList
@@ -761,7 +770,9 @@ export default class EditRecipePage extends React.Component{
         ingredients={this.state.ingredients}
         handle={this.addIngredient}
       />
+      </div>
 
+      <div className="card" style={{margin: '10px 0'}}>
       <RecipeHeader
         type={this.state.editMode ? "edit" : "display"}
         buttons={["add Step", "add Image"]}
@@ -773,6 +784,7 @@ export default class EditRecipePage extends React.Component{
         recipe={this.state.recipe}
         handle={this.updateRecipe}
       />
+      </div>
 
       <div className={this.state.msgType} style={{display: (this.state.errorMsg ? 'block' : 'none')}}>
         <p>{this.state.msg}</p>
@@ -796,3 +808,5 @@ export default class EditRecipePage extends React.Component{
     )
   }
 }
+
+export default withRouter(EditRecipePage);
