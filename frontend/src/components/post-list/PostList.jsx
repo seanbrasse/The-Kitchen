@@ -112,7 +112,7 @@ export default class PostList extends React.Component {
                                                 description={recipe.description}
                                                 image={post.post_pic_url}
                                                 userid={post.user_id}
-                                                username={`User ${post.user_id}`}
+                                                username={post.name ? post.name : `User ${post.user_id}`}
                                             />
                                         </li>
                                     );
