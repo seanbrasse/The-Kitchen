@@ -19,7 +19,7 @@ export default class CommentForm extends React.Component {
 
     //make the api call to the authentication page
     fetch("http://stark.cse.buffalo.edu/cse410/deldev/api/postcontroller.php", {
-   
+
       method: "post",
       body: JSON.stringify({
         action: "addOrEditPosts",
@@ -32,11 +32,10 @@ export default class CommentForm extends React.Component {
       .then(res => res.json())
       .then(
         result => {
-          console.log("post is " + this.state.post_text);
           if (this.state.socket) {
             this.state.socket.emit('newComment', { room: this.state.imageName, comment: this.state.post_text });
         }
-          
+
           // update the count in the UI manually, to avoid a database hit
           //this.props.onAddComment(this.props.commentCount + 1);
           this.postListing.current.loadPosts();
@@ -62,7 +61,7 @@ export default class CommentForm extends React.Component {
           <label>
             Add A Comment to Post {this.props.parent}
             <br />   <textarea className="newComment" placeholder="Comment here..." onChange={this.myChangeHandler}  />
-          </label>         
+          </label>
           <br />
 
           <input type="submit" value="submit" />

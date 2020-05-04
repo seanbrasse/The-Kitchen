@@ -39,7 +39,6 @@ export default class Post extends React.Component {
   }
 
   conditionalDisplay() {
-    console.log("Parent is " + this.props.post.parent_id);
     if (this.props.post.parent_id) {
       return "";
     } else {
