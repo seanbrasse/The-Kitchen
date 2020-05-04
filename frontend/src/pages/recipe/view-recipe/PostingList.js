@@ -16,16 +16,22 @@ export default class PostingList extends React.Component {
     this.loadPosts();
   }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.parentID !== this.props.parentID) {
+      this.loadPosts();
+    }
+  }
+
   loadPosts() {
-    
-    fetch("http://stark.cse.buffalo.edu/cse410/deldev/api/postcontroller.php", {
-      method: "post",
-      body: JSON.stringify({
-        action: "getPosts",
-        max_posts: "3",
-        parentid: this.props.parentid
+    //if (this.props.parentID) {
+      fetch("http://stark.cse.buffalo.edu/cse410/deldev/api/postcontroller.php", {
+        method: "post",
+        body: JSON.stringify({
+          action: "getPosts",
+          max_posts: "3",
+          parentid: this.props.parentID
+        })
       })
-    })
       .then(res => res.json())
       .then(
        
@@ -45,10 +51,10 @@ export default class PostingList extends React.Component {
           });
         }
       );
+    //}
   }
 
   render() {
-    this.loadPosts();
     const {error, isLoaded, posts} = this.state;
     if (error) {
       return <div> Error: {error.message} </div>;

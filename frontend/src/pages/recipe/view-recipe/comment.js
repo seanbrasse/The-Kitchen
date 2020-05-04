@@ -26,7 +26,7 @@ export default class CommentForm extends React.Component {
         user_id: sessionStorage.getItem("userID"),
         session_token: sessionStorage.getItem("token"),
         posttext: this.state.post_text,
-        parentID: this.props.parent
+        parentid: this.props.parent
       })
     })
       .then(res => res.json())
@@ -41,9 +41,10 @@ export default class CommentForm extends React.Component {
           this.postListing.current.loadPosts();
         },
         error => {
-          alert("error!");
+          //alert("error!");
         }
       );
+      this.setState({post_text: ''});
   };
 
   myChangeHandler = event => {

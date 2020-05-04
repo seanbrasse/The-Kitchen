@@ -579,10 +579,9 @@ export default class ViewRecipePage extends React.Component{
       <div id={"/recipe/" + this.state.postID + "/#recipe"}></div>
       <RecipeHeader>Recipe</RecipeHeader>
       <Recipe recipe={this.state.recipe}/>
-      <Comment parent={this.props.postID}/>
 
       <div id={"/recipe/" + this.state.postID + "/#comments"}></div>
-      <Comment/>
+      <Comment parent={this.props.postID}/>
       </div>
       </div>
     )
