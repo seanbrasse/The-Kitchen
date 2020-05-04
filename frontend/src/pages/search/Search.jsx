@@ -53,7 +53,9 @@ export default class Search extends React.Component {
                     }
                 }>
                     <div className={styles.searchbar}>
+                        <label for="search">Search</label>
                         <input
+                            id="search"
                             type="text" value={this.state.search} className={styles.search}
                             onChange={e => this.setState({search: e.target.value})}
                         />
@@ -64,7 +66,7 @@ export default class Search extends React.Component {
                         <div className={`card ${styles.extraSearch}`}>
                             <h3>Search Details</h3>
                             <label htmlFor="order">Order By</label><br/>
-                            <select name="order" value={this.state.sort} onChange={e => this.setState({sort: e.target.value})}>
+                            <select id="order" value={this.state.sort} onChange={e => this.setState({sort: e.target.value})}>
                                 <option value="new">Newest</option>
                                 <option value="old">Oldest</option>
                                 <option value="top">Highest Rated</option>
@@ -72,23 +74,23 @@ export default class Search extends React.Component {
                             <br/><br/>
 
                             <label htmlFor="tags">Tags</label><br/>
-                            <input name="tags" type="text" onChange={e => this.setState({tags: e.target.value})}/>
+                            <input id="tags" type="text" onChange={e => this.setState({tags: e.target.value})}/>
                             <br/><br/>
 
                             <label htmlFor="exclude-ingredients">Exclude Ingredients</label><br/>
-                            <input name="exclude-ingredients" type="text" onChange={e => this.setState({excludeIngredients: e.target.value})}/>
+                            <input id="exclude-ingredients" type="text" onChange={e => this.setState({excludeIngredients: e.target.value})}/>
                             <br/><br/>
 
                             <label htmlFor="min-prep-time">Minimum Prep Time</label><br/>
-                            <input name="min-prep-time" type="number" onChange={e => this.setState({minPrepTime: e.target.value})}/><br/>
+                            <input id="min-prep-time" type="number" onChange={e => this.setState({minPrepTime: e.target.value})}/><br/>
                             <label htmlFor="max-prep-time">Maximum Prep Time</label><br/>
-                            <input name="max-prep-time" type="number" onChange={e => this.setState({maxPrepTime: e.target.value})}/>
+                            <input id="max-prep-time" type="number" onChange={e => this.setState({maxPrepTime: e.target.value})}/>
                             <br/><br/>
                             
                             <label htmlFor="min-cook-time">Minimum Cook Time</label><br/>
-                            <input name="min-cook-time" type="number" onChange={e => this.setState({minCookTime: e.target.value})}/><br/>
+                            <input id="min-cook-time" type="number" onChange={e => this.setState({minCookTime: e.target.value})}/><br/>
                             <label htmlFor="max-cook-time">Maximum Cook Time</label><br/>
-                            <input name="max-cook-time" type="number" onChange={e => this.setState({maxCookTime: e.target.value})}/>
+                            <input id="max-cook-time" type="number" onChange={e => this.setState({maxCookTime: e.target.value})}/>
                             <br/><br/>
 
                             Minimum Rating<br/>

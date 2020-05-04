@@ -3,6 +3,11 @@
     margin: 0 30px;
     display: flex;
     flex-direction: row;
+    align-items: center;
+}
+
+:local(.searchbar label) {
+    margin-right: 5px;
 }
 
 :local(.searchbar input[type="text"]) {
@@ -16,6 +21,13 @@
 :local(.listWrapper) {
     display: flex;
     margin: 20px 30px;
+}
+
+@media only screen and (max-width: 610px) {
+    :local(.listWrapper) {
+        flex-wrap: wrap-reverse;
+        justify-content: center;
+    }
 }
 
 :local(.extraSearch) {

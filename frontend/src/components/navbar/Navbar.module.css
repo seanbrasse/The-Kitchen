@@ -1,5 +1,5 @@
 :local(.navbar) {
-    background-color: #54C254;
+    background-color: #008300;
     border-radius: 4px;
     padding: 15px 0;
     display: flex;
@@ -12,7 +12,8 @@
 :local(.navbar ul) {
     padding: 0;
     margin: 0;
-    display: inline-block;
+    flex-grow: 1;
+    display: flex;
 }
 
 :local(.navbar li) {
@@ -45,8 +46,11 @@
 }
 */
 
-@media only screen and (max-width: 700px) {
+@media only screen and (max-width: 500px) {
     :local(.navbar) {
+        display: block;
+    }
+    :local(.navbar ul) {
         display: block;
     }
     :local(.navbar ul *) {

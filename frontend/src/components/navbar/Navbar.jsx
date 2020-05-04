@@ -39,10 +39,9 @@ class Navbar extends React.Component {
             </NavLink>
           </li>
 
-          <div className={styles.rightNav}>
             {sessionStorage.getItem("userID") ? (
               <Fragment>
-                <li>
+                <li style={{marginLeft: 'auto'}}>
                   <NavLink to={"/recipe/create"}>Create Post</NavLink>
                 </li>
                 <li>
@@ -66,7 +65,6 @@ class Navbar extends React.Component {
             ) : (
               ""
             )}
-          </div>
         </ul>
       </nav>
     );
