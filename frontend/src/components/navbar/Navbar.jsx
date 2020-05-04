@@ -25,7 +25,7 @@ class Navbar extends React.Component {
       <nav className={styles.navbar}>
         <div className={styles.logoWrapper}>
           <NavLink to="/feed" className={styles.logo}>
-            <img src={logo} style={{height: '40px', marginRight: '5px'}}/>
+            <img src={logo} style={{height: '40px', marginRight: '5px'}} alt="logo"/>
             The Kitchen
           </NavLink>
         </div>

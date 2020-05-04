@@ -35,7 +35,7 @@ const EditElem = (props) => {
   if(props.type === "header"){
   return(<div>
             <input type="text" name="update" placeholder="Step" value={props.value} onChange={(e) => props.handle(e, props.index)}></input>
-            <button className="icon" name="Delete" onClick={(e) => props.handle(e, props.index)}><MdDelete/></button>
+            <button className="icon" name="Delete" onClick={(e) => props.handle(e, props.index)} aria-label="Close"><MdDelete/></button>
           </div>)
   }else if (props.type === "text") {
     return(<div>
@@ -44,7 +44,7 @@ const EditElem = (props) => {
   }else{
     return(<div>
             <label for="textbox">Image URL</label>
-            <button className="icon" name="Delete" onClick={(e) => props.handle(e, props.index)}><MdDelete/></button><br></br>
+            <button className="icon" name="Delete" onClick={(e) => props.handle(e, props.index)} aria-label="Close"><MdDelete/></button><br></br>
             <input type="text" placeholder="Paste Image or URL" name="update" value={props.value} onChange={(e) => props.handle(e, props.index)}></input><br></br>
             <img src={props.value} alt=""/>
           </div>)

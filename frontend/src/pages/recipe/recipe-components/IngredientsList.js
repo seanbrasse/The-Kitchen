@@ -27,7 +27,7 @@ const IngredientsList = (props) => {
             <ul>
             {props.ingredients[2].map((unit, i) => <li key={i}>
               <input type="text" placeholder="Cups" name="Units" value={unit} onChange={(e) => props.handle(e, i)}></input>
-              <button className="icon" name="Delete" onClick={(e) => props.handle(e, i)}><MdDelete/></button>
+              <button className="icon" name="Delete" onClick={(e) => props.handle(e, i)} aria-label="Delete"><MdDelete/></button>
               </li>)}
             </ul>
             <button className="smallButton" name="button" onClick={(e) => props.handle(e, 0)}>Add Ingredient</button>
