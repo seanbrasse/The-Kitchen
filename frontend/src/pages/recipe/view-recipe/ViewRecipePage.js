@@ -4,10 +4,19 @@ import IngredientsList from '../recipe-components/IngredientsList'
 import Recipe from '../recipe-components/Recipe'
 import Description from '../recipe-components/Description'
 import Title from '../recipe-components/Title'
+<<<<<<< HEAD
 import Comment from './comment'
 import { MdStar } from 'react-icons/md';
 import {parseRecipe} from 'util/parseRecipe.js'
 
+=======
+import styles from '../recipe-components/recipe.css'
+import Postform from './PostForm.js'
+import Comment from './comment.js'
+import Post from './Post.js'
+import {parseRecipe} from 'util/parseRecipe.js';
+import PostForm from './PostForm'
+>>>>>>> origin/comments
 export default class ViewRecipePage extends React.Component{
   constructor(props){
     super(props);
@@ -111,6 +120,7 @@ export default class ViewRecipePage extends React.Component{
               }
 
               this.setState({
+<<<<<<< HEAD
                 tags: tags
               });
               this.tagIDs = this.tagIDs.concat(tagIDs);
@@ -251,6 +261,18 @@ export default class ViewRecipePage extends React.Component{
               userRating: userRating
             });
     })
+=======
+                content: parsedRes.posts[0].post_text,
+                mainImage: parsedRes.posts[0].post_pic_url
+              })
+              var recipe = parseRecipe(this.state.content);
+              this.setState({title: recipe.title});
+              this.setState({description: recipe.description});
+              this.setState({ingredients: recipe.ingredients});
+              this.setState({recipe: recipe.recipe});
+             
+      })
+>>>>>>> origin/comments
   }
 
   combineData(){
@@ -553,7 +575,7 @@ export default class ViewRecipePage extends React.Component{
       <IngredientsList ingredients={this.state.ingredients}/>
       <RecipeHeader>Recipe</RecipeHeader>
       <Recipe recipe={this.state.recipe}/>
-      <Comment/>
+      <Comment parent={this.props.postID}/>
 
       <p>
       numberOfRatingsID: {this.state.numberOfRatingsID}<br></br>

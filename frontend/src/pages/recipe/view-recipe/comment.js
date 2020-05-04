@@ -8,6 +8,7 @@ export default class CommentForm extends React.Component {
     this.state = {
       post_text: "",
       postmessage: ""
+      
     };
     this.postListing = React.createRef();
   }
@@ -25,7 +26,7 @@ export default class CommentForm extends React.Component {
         user_id: sessionStorage.getItem("userID"),
         session_token: sessionStorage.getItem("token"),
         posttext: this.state.post_text,
-        parentid: this.props.parent
+        parentID: this.props.parent
       })
     })
       .then(res => res.json())
@@ -51,9 +52,11 @@ export default class CommentForm extends React.Component {
      post_text: event.target.value
     });
   };
-
+ 
   render() {
+    
     return (
+      
       <div>
         <form onSubmit={this.submitHandler}>
           <label>
@@ -64,11 +67,13 @@ export default class CommentForm extends React.Component {
 
           <input type="submit" value="submit" />
           <br />
+       
           {this.state.postmessage}
         </form>
         <PostingList
           ref={this.postListing}
-          parentid={this.props.parent}
+          parentID={this.props.parent}
+         
           type="commentlist"
         />
       </div>

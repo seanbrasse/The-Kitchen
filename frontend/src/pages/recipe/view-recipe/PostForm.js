@@ -1,7 +1,7 @@
 import React from "react";
 import "./comment.css";
 import PostingList from "./PostingList.js";
-
+import Comment from "./comment.js"
 export default class PostForm extends React.Component {
   constructor(props) {
     super(props);
@@ -62,7 +62,9 @@ export default class PostForm extends React.Component {
           <br />
           {this.state.postmessage}
         </form>
-        <PostingList ref={this.postListing} type="postlist" />
+        <PostingList ref={this.postListing}  parentid={this.props.parent} type="postlist"/>
+       
+
       </div>
     );
   }

@@ -17,17 +17,24 @@ export default class PostingList extends React.Component {
   }
 
   loadPosts() {
+    
     fetch("http://stark.cse.buffalo.edu/cse410/deldev/api/postcontroller.php", {
       method: "post",
       body: JSON.stringify({
         action: "getPosts",
         max_posts: "3",
+<<<<<<< HEAD
+        parentid: this.props.parentID
+=======
         parentid: this.props.parentid
+>>>>>>> a1ba7db2f5d1929dcf6a4dd5a1628abb4aac70bc
       })
     })
       .then(res => res.json())
       .then(
+       
         result => {
+        
           if (result.posts) {
             this.setState({
               isLoaded: true,
@@ -55,7 +62,7 @@ export default class PostingList extends React.Component {
       return (
         <div className="posts">
           {posts.map(post => (
-            <Post key={post.post_id} post={post} type={this.props.type} />
+            <Post key={post.post_ID} post={post} type={this.props.type} />
           ))}
         </div>
       );
