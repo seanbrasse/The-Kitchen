@@ -44,3 +44,16 @@
     background-color: #d9d9d9;
 }
 */
+
+@media only screen and (max-width: 700px) {
+    :local(.navbar) {
+        display: block;
+    }
+    :local(.navbar ul *) {
+      display: block;
+      position: static;
+    }
+    :local(.logoWrapper) {
+        margin-bottom: 5px;
+    }
+}

@@ -762,7 +762,9 @@ class Profile extends React.Component {
             </div>
 
             <div className="profileFeed">
+              <div class="newpostwrapper">
               <NewPost />
+              </div>
               <PostList
                 fetchParams={{
                   action: "getPosts",

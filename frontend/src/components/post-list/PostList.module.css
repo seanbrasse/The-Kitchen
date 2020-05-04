@@ -5,7 +5,7 @@
 :local(.cardli.small) {
     display: inline-block;
     margin: 0 10px 10px 10px;
-    overflow: hidden;
+    /*overflow: hidden;*/
 }
 
 :local(.listWrapper) {
