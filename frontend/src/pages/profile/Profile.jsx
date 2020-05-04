@@ -614,6 +614,7 @@ class Profile extends React.Component {
               <PostList
                 fetchParams={{
                   action: "getPosts",
+                  posttype: 'Recipe',
                   userid: this.props.match.params.userID,
                 }}
               />
